@@ -1,5 +1,9 @@
+import 'react-native-gesture-handler';
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native'
+
+// Navigation
+import AppNavigation from './src/routes/AppNavigation';
 
 // Style
 import styles from './src/styles/App'
@@ -7,8 +11,9 @@ import styles from './src/styles/App'
 const App = () => {
   return (
     <View style={styles.container}>
-      <Text> A Life Lived</Text>
+      <AppNavigation />
     </View>
-  )
+  );
 };
+
 export default App;

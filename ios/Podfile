@@ -77,7 +77,8 @@ target 'aLifeLived' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'RNGestureHandler', :podspec => '../node_modules/react-native-gesture-handler/RNGestureHandler.podspec'
 
   target 'aLifeLivedTests' do
     inherit! :complete
