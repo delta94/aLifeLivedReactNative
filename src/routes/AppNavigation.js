@@ -3,9 +3,12 @@ import React, {useState, useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'; 
+
+// Icon imports
 import AntIcons from 'react-native-vector-icons/AntDesign';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Screens
 import LoginScreen from './../screens/LoginScreen';
@@ -18,6 +21,7 @@ import StoryCreationScreen from './../screens/StoryCreationScreen';
 import SearchScreen from './../screens/SearchScreen';
 
 // Styles
+import {COLOR, ICON_SIZE} from './../styles/styleHelpers';
 
 const Tabs = createBottomTabNavigator();
 
@@ -28,9 +32,6 @@ const ProfileStack = createStackNavigator();
 const NotificationsStack = createStackNavigator();
 const StoryCreationStack = createStackNavigator();
 const SearchStack = createStackNavigator();
-
-// Icons
-
 
 // The below are stacks they can hold a number of screens. We're using this because of the tab.
 const HomeStackScreen = () => (
@@ -81,8 +82,14 @@ const LoginAndSignUpStackScreen = () => (
 
 const AppNavigation = (props) => {
 
+  // TODO: Handle loading of the application.
   const [isLoading, setIsLoading] = useState(true);
   const [userToken, setUserToken] = useState('12345678');
+
+  // The below handles the basic tab options 
+  const tabDefaultOptions = {
+    showLabel: false,
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -90,6 +97,7 @@ const AppNavigation = (props) => {
     }, 1000);
   }, []);
 
+  // Below will be where we handle the loading splash screen.
   if (isLoading) {
     return <SplashScreen />;
   };
@@ -97,51 +105,54 @@ const AppNavigation = (props) => {
   return (
     <NavigationContainer>
       {userToken ? (
-        <Tabs.Navigator>
+        <Tabs.Navigator 
+        tabBarOptions={tabDefaultOptions} 
+        screenOptions={({route}) => ({
+            tabBarIcon: ({focused}) => {
+              let iconName;
+              const color = focused ? COLOR.limeGreen : COLOR.grey;
+
+              switch (route.name) {
+                case "Home":
+                  iconName = focused ? 'home' : 'home-outline';
+                  return <MaterialCommunityIcons name={iconName} size={ICON_SIZE.iconSizeMedium} color={color} /> 
+                case "Notifications":
+                  iconName = focused ? 'bell' : 'bell-outline';
+                  return <MaterialCommunityIcons name={iconName} size={ICON_SIZE.iconSizeMedium} color={color} /> 
+                case "Create Story":
+                  iconName = focused ? 'microphone' : 'microphone-outline';
+                  return <MaterialCommunityIcons name={iconName} size={ICON_SIZE.iconSizeMedium} color={color} /> 
+                case "Search":
+                  iconName = focused ? 'md-search' : 'ios-search';
+                  return <IonIcons name={iconName} size={ICON_SIZE.iconSizeMedium} color={color} /> 
+                case "Profile":
+                  iconName = focused ? 'user' : 'user-o';
+                  return <FontAwesomeIcons name={iconName} size={ICON_SIZE.iconSizeMedium} color={color} /> 
+                default:
+                  break;
+              }
+            }
+          })}
+        >
           <Tabs.Screen
             name="Home"
             component={HomeStackScreen}
-            options={{
-              tabBarIcon: () => (
-                <AntIcons name="home" size={30} color="black" />
-              ),
-            }}
           />
           <Tabs.Screen
             name="Notifications"
             component={NotificationsStackScreen}
-            options={{
-              tabBarIcon: () => (
-                <IonIcons name="ios-notifications" size={30} color="black" />
-              ),
-            }}
           />
           <Tabs.Screen
             name="Create Story"
             component={StoryCreationStackScreen}
-            options={{
-              tabBarIcon: () => (
-                <FontAwesomeIcons name="microphone" size={30} color="black" />
-              ),
-            }}
           />
           <Tabs.Screen
             name="Search"
             component={SearchStackScreen}
-            options={{
-              tabBarIcon: () => (
-                <AntIcons name="search1" size={30} color="black" />
-              ),
-            }}
           />
           <Tabs.Screen
             name="Profile"
             component={ProfileStackScreen}
-            options={{
-              tabBarIcon: () => (
-                <AntIcons name="user" size={30} color="black" />
-              )
-            }}
           />
         </Tabs.Navigator>
       ) : (
