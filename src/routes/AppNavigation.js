@@ -110,24 +110,53 @@ const AppNavigation = (props) => {
         screenOptions={({route}) => ({
             tabBarIcon: ({focused}) => {
               let iconName;
-              const color = focused ? COLOR.limeGreen : COLOR.grey;
 
               switch (route.name) {
                 case "Home":
                   iconName = focused ? 'home' : 'home-outline';
-                  return <MaterialCommunityIcons name={iconName} size={ICON_SIZE.iconSizeMedium} color={color} /> 
+                  return (
+                    <MaterialCommunityIcons
+                      name={iconName}
+                      size={ICON_SIZE.iconSizeMedium}
+                      color={COLOR.grey}
+                    />
+                  ); 
                 case "Notifications":
                   iconName = focused ? 'bell' : 'bell-outline';
-                  return <MaterialCommunityIcons name={iconName} size={ICON_SIZE.iconSizeMedium} color={color} /> 
+                  return (
+                    <MaterialCommunityIcons
+                      name={iconName}
+                      size={ICON_SIZE.iconSizeMedium}
+                      color={COLOR.grey}
+                    />
+                  ); 
                 case "Create Story":
                   iconName = focused ? 'microphone' : 'microphone-outline';
-                  return <MaterialCommunityIcons name={iconName} size={ICON_SIZE.iconSizeMedium} color={color} /> 
+                  return (
+                    <MaterialCommunityIcons
+                      name={iconName}
+                      size={ICON_SIZE.iconSizeMedium}
+                      color={COLOR.grey}
+                    />
+                  ); 
                 case "Search":
                   iconName = focused ? 'md-search' : 'ios-search';
-                  return <IonIcons name={iconName} size={ICON_SIZE.iconSizeMedium} color={color} /> 
+                  return (
+                    <IonIcons
+                      name={iconName}
+                      size={ICON_SIZE.iconSizeMedium}
+                      color={COLOR.grey}
+                    />
+                  ); 
                 case "Profile":
                   iconName = focused ? 'user' : 'user-o';
-                  return <FontAwesomeIcons name={iconName} size={ICON_SIZE.iconSizeMedium} color={color} /> 
+                  return (
+                    <FontAwesomeIcons
+                      name={iconName}
+                      size={ICON_SIZE.iconSizeMedium}
+                      color={COLOR.grey}
+                    />
+                  ); 
                 default:
                   break;
               }
