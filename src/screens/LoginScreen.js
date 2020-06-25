@@ -4,8 +4,12 @@ import {View, Text, Button} from 'react-native';
 // Components
 import TextInputComponent from './../components/TextInputComponent';
 
+// Icons
+import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
+
 // Styles
 import styles from './../styles/screens/LoginScreen';
+import {COLOR, ICON_SIZE} from './../styles/styleHelpers';
 
 const LoginScreen = ({navigation}) => {
   
@@ -20,17 +24,20 @@ const LoginScreen = ({navigation}) => {
     return setPasswordValue(text)
   };
 
+
   return (
     <View style={styles.container}>
       <Text> HELLO </Text>
       <Text> Sign in to your account</Text>
       <TextInputComponent
+        icon={<FontAwesomeIcons name="user" size={ICON_SIZE.iconSizeMedium} color={COLOR.grey} />}
         placeholder="Email address"
         onChange={(event) => {
           onChangeEmailAddress(event);
         }}
         keyboardType="email-address"
       />
+
       <TextInputComponent
         placeholder="Password"
         onChange={(event) => {
@@ -38,6 +45,7 @@ const LoginScreen = ({navigation}) => {
         }}
         keyboardType="email-address"
       />
+      
       <Button
         title="Don't have an account?"
         onPress={() => navigation.push('SignUp')}

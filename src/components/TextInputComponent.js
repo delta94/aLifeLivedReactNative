@@ -6,6 +6,7 @@ import styles from './../styles/components/TextInputComponent';
 
 const TextInputComponent = ({
   onChange,
+  icon,
   placeholder,
   label,
   keyboardType,
@@ -26,20 +27,25 @@ const TextInputComponent = ({
   return (
     <View>
       <Text> {label} </Text>
-      <TextInput
-        style={styles.textInput}
-        placeholder={placeholder}
-        placeholderTextColor={styles.placeHolder.color}
-        value={value ? value : null}
-        defaultValue={defaultValue ? defaultValue : null}
-        onChange={handleChange}
-        secureTextEntry={
-          placeholder === 'Password' || secureTextEntry === true ? true : false
-        }
-        keyboardType={keyboardType ? keyboardType : 'default'}
-        multiline={isMultiline ? isMultiline : false}
-        numberOfLines={numberOfLines ? numberOfLines : null}
-      />
+      <View>
+        {icon ? icon : null}
+        <TextInput
+          style={styles.textInput}
+          placeholder={placeholder}
+          placeholderTextColor={styles.placeHolder.color}
+          value={value ? value : null}
+          defaultValue={defaultValue ? defaultValue : null}
+          onChange={handleChange}
+          secureTextEntry={
+            placeholder === 'Password' || secureTextEntry === true
+              ? true
+              : false
+          }
+          keyboardType={keyboardType ? keyboardType : 'default'}
+          multiline={isMultiline ? isMultiline : false}
+          numberOfLines={numberOfLines ? numberOfLines : null}
+        />
+      </View>
     </View>
   );
 };
