@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   },
 
   placeHolder: {
-    color: COLOR.grey
+    color: COLOR.grey,
   },
 
   labelText: {
@@ -23,6 +23,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.white,
     height: 50,
     width: 350,
+    shadowColor: COLOR.grey,
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.6,
+    shadowRadius: 2,
     paddingLeft: 10,
     borderWidth: 1,
     borderRadius: 6,
