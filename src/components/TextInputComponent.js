@@ -17,6 +17,7 @@ const TextInputComponent = ({
   disable,
   errorMessage,
   keyboardType,
+  secureTextEntry
 }) => {
   // NOTE: number of lines needs to be null or you can't see text on android  
   const handleChange = (event) => {
@@ -25,18 +26,19 @@ const TextInputComponent = ({
  
   return (
     <View>
-        <Input 
-          placeholder={placeholder}
-          leftIcon={{type: iconType, name: iconName}}
-          onChangeText={handleChange}
-          disabled={disable}
-          errorMessage={errorMessage}
-          label={label}
-          inputContainerStyle={styles.textInput}
-          inputStyle={styles.textStyle}
-          placeholderTextColor={COLOR.grey}
-          keyboardType={keyboardType ? keyboardType : "default"}
-        />
+      <Input
+        placeholder={placeholder}
+        leftIcon={{type: iconType, name: iconName}}
+        onChangeText={handleChange}
+        disabled={disable}
+        errorMessage={errorMessage}
+        label={label}
+        inputContainerStyle={styles.textInput}
+        inputStyle={styles.textStyle}
+        placeholderTextColor={COLOR.grey}
+        secureTextEntry={secureTextEntry}
+        keyboardType={keyboardType ? keyboardType : 'default'}
+      />
     </View>
   );
 };

@@ -3,7 +3,7 @@ export const FLEX = {
 }
 
 export const COLOR = {
-  grey: '#424242',
+  grey: '#252424',
   limeGreen: '#00D6A8',
   white: 'white'
 }

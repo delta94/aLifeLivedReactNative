@@ -5,14 +5,30 @@ import {View, Text, Button} from 'react-native';
 import TextInputComponent from './../components/TextInputComponent';
 import ButtonComponent from './../components/ButtonComponent';
 
+// API
+import {login} from './../api/postRequests/login';
+
 // Styles
 import styles from './../styles/screens/LoginScreen';
-import {COLOR, ICON_SIZE} from './../styles/styleHelpers';
 
-const LoginScreen = ({navigation}) => {
-  
-  const [emailAddressValue, setEmailAddressValue] = useState('');
-  const [passwordValue, setPasswordValue] = useState('');
+const LoginScreen = ({navigation}) => {  
+  const [emailAddress, setEmailAddressValue] = useState('');
+  const [password, setPasswordValue] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const onSubmit = async () => {
+    const data = await login(emailAddress, password);
+    
+    if (data.status === 200) {
+      const userData = data.data;
+      console.log(userData);
+      
+    } else {
+      console.log(data.errorMessage);
+      setErrorMessage(data.errorMessage);
+    }
+
+  };
   
   return (
     <View style={styles.container}>
@@ -34,12 +50,22 @@ const LoginScreen = ({navigation}) => {
           placeholder="Password"
           iconName="lock"
           iconType="font-awesome"
+          secureTextEntry={true}
           onChange={(event) => setPasswordValue(event)}
         />
       </View>
 
       <View>
-        <ButtonComponent title="Login" buttonType="solid" />
+        {errorMessage ? (
+          <Text style={styles.errorMessage}> {errorMessage} </Text>
+        ) : null}
+        <ButtonComponent
+          title="Login"
+          buttonType="solid"
+          onButtonPress={() => onSubmit()}
+          disabled={emailAddress || password ? false : true}
+        />
+
         <Button
           title="Don't have an account?"
           onPress={() => navigation.push('SignUp')}
