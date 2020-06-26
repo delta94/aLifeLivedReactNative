@@ -1,5 +1,9 @@
 import React, {useState} from 'react';
 import {View, Text, Button} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+
+// Icon
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // Components
 import TextInputComponent from './../components/TextInputComponent';
@@ -10,11 +14,15 @@ import {login} from './../api/postRequests/login';
 
 // Styles
 import styles from './../styles/screens/LoginScreen';
+import { ICON_SIZE, COLOR } from '../styles/styleHelpers';
 
-const LoginScreen = ({navigation}) => {  
+const LoginScreen = () => {  
   const [emailAddress, setEmailAddressValue] = useState('');
   const [password, setPasswordValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  // Direct navigation to homepage. 
+  const navigation = useNavigation();
 
   const onSubmit = async () => {
     const data = await login(emailAddress, password);
@@ -27,12 +35,12 @@ const LoginScreen = ({navigation}) => {
       console.log(data.errorMessage);
       setErrorMessage(data.errorMessage);
     }
-
   };
   
   return (
     <View style={styles.container}>
-      <View>
+      <AntDesign name="close" size={ICON_SIZE.iconSizeMedium} color={COLOR.grey} style={styles.icon} onPress={() => navigation.navigate("Home")}/>
+      <View style={styles.texInputContainer}>
         <View style={styles.textContainer}>
           <Text style={styles.header}> HELLO </Text>
           <Text> Sign in to your account</Text>
@@ -55,7 +63,7 @@ const LoginScreen = ({navigation}) => {
         />
       </View>
 
-      <View>
+      <View style={styles.buttonContainer}>
         {errorMessage ? (
           <Text style={styles.errorMessage}> {errorMessage} </Text>
         ) : null}

@@ -5,6 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "iPhone8": "react-native run-ios --simulator=iPhone 8",
+    "iosDevice": "node node_modules/react-native/local-cli/cli.js run-ios --device \"iPhone\"",
     "xCode": "xed ios",
     "ios": "react-native run-ios",
     "start": "react-native start",
