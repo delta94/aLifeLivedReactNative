@@ -22,10 +22,16 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.mediumSize,
     backgroundColor: COLOR.white,
     height: 50,
+    width: 350,
     paddingLeft: 10,
     borderWidth: 1,
     borderRadius: 6,
     borderColor: COLOR.black,
+  },
+
+  textStyle: {
+    paddingLeft: 10,
+    color: COLOR.grey,
   },
 
   textInputLarge: {

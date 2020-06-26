@@ -1,51 +1,42 @@
 import React from 'react';
-import {Text, TextInput, View, Platform} from 'react-native';
+import {View} from 'react-native';
+import {Input} from 'react-native-elements';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 // Styles
 import styles from './../styles/components/TextInputComponent';
+import {COLOR} from './../styles/styleHelpers';
+MaterialIcons.loadFont();
 
 const TextInputComponent = ({
   onChange,
-  icon,
   placeholder,
   label,
+  iconType,
+  iconName,
+  disable,
+  errorMessage,
   keyboardType,
-  isMultiline,
-  numberOfLines,
-  inputSize,
-  value,
-  name,
-  required,
-  defaultValue,
-  secureTextEntry
 }) => {
   // NOTE: number of lines needs to be null or you can't see text on android  
   const handleChange = (event) => {
-    return onChange(event.nativeEvent);
+    return onChange(event);
   };
-
+ 
   return (
     <View>
-      <Text> {label} </Text>
-      <View>
-        {icon ? icon : null}
-        <TextInput
-          style={styles.textInput}
+        <Input 
           placeholder={placeholder}
-          placeholderTextColor={styles.placeHolder.color}
-          value={value ? value : null}
-          defaultValue={defaultValue ? defaultValue : null}
-          onChange={handleChange}
-          secureTextEntry={
-            placeholder === 'Password' || secureTextEntry === true
-              ? true
-              : false
-          }
-          keyboardType={keyboardType ? keyboardType : 'default'}
-          multiline={isMultiline ? isMultiline : false}
-          numberOfLines={numberOfLines ? numberOfLines : null}
+          leftIcon={{type: iconType, name: iconName}}
+          onChangeText={handleChange}
+          disabled={disable}
+          errorMessage={errorMessage}
+          label={label}
+          inputContainerStyle={styles.textInput}
+          inputStyle={styles.textStyle}
+          placeholderTextColor={COLOR.grey}
+          keyboardType={keyboardType ? keyboardType : "default"}
         />
-      </View>
     </View>
   );
 };

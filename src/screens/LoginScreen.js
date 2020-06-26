@@ -3,9 +3,7 @@ import {View, Text, Button} from 'react-native';
 
 // Components
 import TextInputComponent from './../components/TextInputComponent';
-
-// Icons
-import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
+import ButtonComponent from './../components/ButtonComponent';
 
 // Styles
 import styles from './../styles/screens/LoginScreen';
@@ -16,40 +14,37 @@ const LoginScreen = ({navigation}) => {
   const [emailAddressValue, setEmailAddressValue] = useState('');
   const [passwordValue, setPasswordValue] = useState('');
   
-  const onChangeEmailAddress = ({text}) => {
-    return setEmailAddressValue(text)
-  };
-
-  const onChangePassword = ({text}) => {
-    return setPasswordValue(text)
-  };
-
-
   return (
     <View style={styles.container}>
-      <Text> HELLO </Text>
-      <Text> Sign in to your account</Text>
-      <TextInputComponent
-        icon={<FontAwesomeIcons name="user" size={ICON_SIZE.iconSizeMedium} color={COLOR.grey} />}
-        placeholder="Email address"
-        onChange={(event) => {
-          onChangeEmailAddress(event);
-        }}
-        keyboardType="email-address"
-      />
+      <View>
+        <View style={styles.textContainer}>
+          <Text style={styles.header}> HELLO </Text>
+          <Text> Sign in to your account</Text>
+        </View>
 
-      <TextInputComponent
-        placeholder="Password"
-        onChange={(event) => {
-          onChangeEmailAddress(event);
-        }}
-        keyboardType="email-address"
-      />
-      
-      <Button
-        title="Don't have an account?"
-        onPress={() => navigation.push('SignUp')}
-      />
+        <TextInputComponent
+          placeholder="Email Address"
+          keyboardType="email-address"
+          iconName="user"
+          iconType="font-awesome"
+          onChange={(event) => setEmailAddressValue(event)}
+        />
+
+        <TextInputComponent
+          placeholder="Password"
+          iconName="lock"
+          iconType="font-awesome"
+          onChange={(event) => setPasswordValue(event)}
+        />
+      </View>
+
+      <View>
+        <ButtonComponent title="Login" buttonType="solid" />
+        <Button
+          title="Don't have an account?"
+          onPress={() => navigation.push('SignUp')}
+        />
+      </View>
     </View>
   );
 };
