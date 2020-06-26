@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, Button} from 'react-native';
+import {View, Text, Button, AsyncStorage} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 // Icon
@@ -20,18 +20,31 @@ const LoginScreen = () => {
   const [emailAddress, setEmailAddressValue] = useState('');
   const [password, setPasswordValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   // Direct navigation to homepage. 
   const navigation = useNavigation();
 
   const onSubmit = async () => {
+    setIsLoading(true);
     const data = await login(emailAddress, password);
+
+    const storeAuthToken = async (encryptedToken) => {
+      try {
+        await AsyncStorage.setItem('A_LIFE_LIVED_TOKEN', authToken);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     
     if (data.status === 200) {
       const userData = data.data;
-      console.log(userData);
-      
+      storeAuthToken(userData.encryptedToken);
+
+      setIsLoading(false);
+      return navigation.navigate("Home");
     } else {
+      setIsLoading(false)
       console.log(data.errorMessage);
       setErrorMessage(data.errorMessage);
     }
@@ -70,6 +83,7 @@ const LoginScreen = () => {
         <ButtonComponent
           title="Login"
           buttonType="solid"
+          isLoading={isLoading}
           onButtonPress={() => onSubmit()}
           disabled={emailAddress || password ? false : true}
         />
