@@ -1,8 +1,9 @@
 import 'react-native-gesture-handler';
 import React, {useState, useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer, StackActions} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'; 
+import AsyncStorage from '@react-native-community/async-storage';
 
 // Icon imports
 import IonIcons from 'react-native-vector-icons/Ionicons';
@@ -158,8 +159,8 @@ const AppNavigation = () => {
     <NavigationContainer>
         <Tabs.Navigator tabBarOptions={tabDefaultOptions} screenOptions={({route}) => screenOptions(route)}>
           <Tabs.Screen name="Home" component={HomeStackScreen} />
-          <Tabs.Screen name="Notifications" component={userToken ? NotificationsStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false} } />
-          <Tabs.Screen name="Create Story" component={StoryCreationStackScreen} /> 
+          <Tabs.Screen name="Notifications" component={userToken ? NotificationsStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} />
+          <Tabs.Screen name="Create Story" component={userToken ? StoryCreationStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} /> 
           <Tabs.Screen name="Search" component={SearchStackScreen} />
           <Tabs.Screen name="Profile" component={userToken ? ProfileStackScreen : LoginAndSignUpStackScreen} />
         </Tabs.Navigator>

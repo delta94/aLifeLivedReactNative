@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
   },
 
   icon: {
+    marginTop: 20,
     marginLeft: 20,
   },
 

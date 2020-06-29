@@ -1,6 +1,14 @@
 import React, {useState} from 'react';
-import {View, Text, Button, AsyncStorage} from 'react-native';
+import {View, Text, Button} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
+
+// API
+import {login} from './../api/postRequests/login';
+
+// Redux
+import {connect} from 'react-redux';
+import {userLoginSuccessful} from './../redux/actions/userActions';
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -9,14 +17,12 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import TextInputComponent from './../components/TextInputComponent';
 import ButtonComponent from './../components/ButtonComponent';
 
-// API
-import {login} from './../api/postRequests/login';
 
 // Styles
 import styles from './../styles/screens/LoginScreen';
 import { ICON_SIZE, COLOR } from '../styles/styleHelpers';
 
-const LoginScreen = () => {  
+const LoginScreen = (props) => {  
   const [emailAddress, setEmailAddressValue] = useState('');
   const [password, setPasswordValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -31,18 +37,23 @@ const LoginScreen = () => {
 
     const storeAuthToken = async (encryptedToken) => {
       try {
-        await AsyncStorage.setItem('A_LIFE_LIVED_TOKEN', authToken);
+        await AsyncStorage.setItem('A_LIFE_LIVED_TOKEN', encryptedToken);
       } catch (error) {
         console.log(error);
       }
     };
     
     if (data.status === 200) {
-      const userData = data.data;
-      storeAuthToken(userData.encryptedToken);
-
-      setIsLoading(false);
-      return navigation.navigate("Home");
+      try {
+        const userData = data.data;
+        storeAuthToken(userData.encryptedToken);
+        props.userLoginSuccessful(userData);
+        setIsLoading(false);
+        return navigation.navigate('Home');
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+      };
     } else {
       setIsLoading(false)
       console.log(data.errorMessage);
@@ -97,4 +108,10 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    userLoginSuccessful: (userData) => dispatch(userLoginSuccessful(userData))
+  };
+};
+
+export default connect(null, mapDispatchToProps)(LoginScreen);
