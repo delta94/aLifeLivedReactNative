@@ -1,11 +1,14 @@
 import 'react-native-gesture-handler';
 import React from 'react';
+import {Provider} from 'react-redux';
 import {View} from 'react-native'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import IonIcons from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+// Redux Store
+import store from './src/redux/store';
 
 // Navigation
 import AppNavigation from './src/routes/AppNavigation';
@@ -21,9 +24,11 @@ FontAwesomeIcons.loadFont();
 
 const App = () => {
   return (
-    <View style={styles.container}>
-      <AppNavigation />
-    </View>
+    <Provider store={store}>
+      <View style={styles.container}>
+        <AppNavigation />
+      </View>
+    </Provider>
   );
 };
 
