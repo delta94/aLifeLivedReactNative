@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import {View, Text, Button} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import AsyncStorage from '@react-native-community/async-storage';
+
+// Async Storage
+import {storeToken} from './../helpers/asyncStorage';
 
 // API
 import {login} from './../api/postRequests/login';
@@ -35,18 +37,10 @@ const LoginScreen = (props) => {
     setIsLoading(true);
     const data = await login(emailAddress, password);
 
-    const storeAuthToken = async (encryptedToken) => {
-      try {
-        await AsyncStorage.setItem('A_LIFE_LIVED_TOKEN', encryptedToken);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    
     if (data.status === 200) {
       try {
         const userData = data.data;
-        storeAuthToken(userData.encryptedToken);
+        storeToken(userData.encryptedToken);
         props.userLoginSuccessful(userData);
         setIsLoading(false);
         return navigation.navigate('Home');

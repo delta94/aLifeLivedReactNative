@@ -1,7 +1,7 @@
-import {USER_LOGIN_SUCCESSFUL} from './../actions/allActions';
+import {USER_LOGIN_SUCCESSFUL, SET_USER_TOKEN, REMOVE_USER_TOKEN} from './../actions/allActions';
 
 const userDefaultState = {
-  id: "",
+  id: null,
   loggedIn: false,
   emailAddress: "",
   isAdmin: false,
@@ -27,6 +27,15 @@ const userReducer = (state = userDefaultState, action) => {
         firstName: firstName,
         lastName: lastName
       };
+    case SET_USER_TOKEN:      
+      return {
+        ...state,
+        id: action.payload.encryptedToken
+      };
+    case REMOVE_USER_TOKEN: 
+      return {
+        id: null
+      }
     default:
       return state;
   }

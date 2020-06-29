@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import {Provider} from 'react-redux';
 import {View} from 'react-native'
+
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import IonIcons from 'react-native-vector-icons/Ionicons'
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
