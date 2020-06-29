@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, Button} from 'react-native';
+import {View, Text, Button, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 // Async Storage
@@ -18,7 +18,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 // Components
 import TextInputComponent from './../components/TextInputComponent';
 import ButtonComponent from './../components/ButtonComponent';
-
 
 // Styles
 import styles from './../styles/screens/LoginScreen';
@@ -56,47 +55,59 @@ const LoginScreen = (props) => {
   };
   
   return (
-    <View style={styles.container}>
-      <AntDesign name="close" size={ICON_SIZE.iconSizeMedium} color={COLOR.grey} style={styles.icon} onPress={() => navigation.navigate("Home")}/>
-      <View style={styles.texInputContainer}>
-        <View style={styles.textContainer}>
-          <Text style={styles.header}> HELLO </Text>
-          <Text> Sign in to your account</Text>
-        </View>
-
-        <TextInputComponent
-          placeholder="Email Address"
-          keyboardType="email-address"
-          iconName="user"
-          iconType="font-awesome"
-          onChange={(event) => setEmailAddressValue(event)}
-        />
-
-        <TextInputComponent
-          placeholder="Password"
-          iconName="lock"
-          iconType="font-awesome"
-          secureTextEntry={true}
-          onChange={(event) => setPasswordValue(event)}
-        />
+    <View style={styles.mainContainer}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}> A Life Lived </Text>
       </View>
 
-      <View style={styles.buttonContainer}>
-        {errorMessage ? (
-          <Text style={styles.errorMessage}> {errorMessage} </Text>
-        ) : null}
-        <ButtonComponent
-          title="Login"
-          buttonType="solid"
-          isLoading={isLoading}
-          onButtonPress={() => onSubmit()}
-          disabled={emailAddress || password ? false : true}
+      <View style={styles.footer}>
+        <AntDesign
+          name="close"
+          size={ICON_SIZE.iconSizeMedium}
+          color={COLOR.grey}
+          style={styles.icon}
+          onPress={() => navigation.navigate('Home')}
         />
+        <View style={styles.texInputContainer}>
+          <View style={styles.textContainer}>
+            <Text style={styles.header}> HELLO </Text>
+            <Text> Sign in to your account</Text>
+        </View>
 
-        <Button
-          title="Don't have an account?"
-          onPress={() => navigation.push('SignUp')}
-        />
+          <TextInputComponent
+            placeholder="Email Address"
+            keyboardType="email-address"
+            iconName="user"
+            iconType="font-awesome"
+            onChange={(event) => setEmailAddressValue(event)}
+          />
+
+          <TextInputComponent
+            placeholder="Password"
+            iconName="lock"
+            iconType="font-awesome"
+            secureTextEntry={true}
+            onChange={(event) => setPasswordValue(event)}
+          />
+        </View>
+
+        <View style={styles.buttonContainer}>
+          {errorMessage ? (
+            <Text style={styles.errorMessage}> {errorMessage} </Text>
+          ) : null}
+          <ButtonComponent
+            title="Login"
+            buttonType="solid"
+            isLoading={isLoading}
+            onButtonPress={() => onSubmit()}
+            disabled={emailAddress || password ? false : true}
+          />
+
+          <Button
+            title="Don't have an account?"
+            onPress={() => navigation.push('SignUp')}
+          />
+        </View>
       </View>
     </View>
   );

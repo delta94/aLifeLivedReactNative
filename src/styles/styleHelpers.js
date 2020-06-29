@@ -5,7 +5,8 @@ export const FLEX = {
 export const COLOR = {
   grey: '#252424',
   limeGreen: '#0FCFA6',
-  white: 'white'
+  white: 'white', 
+  green: "#009387"
 }
 
 export const ICON_SIZE = {
