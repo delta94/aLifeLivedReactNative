@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, Button, ScrollView} from 'react-native';
+import {View, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 // Async Storage
@@ -18,6 +18,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 // Components
 import TextInputComponent from './../components/TextInputComponent';
 import ButtonComponent from './../components/ButtonComponent';
+import ButtonClearComponent from './../components/ButtonClearComponent';
 
 // Styles
 import styles from './../styles/screens/LoginScreen';
@@ -72,7 +73,7 @@ const LoginScreen = (props) => {
           <View style={styles.textContainer}>
             <Text style={styles.header}> HELLO </Text>
             <Text> Sign in to your account</Text>
-        </View>
+          </View>
 
           <TextInputComponent
             placeholder="Email Address"
@@ -103,9 +104,9 @@ const LoginScreen = (props) => {
             disabled={emailAddress || password ? false : true}
           />
 
-          <Button
+          <ButtonClearComponent
             title="Don't have an account?"
-            onPress={() => navigation.push('SignUp')}
+            onButtonPress={() => navigation.push('SignUp')}
           />
         </View>
       </View>
