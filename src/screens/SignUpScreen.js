@@ -29,8 +29,6 @@ const SignUpScreen = () => {
 
   // Input Values
   const [avatarURI, setAvatarURI] = useState("");
-  console.log(avatarURI);
-  
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
@@ -39,12 +37,22 @@ const SignUpScreen = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // Validation
+  const [firstNameValidation, setFirstNameValidation] = useState(null);
+
   const onSubmit = async () => {
     setIsLoading(true);
-    const data = await signUp(emailAddress, firstName, lastName, username, mobileNumber, password);
+    const userData = {
+      firstName: firstName,
+      lastName: lastName,
+      emailAddress: emailAddress,
+      username: username, 
+      mobileNumber: mobileNumber,
+      password: password
+    };
 
-    console.log(data);
-    
+    const data = await signUp(userData);
+ 
   };
 
   // Below uses image picker to select image
@@ -54,9 +62,23 @@ const SignUpScreen = () => {
     };
 
     ImagePicker.launchImageLibrary(options, (response) => {      
-      setAvatarURI(response.uri.toString())
+      setAvatarURI(response.uri)
     });
   };
+
+  // Validation
+  const validateFirstName = (event) => {
+    console.log("HERE", event);
+    
+    if (!event) {
+      setFirstNameValidation("First name is required")
+    } else {
+      setFirstNameValidation(null)
+    }
+  };
+
+  console.log("YES", firstNameValidation);
+  
 
   return (
     <View style={styles.mainContainer}>
@@ -94,7 +116,11 @@ const SignUpScreen = () => {
             placeholder="First name"
             iconName="address-card"
             iconType="font-awesome"
+            errorMessage={!firstName ? "First name must not be empty" : null}
+            isFocused={true}
             onChange={(event) => setFirstName(event)}
+            inputValidation={(event) => validateFirstName(event)}
+            errorMessage={firstNameValidation}
           />
 
           <TextInputComponent
@@ -105,6 +131,7 @@ const SignUpScreen = () => {
           />
 
           <TextInputComponent
+            autoCapitalize="none"
             placeholder="Email Address"
             keyboardType="email-address"
             iconName="envelope"

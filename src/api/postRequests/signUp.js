@@ -1,17 +1,21 @@
 import { axiosAPI } from './../axiosWithAuth';
 
-export const signUp = async (emailAddress, password, username, mobileNumber) => {
+export const signUp = async ({firstName, lastName, emailAddress, mobileNumber, username, password}) => {
 
+  console.log("HERE", firstName);
+  
   try {
     const data = await axiosAPI.post('/signup', {
+      firstName,
+      lastName, 
       emailAddress,
-      password,
-      username, 
-      mobileNumber
+      mobileNumber,
+      username,
+      password
     });
 
     return data;
-  } catch (error) {
+  } catch (error) {   
     return {
       error,
       errorMessage: error.response.data.message
