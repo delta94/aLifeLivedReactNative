@@ -6,7 +6,11 @@ import {Avatar} from 'react-native-elements';
 import styles from '../styles/components/AvatarComponent';
 import {COLOR} from './../styles/styleHelpers';
 
-const AvatarComponent = ({isRounded, size, iconName, source, showEditButton }) => {
+const AvatarComponent = ({isRounded, size, iconName, source, showEditButton, onPress }) => {
+
+  const handleOnPress = () => {
+    return onPress();
+  }
 
   return (
     <View>
@@ -17,6 +21,7 @@ const AvatarComponent = ({isRounded, size, iconName, source, showEditButton }) =
         showEditButton={showEditButton}
         source={ source ? {uri: source} : null}
         containerStyle={styles.container}
+        onPress={handleOnPress}
       />
     </View>
   );

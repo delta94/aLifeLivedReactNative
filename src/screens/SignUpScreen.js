@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import ImagePicker from 'react-native-image-picker';
 import {View, Text, ScrollView, KeyboardAvoidingView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
@@ -28,6 +29,8 @@ const SignUpScreen = () => {
 
   // Input Values
   const [avatarURI, setAvatarURI] = useState("");
+  console.log(avatarURI);
+  
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
@@ -42,6 +45,17 @@ const SignUpScreen = () => {
 
     console.log(data);
     
+  };
+
+  // Below uses image picker to select image
+  const imagePicker = () => {
+    const options = {
+      noData: true,
+    };
+
+    ImagePicker.launchImageLibrary(options, (response) => {      
+      setAvatarURI(response.uri.toString())
+    });
   };
 
   return (
@@ -62,13 +76,15 @@ const SignUpScreen = () => {
               onPress={() => navigation.navigate('Home')}
             />
           </View>
-          <View style={styles.avatarContainer}>
+          <View style={styles.avatarContainer} >
             <AvatarComponent
               style={styles.avatarIcon}
               isRounded={true}
               showEditButton={true}
-              size="large"
+              size="xlarge"
               iconName="user"
+              source={avatarURI}
+              onPress={() => imagePicker()}
             />
           </View>
         </View>
@@ -76,14 +92,14 @@ const SignUpScreen = () => {
         <View style={styles.textInputContainer}> 
           <TextInputComponent
             placeholder="First name"
-            iconName="user"
+            iconName="address-card"
             iconType="font-awesome"
             onChange={(event) => setFirstName(event)}
           />
 
           <TextInputComponent
             placeholder="Last name"
-            iconName="user"
+            iconName="address-card"
             iconType="font-awesome"
             onChange={(event) => setLastName(event)}
           />
@@ -132,7 +148,7 @@ const SignUpScreen = () => {
         <View style={styles.buttonContainer}>
           <ButtonComponent
             title="Signup"
-            onButtonPress={() => console.log('HELLO THERE')}
+            onButtonPress={() => onSubmit()}
           />
 
           <ButtonClearComponent
