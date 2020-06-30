@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {FLEX, COLOR, FONT_SIZE} from './../styleHelpers';
+import { StyleSheet } from 'react-native';
+import { FLEX, COLOR, FONT_SIZE } from './../styleHelpers';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -33,24 +33,19 @@ const styles = StyleSheet.create({
     flex: FLEX.flexOne,
   },
 
+  avatarContainer: {
+    alignItems: "center",
+    flex: 2,
+    marginBottom: 30
+  },
+
   icon: {
     marginLeft: 15,
-    marginTop: 20,
+    marginTop: 20, 
   },
 
-  header: {
-    color: COLOR.grey,
-    fontWeight: 'bold',
-    fontSize: FONT_SIZE.xLargeSize,
-  },
-
-  texInputContainer: {
+  textInputContainer: {
     alignItems: 'center',
-  },
-
-  textContainer: {
-    alignItems: 'center',
-    marginBottom: 100,
   },
 
   errorMessage: {
@@ -61,7 +56,8 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    marginTop: 100,
+    marginTop: 20,
+    marginBottom: 30,
     alignItems: 'center',
   },
 });

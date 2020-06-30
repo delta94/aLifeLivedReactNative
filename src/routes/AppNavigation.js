@@ -69,9 +69,9 @@ const ProfileStackScreen = () => (
 );
 
 const LoginAndSignUpStackScreen = () => (
-  <LoginAndSignUpStack.Navigator screenOptions={{headerShown: false}}>
+  <LoginAndSignUpStack.Navigator screenOptions={{ headerShown: false}}>
     <LoginAndSignUpStack.Screen name="Login" component={LoginScreen} />
-    <LoginAndSignUpStack.Screen name="SignUp" component={SignUpScreen} />
+    <LoginAndSignUpStack.Screen name="SignUp" component={SignUpScreen}/>
   </LoginAndSignUpStack.Navigator>
 );
 
@@ -159,6 +159,9 @@ const AppNavigation = (props) => {
                 color={COLOR.grey}
               />
             );
+          case 'SignUp': 
+            const tabBarVisible = false
+            return tabBarVisible
           default:
             break;
         }
