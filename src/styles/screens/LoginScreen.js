@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {FLEX, COLOR, FONT_SIZE, BORDER_RADIUS} from './../styleHelpers';
+import {StyleSheet, Platform} from 'react-native';
+import {FLEX, COLOR, FONT_SIZE, BORDER_RADIUS, HEADER_MARGINS} from './../styleHelpers';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    height: 100,
+    marginTop: HEADER_MARGINS.marginTop,
+    marginBottom: HEADER_MARGINS.marginBottom,
   },
 
   headerText: {

@@ -4,6 +4,7 @@ export const FLEX = {
 
 export const COLOR = {
   grey: '#252424',
+  lightGrey: "#E5E5E5",
   limeGreen: '#0FCFA6',
   white: 'white', 
   green: "#009387"
@@ -22,4 +23,9 @@ export const FONT_SIZE = {
 
 export const BORDER_RADIUS = {
   medium: 20
+};
+
+export const HEADER_MARGINS = {
+  marginTop: Platform.OS === 'ios' ? 25 : 5,
+  marginBottom: Platform.OS === 'ios' ? 25 : 15
 };

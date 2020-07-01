@@ -12,8 +12,13 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: COLOR.grey,
+    color: COLOR.white,
     fontWeight: "bold"
+  },
+
+  disabledButton: {
+    backgroundColor: COLOR.lightGrey,
+    color: COLOR.white
   }
 });
 

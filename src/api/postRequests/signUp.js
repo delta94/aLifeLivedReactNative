@@ -1,8 +1,7 @@
 import { axiosAPI } from './../axiosWithAuth';
 
 export const signUp = async ({firstName, lastName, emailAddress, mobileNumber, username, password}) => {
-
-  console.log("HERE", firstName);
+  console.log(firstName);
   
   try {
     const data = await axiosAPI.post('/signup', {

@@ -10,17 +10,18 @@ const ButtonComponent = ({buttonType, title, isLoading, onButtonPress, disabled}
   };
 
   return (
-    <Button 
+    <Button
       title={title}
       type={buttonType ? buttonType : null}
       loading={isLoading ? true : false}
       buttonStyle={styles.button}
+      disabledStyle={styles.disabledButton}
       titleStyle={styles.title}
       disabled={disabled}
       containerStyle={styles.container}
       onPress={handleOnPress}
     />
-  )
+  );
 };
 
 export default ButtonComponent;

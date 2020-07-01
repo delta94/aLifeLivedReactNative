@@ -2,9 +2,14 @@ import React, {useState} from 'react';
 import ImagePicker from 'react-native-image-picker';
 import {View, Text, ScrollView, KeyboardAvoidingView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import * as Animatable from 'react-native-animatable';
 
 // API
 import {signUp} from './../api/postRequests/signUp';
+
+// Redux
+import {connect} from 'react-redux';
+import {userLoginSuccessful} from './../redux/actions/userActions';
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -33,7 +38,7 @@ const SignUpScreen = () => {
   const [lastName, setLastName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [username, setUsername] = useState("");
-  const [mobileNumber, setMobileNumber] = useState(null);
+  const [mobileNumber, setMobileNumber] = useState(0);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -44,6 +49,7 @@ const SignUpScreen = () => {
   const [usernameValidation, setUsernameValidation] = useState(null);
   const [passwordValidation, setPasswordValidation] = useState(null);
   const [confirmPasswordValidation, setConfirmPasswordValidation] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const onSubmit = async () => {
     setIsLoading(true);
@@ -57,6 +63,18 @@ const SignUpScreen = () => {
     };
 
     const data = await signUp(userData);
+    
+    if (data.status === 200) {
+      try {
+        const userData = data.data
+      } catch (error) {
+        console.log("HERE", error);
+        
+      }
+    } else {
+      console.log(data.errorMessage)
+      setErrorMessage(data.errorMessage);
+    }
  
   };
 
@@ -128,124 +146,147 @@ const SignUpScreen = () => {
     }
   };
 
+  const disableButton = () => {
+    if (!firstName || !lastName || !emailAddress || !username || !password || !confirmPassword) {
+      return true;
+    } else if (firstNameValidation || lastNameValidation || emailAddressValidation || usernameValidation || passwordValidation || confirmPasswordValidation) {
+      return true
+    } else {
+      return false;
+    }
+  };
+
+  console.log(disableButton());
+  
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}> A Life Lived </Text>
       </View>
-      <View style={styles.footer}>
-        <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
-        <ScrollView>
-        <View style={styles.iconContainer}>
-          <View style={styles.crossIcon}>
-            <AntDesign
-              name="close"
-              size={ICON_SIZE.iconSizeMedium}
-              color={COLOR.grey}
-              style={styles.icon}
-              onPress={() => navigation.navigate('Home')}
-            />
-          </View>
-          <View style={styles.avatarContainer} >
-            <AvatarComponent
-              style={styles.avatarIcon}
-              isRounded={true}
-              showEditButton={true}
-              size="xlarge"
-              iconName="user"
-              source={avatarURI}
-              onPress={() => imagePicker()}
-            />
-          </View>
-        </View>
-        
-        <View style={styles.textInputContainer}> 
-          <TextInputComponent
-            placeholder="First name"
-            iconName="address-card"
-            iconType="font-awesome"
-            errorMessage={!firstName ? "First name must not be empty" : null}
-            isFocused={true}
-            onChange={(event) => setFirstName(event)}
-            inputValidation={(event) => validateFirstName(event)}
-            errorMessage={firstNameValidation}
-          />
+      <Animatable.View animation="fadeInUpBig" style={styles.footer}>
+          <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
+            <ScrollView>
+              <View style={styles.iconContainer}>
+                <View style={styles.crossIcon}>
+                  <AntDesign
+                    name="close"
+                    size={ICON_SIZE.iconSizeMedium}
+                    color={COLOR.grey}
+                    style={styles.icon}
+                    onPress={() => navigation.navigate('Home')}
+                  />
+                </View>
+                <View style={styles.avatarContainer}>
+                  <AvatarComponent
+                    style={styles.avatarIcon}
+                    isRounded={true}
+                    showEditButton={true}
+                    size="xlarge"
+                    iconName="user"
+                    source={avatarURI}
+                    onPress={() => imagePicker()}
+                  />
+                </View>
+              </View>
 
-          <TextInputComponent
-            placeholder="Last name"
-            iconName="address-card"
-            iconType="font-awesome"
-            onChange={(event) => setLastName(event)}
-            inputValidation={(event) => validateLastName(event)}
-            errorMessage={lastNameValidation}
-          />
+              <View style={styles.textInputContainer}>
+                <TextInputComponent
+                  placeholder="First name"
+                  iconName="address-card"
+                  iconType="font-awesome"
+                  errorMessage={
+                    !firstName ? 'First name must not be empty' : null
+                  }
+                  isFocused={true}
+                  onChange={(event) => setFirstName(event)}
+                  inputValidation={(event) => validateFirstName(event)}
+                  errorMessage={firstNameValidation}
+                />
 
-          <TextInputComponent
-            autoCapitalize="none"
-            placeholder="Email Address"
-            keyboardType="email-address"
-            iconName="envelope"
-            iconType="font-awesome"
-            onChange={(event) => setEmailAddress(event)}
-            inputValidation={(event) => validateEmailAddress(event)}
-            errorMessage={emailAddressValidation}
-          />
+                <TextInputComponent
+                  placeholder="Last name"
+                  iconName="address-card"
+                  iconType="font-awesome"
+                  onChange={(event) => setLastName(event)}
+                  inputValidation={(event) => validateLastName(event)}
+                  errorMessage={lastNameValidation}
+                />
 
-          <TextInputComponent
-            placeholder="Username"
-            iconName="user"
-            iconType="font-awesome"
-            onChange={(event) => setUsername(event)}
-            inputValidation={(event) => validateUsername(event)}
-            errorMessage={usernameValidation}
-          />
+                <TextInputComponent
+                  autoCapitalize="none"
+                  placeholder="Email Address"
+                  keyboardType="email-address"
+                  iconName="envelope"
+                  iconType="font-awesome"
+                  onChange={(event) => setEmailAddress(event)}
+                  inputValidation={(event) => validateEmailAddress(event)}
+                  errorMessage={emailAddressValidation}
+                />
 
-          <TextInputComponent
-            placeholder="Mobile Number"
-            keyboardType="phone-pad"
-            iconName="mobile"
-            iconType="font-awesome"
-            onChange={(event) => setMobileNumber(event)}
-          />
+                <TextInputComponent
+                  placeholder="Username"
+                  iconName="user"
+                  iconType="font-awesome"
+                  onChange={(event) => setUsername(event)}
+                  inputValidation={(event) => validateUsername(event)}
+                  errorMessage={usernameValidation}
+                />
 
-          <TextInputComponent
-            placeholder="Password"
-            secureTextEntry={true}
-            iconName="lock"
-            iconType="font-awesome"
-            onChange={(event) => setPassword(event)}
-            inputValidation={(event) => validatePassword(event)}
-            errorMessage={passwordValidation}
-          />
+                <TextInputComponent
+                  placeholder="Mobile Number"
+                  keyboardType="phone-pad"
+                  iconName="mobile"
+                  iconType="font-awesome"
+                  onChange={(event) => setMobileNumber(event)}
+                />
 
-          <TextInputComponent
-            placeholder="Confirm Password"
-            secureTextEntry={true}
-            iconName="lock"
-            iconType="font-awesome"
-            onChange={(event) => setConfirmPassword(event)}
-            inputValidation={(event) => validateConfirmPassword(event)}
-            errorMessage={confirmPasswordValidation}
-          />
-        </View>
-        
+                <TextInputComponent
+                  placeholder="Password"
+                  secureTextEntry={true}
+                  iconName="lock"
+                  iconType="font-awesome"
+                  onChange={(event) => setPassword(event)}
+                  inputValidation={(event) => validatePassword(event)}
+                  errorMessage={passwordValidation}
+                />
 
-        <View style={styles.buttonContainer}>
-          <ButtonComponent
-            title="Signup"
-            onButtonPress={() => onSubmit()}
-          />
+                <TextInputComponent
+                  placeholder="Confirm Password"
+                  secureTextEntry={true}
+                  iconName="lock"
+                  iconType="font-awesome"
+                  onChange={(event) => setConfirmPassword(event)}
+                  inputValidation={(event) => validateConfirmPassword(event)}
+                  errorMessage={confirmPasswordValidation}
+                />
+              </View>
 
-          <ButtonClearComponent
-            title="Already have an account?"
-            onButtonPress={() => navigation.push('Login')}
-          />
-        </View>
-        </ScrollView>
-        </KeyboardAvoidingView>
-      </View>
+              <View style={styles.buttonContainer}>
+                {errorMessage ? <Text style={styles.errorMessage}>{errorMessage}</Text> : null}
+                <ButtonComponent
+                  title="Signup"
+                  onButtonPress={() => onSubmit()}
+                  disabled={disableButton()}
+                />
+
+                <ButtonClearComponent
+                  title="Already have an account?"
+                  onButtonPress={() => navigation.push('Login')}
+                />
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
+      </Animatable.View>
     </View>
   );
 };
 
-export default SignUpScreen;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    userLoginSuccessful: (userData) => dispatch(userLoginSuccessful(userData)),
+  };
+};
+
+
+export default connect(null, mapDispatchToProps)(SignUpScreen);
