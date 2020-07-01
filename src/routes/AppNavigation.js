@@ -178,7 +178,7 @@ const AppNavigation = (props) => {
           <Tabs.Screen name="Notifications" component={userToken ? NotificationsStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} />
           <Tabs.Screen name="Create Story" component={userToken ? StoryCreationStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} /> 
           <Tabs.Screen name="Search" component={SearchStackScreen} />
-          <Tabs.Screen name="Profile" component={userToken ? ProfileStackScreen : LoginAndSignUpStackScreen} />
+          <Tabs.Screen name="Profile" component={userToken ? ProfileStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} />
         </Tabs.Navigator>
     </NavigationContainer>
   );

@@ -11,6 +11,9 @@ import {signUp} from './../api/postRequests/signUp';
 import {connect} from 'react-redux';
 import {userLoginSuccessful} from './../redux/actions/userActions';
 
+// Async Storage
+import {storeToken} from './../helpers/asyncStorage';
+
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -24,7 +27,7 @@ import AvatarComponent from './../components/AvatarComponent';
 import styles from './../styles/screens/SignUpScreen';
 import { ICON_SIZE, COLOR } from '../styles/styleHelpers';
 
-const SignUpScreen = () => {
+const SignUpScreen = (props) => {
 
   // Loading state
   const [isLoading, setIsLoading] = useState(false);
@@ -66,16 +69,20 @@ const SignUpScreen = () => {
     
     if (data.status === 200) {
       try {
-        const userData = data.data
+        const userData = data.data;
+        storeToken(userData.encryptedToken);
+        props.userLoginSuccessful(userData);
+        setIsLoading(false);
+        return navigation.navigate('Home');
       } catch (error) {
-        console.log("HERE", error);
-        
+        console.log(error);
+        setIsLoading(false);
       }
     } else {
+      setIsLoading(false);
       console.log(data.errorMessage)
       setErrorMessage(data.errorMessage);
     }
- 
   };
 
   // Below uses image picker to select image
@@ -155,9 +162,6 @@ const SignUpScreen = () => {
       return false;
     }
   };
-
-  console.log(disableButton());
-  
 
   return (
     <View style={styles.mainContainer}>
@@ -268,6 +272,7 @@ const SignUpScreen = () => {
                   title="Signup"
                   onButtonPress={() => onSubmit()}
                   disabled={disableButton()}
+                  isLoading={isLoading}
                 />
 
                 <ButtonClearComponent
