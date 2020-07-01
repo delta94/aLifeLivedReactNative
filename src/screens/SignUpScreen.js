@@ -39,6 +39,11 @@ const SignUpScreen = () => {
 
   // Validation
   const [firstNameValidation, setFirstNameValidation] = useState(null);
+  const [lastNameValidation, setLastNameValidation] = useState(null);
+  const [emailAddressValidation, setEmailAddressValidation] = useState(null);
+  const [usernameValidation, setUsernameValidation] = useState(null);
+  const [passwordValidation, setPasswordValidation] = useState(null);
+  const [confirmPasswordValidation, setConfirmPasswordValidation] = useState(null);
 
   const onSubmit = async () => {
     setIsLoading(true);
@@ -68,17 +73,60 @@ const SignUpScreen = () => {
 
   // Validation
   const validateFirstName = (event) => {
-    console.log("HERE", event);
-    
     if (!event) {
-      setFirstNameValidation("First name is required")
+      return setFirstNameValidation('First name is required');
     } else {
-      setFirstNameValidation(null)
+      return setFirstNameValidation(null);
     }
   };
 
-  console.log("YES", firstNameValidation);
-  
+  const validateLastName = (event) => {
+    if (!event) {
+      return setLastNameValidation('Last name is required');
+    } else {
+      return setLastNameValidation(null);
+    }
+  };
+
+  const validateEmailAddress = (event) => {
+    if (!event) {
+      return setEmailAddressValidation('Email address is required');
+    } else if (!event) {
+
+    } else {
+      return setEmailAddressValidation(null);
+    }
+  };
+
+  const validateUsername = (event) => {
+    if (!event) {
+      return setUsernameValidation('Username is required');
+    } else if (event.length < 3) {
+      return setUsernameValidation('Username must be 3 characters or greater');
+    } else {
+      return setUsernameValidation(null);
+    }
+  };
+
+  const validatePassword = (event) => {
+    if (!event) {
+      return setPasswordValidation('Password is required');
+    } else if (event.length < 6) {
+      return setPasswordValidation('Password must be 6 characters or greater');
+    } else {
+      return setPasswordValidation(null);
+    }
+  };
+
+  const validateConfirmPassword = (event) => {
+    if (!event) {
+      return setConfirmPasswordValidation('Please enter the above password again');
+    } else if (event != password) {
+      return setConfirmPasswordValidation("Passwords don't match");
+    } else {
+      return setConfirmPasswordValidation(null);
+    }
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -128,6 +176,8 @@ const SignUpScreen = () => {
             iconName="address-card"
             iconType="font-awesome"
             onChange={(event) => setLastName(event)}
+            inputValidation={(event) => validateLastName(event)}
+            errorMessage={lastNameValidation}
           />
 
           <TextInputComponent
@@ -137,6 +187,8 @@ const SignUpScreen = () => {
             iconName="envelope"
             iconType="font-awesome"
             onChange={(event) => setEmailAddress(event)}
+            inputValidation={(event) => validateEmailAddress(event)}
+            errorMessage={emailAddressValidation}
           />
 
           <TextInputComponent
@@ -144,6 +196,8 @@ const SignUpScreen = () => {
             iconName="user"
             iconType="font-awesome"
             onChange={(event) => setUsername(event)}
+            inputValidation={(event) => validateUsername(event)}
+            errorMessage={usernameValidation}
           />
 
           <TextInputComponent
@@ -160,6 +214,8 @@ const SignUpScreen = () => {
             iconName="lock"
             iconType="font-awesome"
             onChange={(event) => setPassword(event)}
+            inputValidation={(event) => validatePassword(event)}
+            errorMessage={passwordValidation}
           />
 
           <TextInputComponent
@@ -168,6 +224,8 @@ const SignUpScreen = () => {
             iconName="lock"
             iconType="font-awesome"
             onChange={(event) => setConfirmPassword(event)}
+            inputValidation={(event) => validateConfirmPassword(event)}
+            errorMessage={confirmPasswordValidation}
           />
         </View>
         

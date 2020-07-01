@@ -1,14 +1,14 @@
 import { StyleSheet } from 'react-native';
-import { FLEX, COLOR, FONT_SIZE } from './../styleHelpers';
+import {FLEX, COLOR, FONT_SIZE, BORDER_RADIUS} from './../styleHelpers';
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: COLOR.grey,
+    backgroundColor: COLOR.limeGreen,
   },
 
   headerContainer: {
-    backgroundColor: COLOR.grey,
+    backgroundColor: COLOR.limeGreen,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'flex-start',
@@ -16,17 +16,17 @@ const styles = StyleSheet.create({
   },
 
   headerText: {
-    color: COLOR.limeGreen,
+    color: COLOR.grey,
     marginLeft: 20,
     marginTop: 30,
     fontWeight: 'bold',
-    fontSize: FONT_SIZE.largeSize
+    fontSize: FONT_SIZE.largeSize,
   },
 
   footer: {
     flex: 1,
-    borderTopEndRadius: 20,
-    borderTopLeftRadius: 20,
+    borderTopEndRadius: BORDER_RADIUS.medium,
+    borderTopLeftRadius: BORDER_RADIUS.medium,
     display: 'flex',
     justifyContent: 'flex-start',
     backgroundColor: COLOR.white,
@@ -34,14 +34,14 @@ const styles = StyleSheet.create({
   },
 
   avatarContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     flex: 2,
-    marginBottom: 30
+    marginBottom: 30,
   },
 
   icon: {
     marginLeft: 15,
-    marginTop: 20, 
+    marginTop: 20,
   },
 
   textInputContainer: {

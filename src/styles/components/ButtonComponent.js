@@ -4,9 +4,7 @@ import {COLOR, FONT_SIZE} from '../styleHelpers';
 const styles = StyleSheet.create({
   container: {
     borderRadius: 5,
-    width: 350,
-    borderWidth: 0.5,
-    borderColor: COLOR.grey
+    width: 350
   },
 
   button: {
