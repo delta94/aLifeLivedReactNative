@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import ImagePicker from 'react-native-image-picker';
-import {View, Text, ScrollView, KeyboardAvoidingView} from 'react-native';
+import {View, Text, ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 
 // API
 import {signUp} from './../api/postRequests/signUp';
+import {imageUpload} from './../api/postRequests/imageUpload';
 
 // Redux
 import {connect} from 'react-redux';
@@ -36,6 +37,7 @@ const SignUpScreen = (props) => {
   const navigation = useNavigation();
 
   // Input Values
+  const [imageObject, setImageObject] = useState(null);
   const [avatarURI, setAvatarURI] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -56,13 +58,20 @@ const SignUpScreen = (props) => {
 
   const onSubmit = async () => {
     setIsLoading(true);
+    let formData = new FormData();
+    formData.append('file', imageObject);
+
+    const imageResponseData = await imageUpload(formData);
+    const avatarURL = imageResponseData.data;
+    
     const userData = {
       firstName: firstName,
       lastName: lastName,
       emailAddress: emailAddress,
       username: username, 
       mobileNumber: mobileNumber,
-      password: password
+      password: password,
+      avatarURL: avatarURL
     };
 
     const data = await signUp(userData);
@@ -73,7 +82,7 @@ const SignUpScreen = (props) => {
         storeToken(userData.encryptedToken);
         props.userLoginSuccessful(userData);
         setIsLoading(false);
-        return navigation.navigate('Home');
+        // return navigation.navigate('Home');
       } catch (error) {
         console.log(error);
         setIsLoading(false);
@@ -86,13 +95,28 @@ const SignUpScreen = (props) => {
   };
 
   // Below uses image picker to select image
-  const imagePicker = () => {
+  const imagePicker =  () => {
+  
     const options = {
       noData: true,
+      maxWidth: 300,
+      maxHeight: 300
     };
 
-    ImagePicker.launchImageLibrary(options, (response) => {      
-      setAvatarURI(response.uri)
+    ImagePicker.launchImageLibrary(options, async (photo) => {  
+      let photoSuffix = photo.uri.split('.').pop();
+      if (photoSuffix === 'jpg') {
+        photoSuffix = 'jpeg'
+      };
+
+      const file = {
+        type: `image/${photoSuffix}`,
+        name: `photo.${photoSuffix}`,
+        uri: Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
+      };
+       
+      setImageObject(file)
+      setAvatarURI(photo.uri)
     });
   };
 
