@@ -104,6 +104,12 @@ const SignUpScreen = (props) => {
     };
 
     ImagePicker.launchImageLibrary(options, async (photo) => {  
+      if (photo.didCancel) {
+        return;
+      } else if (photo.error) {
+        console.log("Image Picker error:", photo.error); 
+      };
+
       let photoSuffix = photo.uri.split('.').pop();
       if (photoSuffix === 'jpg') {
         photoSuffix = 'jpeg'
