@@ -51,7 +51,7 @@ const NotificationsStackScreen = () => (
 );
 
 const StoryCreationStackScreen = () => (
-  <StoryCreationStack.Navigator>
+  <StoryCreationStack.Navigator screenOptions={{ headerShown: false }}>
     <StoryCreationStack.Screen name="Create Story" component={StoryCreationScreen} />
   </StoryCreationStack.Navigator>
 );
@@ -176,7 +176,7 @@ const AppNavigation = (props) => {
         <Tabs.Navigator tabBarOptions={tabDefaultOptions} screenOptions={({route}) => screenOptions(route)}>
           <Tabs.Screen name="Home" component={HomeStackScreen} />
           <Tabs.Screen name="Notifications" component={userToken ? NotificationsStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} />
-          <Tabs.Screen name="Create Story" component={userToken ? StoryCreationStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} /> 
+          <Tabs.Screen name="Create Story" component={userToken ? StoryCreationStackScreen : LoginAndSignUpStackScreen} options={{tabBarVisible: false}} /> 
           <Tabs.Screen name="Search" component={SearchStackScreen} />
           <Tabs.Screen name="Profile" component={userToken ? ProfileStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} />
         </Tabs.Navigator>

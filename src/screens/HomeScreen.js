@@ -6,10 +6,6 @@ const HomeScreen = (props) => {
   return (
     <View>
       <Text> {props.userReducer.firstName ? props.userReducer.firstName : "HELLO"} </Text>
-      <Image 
-        style={{width: 100, height: 100}}
-        source={{uri: props.userReducer.avatarURL}}
-      />
     </View>
   );
 };

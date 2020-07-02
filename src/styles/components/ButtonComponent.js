@@ -5,6 +5,10 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 5,
     width: 350
+  }, 
+  
+  buttonSmallContainer: {
+    width: 100
   },
 
   button: {

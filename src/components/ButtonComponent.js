@@ -3,11 +3,13 @@ import {Button} from 'react-native-elements';
 
 import styles from '../styles/components/ButtonComponent';
 
-const ButtonComponent = ({buttonType, title, isLoading, onButtonPress, disabled}) => {
+const ButtonComponent = ({buttonType, title, isLoading, onButtonPress, disabled, buttonSize}) => {
 
   const handleOnPress = () => {
     return onButtonPress();
   };
+  console.log(buttonType);
+  
 
   return (
     <Button
@@ -18,7 +20,7 @@ const ButtonComponent = ({buttonType, title, isLoading, onButtonPress, disabled}
       disabledStyle={styles.disabledButton}
       titleStyle={styles.title}
       disabled={disabled}
-      containerStyle={styles.container}
+      containerStyle={buttonSize === "small" ? styles.buttonSmallContainer : styles.container}
       onPress={handleOnPress}
     />
   );

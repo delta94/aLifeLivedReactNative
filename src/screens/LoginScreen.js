@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {View, Text} from 'react-native';
+import { View, Text, Keyboard} from 'react-native';
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import {useNavigation} from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 
@@ -58,6 +59,7 @@ const LoginScreen = (props) => {
   
   return (
     <View style={styles.mainContainer}>
+      
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}> A Life Lived </Text>
       </View>
@@ -70,26 +72,28 @@ const LoginScreen = (props) => {
             onPress={() => navigation.navigate('Home')}
           />
           <View style={styles.texInputContainer}>
-            <View style={styles.textContainer}>
-              <Text style={styles.header}> HELLO </Text>
-              <Text> Sign in to your account</Text>
-            </View>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View style={styles.textContainer}>
+                <Text style={styles.header}> HELLO </Text>
+                <Text> Sign in to your account</Text>
+              </View>
+            
+              <TextInputComponent
+                placeholder="Email Address"
+                keyboardType="email-address"
+                iconName="user"
+                iconType="font-awesome"
+                onChange={(event) => setEmailAddressValue(event)}
+              />
 
-            <TextInputComponent
-              placeholder="Email Address"
-              keyboardType="email-address"
-              iconName="user"
-              iconType="font-awesome"
-              onChange={(event) => setEmailAddressValue(event)}
-            />
-
-            <TextInputComponent
-              placeholder="Password"
-              iconName="lock"
-              iconType="font-awesome"
-              secureTextEntry={true}
-              onChange={(event) => setPasswordValue(event)}
-            />
+              <TextInputComponent
+                placeholder="Password"
+                iconName="lock"
+                iconType="font-awesome"
+                secureTextEntry={true}
+                onChange={(event) => setPasswordValue(event)}
+              />
+            </TouchableWithoutFeedback>
           </View>
 
           <View style={styles.buttonContainer}>
@@ -109,7 +113,9 @@ const LoginScreen = (props) => {
               onButtonPress={() => navigation.push('SignUp')}
             />
           </View>
+          
         </Animatable.View>
+      
     </View>
   );
 };
