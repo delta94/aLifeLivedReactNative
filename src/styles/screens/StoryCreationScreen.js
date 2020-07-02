@@ -1,5 +1,5 @@
-import {StyleSheet, Platform} from 'react-native';
-import {FLEX, COLOR, FONT_SIZE, BORDER_RADIUS, HEADER_MARGINS} from './../styleHelpers';
+import { StyleSheet, Platform } from 'react-native';
+import { FLEX, COLOR, FONT_SIZE, BORDER_RADIUS, HEADER_MARGINS } from './../styleHelpers';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     marginTop: HEADER_MARGINS.marginTop,
-    marginBottom: HEADER_MARGINS.marginBottom,
+    marginBottom: Platform.isPad ? 500 : 250
   },
 
   headerText: {
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     borderTopEndRadius: BORDER_RADIUS.medium,
     borderTopLeftRadius: BORDER_RADIUS.medium,
     display: 'flex',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-evenly',
     backgroundColor: COLOR.white,
     flex: FLEX.flexOne,
   },
@@ -62,8 +62,9 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    marginTop: 100,
-    alignItems: 'center',
+    marginTop: 50,
+    marginRight: 20,
+    alignItems: 'flex-end',
   },
 });
 

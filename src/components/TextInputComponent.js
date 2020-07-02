@@ -17,22 +17,32 @@ const TextInputComponent = ({
   disable,
   errorMessage,
   keyboardType,
-  secureTextEntry
+  secureTextEntry,
+  isFocused,
+  inputValidation,
+  autoCapitalize
 }) => {
-  // NOTE: number of lines needs to be null or you can't see text on android  
+  // NOTE: number of lines needs to be null or you can't see text on android
   const handleChange = (event) => {
     return onChange(event);
   };
- 
+
+  const handleValidation = (event) => {
+    return inputValidation(event);
+  }
+
   return (
     <View>
       <Input
+        onEndEditing={inputValidation ? (event) => handleValidation(event.nativeEvent.text) : null}
+        autoCapitalize={autoCapitalize}
         placeholder={placeholder}
         leftIcon={{type: iconType, name: iconName}}
         onChangeText={handleChange}
         disabled={disable}
         errorMessage={errorMessage}
         label={label}
+        isFocused={isFocused}
         inputContainerStyle={styles.textInput}
         inputStyle={styles.textStyle}
         placeholderTextColor={COLOR.grey}

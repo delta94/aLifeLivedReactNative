@@ -4,11 +4,15 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'; 
 import AsyncStorage from '@react-native-community/async-storage';
+import {connect} from 'react-redux';
 
 // Icon imports
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+// Redux Actions
+import { setUserToken } from './../redux/actions/userActions';
 
 // Screens
 import LoginScreen from './../screens/LoginScreen';
@@ -47,7 +51,7 @@ const NotificationsStackScreen = () => (
 );
 
 const StoryCreationStackScreen = () => (
-  <StoryCreationStack.Navigator>
+  <StoryCreationStack.Navigator screenOptions={{ headerShown: false }}>
     <StoryCreationStack.Screen name="Create Story" component={StoryCreationScreen} />
   </StoryCreationStack.Navigator>
 );
@@ -65,17 +69,25 @@ const ProfileStackScreen = () => (
 );
 
 const LoginAndSignUpStackScreen = () => (
-  <LoginAndSignUpStack.Navigator screenOptions={{headerShown: false}}>
+  <LoginAndSignUpStack.Navigator screenOptions={{ headerShown: false}}>
     <LoginAndSignUpStack.Screen name="Login" component={LoginScreen} />
-    <LoginAndSignUpStack.Screen name="SignUp" component={SignUpScreen} />
+    <LoginAndSignUpStack.Screen name="SignUp" component={SignUpScreen}/>
   </LoginAndSignUpStack.Navigator>
 );
 
-const AppNavigation = () => {
-
-  // TODO: Handle loading of the application.
+const AppNavigation = (props) => {
+  // The below is used for authentication
+  const userToken = props.userReducer.id
   const [isLoading, setIsLoading] = useState(true);
-  const [userToken, setUserToken] = useState(null);
+
+  const getToken = async () => {
+    try {
+      const encryptedToken = await AsyncStorage.getItem("A_LIFE_LIVED_TOKEN");
+      return props.setUserToken(encryptedToken);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // The below handles the basic tab options 
   const tabDefaultOptions = {
@@ -84,6 +96,7 @@ const AppNavigation = () => {
   };
 
   useEffect(() => {
+    getToken();
     setTimeout(() => {
       setIsLoading(false)
     }, 1000);
@@ -146,6 +159,9 @@ const AppNavigation = () => {
                 color={COLOR.grey}
               />
             );
+          case 'SignUp': 
+            const tabBarVisible = false
+            return tabBarVisible
           default:
             break;
         }
@@ -160,12 +176,24 @@ const AppNavigation = () => {
         <Tabs.Navigator tabBarOptions={tabDefaultOptions} screenOptions={({route}) => screenOptions(route)}>
           <Tabs.Screen name="Home" component={HomeStackScreen} />
           <Tabs.Screen name="Notifications" component={userToken ? NotificationsStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} />
-          <Tabs.Screen name="Create Story" component={userToken ? StoryCreationStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} /> 
+          <Tabs.Screen name="Create Story" component={userToken ? StoryCreationStackScreen : LoginAndSignUpStackScreen} options={{tabBarVisible: false}} /> 
           <Tabs.Screen name="Search" component={SearchStackScreen} />
-          <Tabs.Screen name="Profile" component={userToken ? ProfileStackScreen : LoginAndSignUpStackScreen} />
+          <Tabs.Screen name="Profile" component={userToken ? ProfileStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} />
         </Tabs.Navigator>
     </NavigationContainer>
   );
 };
 
-export default AppNavigation;
+function mapStateToProps(state) {
+  return {
+    userReducer: state.userReducer
+  }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUserToken: (encryptedToken) => dispatch(setUserToken(encryptedToken)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppNavigation);

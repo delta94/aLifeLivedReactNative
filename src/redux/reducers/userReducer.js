@@ -1,12 +1,13 @@
-import {USER_LOGIN_SUCCESSFUL} from './../actions/allActions';
+import {USER_LOGIN_SUCCESSFUL, SET_USER_TOKEN, REMOVE_USER_TOKEN} from './../actions/allActions';
 
 const userDefaultState = {
-  id: "",
+  id: null,
   loggedIn: false,
   emailAddress: "",
   isAdmin: false,
   firstName: "",
   lastName: "",
+  avatarURL: ""
 };
 
 const userReducer = (state = userDefaultState, action) => {
@@ -17,6 +18,7 @@ const userReducer = (state = userDefaultState, action) => {
       const emailAddress = userData.userData.emailAddress;
       const firstName = userData.userData.firstName;
       const lastName = userData.userData.lastName;
+      const avatarURL = userData.userData.avatarURL;
 
       return {
         ...state,
@@ -25,8 +27,18 @@ const userReducer = (state = userDefaultState, action) => {
         emailAddress: emailAddress,
         isAdmin: false,
         firstName: firstName,
-        lastName: lastName
+        lastName: lastName,
+        avatarURL: avatarURL
       };
+    case SET_USER_TOKEN:      
+      return {
+        ...state,
+        id: action.payload.encryptedToken
+      };
+    case REMOVE_USER_TOKEN: 
+      return {
+        id: null
+      }
     default:
       return state;
   }

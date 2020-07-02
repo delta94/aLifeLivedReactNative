@@ -4,9 +4,11 @@ import {COLOR, FONT_SIZE} from '../styleHelpers';
 const styles = StyleSheet.create({
   container: {
     borderRadius: 5,
-    width: 350,
-    borderWidth: 0.5,
-    borderColor: COLOR.grey
+    width: 350
+  }, 
+  
+  buttonSmallContainer: {
+    width: 100
   },
 
   button: {
@@ -14,8 +16,13 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: COLOR.grey,
+    color: COLOR.white,
     fontWeight: "bold"
+  },
+
+  disabledButton: {
+    backgroundColor: COLOR.lightGrey,
+    color: COLOR.white
   }
 });
 
