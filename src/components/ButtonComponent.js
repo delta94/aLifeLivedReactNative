@@ -8,8 +8,6 @@ const ButtonComponent = ({buttonType, title, isLoading, onButtonPress, disabled,
   const handleOnPress = () => {
     return onButtonPress();
   };
-  console.log(buttonType);
-  
 
   return (
     <Button

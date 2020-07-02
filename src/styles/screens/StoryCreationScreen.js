@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     marginTop: HEADER_MARGINS.marginTop,
-    marginBottom: Platform.isPad ? 500 : 250
+    marginBottom: Platform.isPad ? 500 : 200
   },
 
   headerText: {
@@ -25,13 +25,14 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    flex: 1,
     borderTopEndRadius: BORDER_RADIUS.medium,
     borderTopLeftRadius: BORDER_RADIUS.medium,
-    display: 'flex',
-    justifyContent: 'space-evenly',
     backgroundColor: COLOR.white,
     flex: FLEX.flexOne,
+  },
+
+  contentContainer: {
+    marginTop: 50
   },
 
   icon: {
@@ -49,11 +50,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  textContainer: {
-    alignItems: 'center',
-    marginBottom: 100,
-  },
-
   errorMessage: {
     textAlign: 'center',
     marginBottom: 10,
@@ -62,7 +58,7 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    marginTop: 50,
+    marginTop: 0,
     marginRight: 20,
     alignItems: 'flex-end',
   },

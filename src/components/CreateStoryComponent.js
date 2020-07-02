@@ -14,22 +14,24 @@ const CreateStoryComponent = () => {
 
   return (
     <View style={styles.mainContainer}>
-        <LargeTextInput 
-          label="Whose the story about?"
-          placeholder="Can be your parents, friends, neighbour or even a stranger..."
-          multiline={true}
-          autoCapitalize="sentences"
-          onChange={(event) => setStoryAbout(event)}
-        />
+      <LargeTextInput
+        label="Whose the story about?"
+        placeholder="Can be your parents, friends, neighbour or even a stranger..."
+        multiline={true}
+        maxLength={100}
+        autoCapitalize="sentences"
+        onChange={(event) => setStoryAbout(event)}
+      />
 
-        <LargeTextInput
-          label="In one sentence what is the meaning of the story?"
-          placeholder="Enter a brief description about the story..."
-          multiline={true}
-          onChange={(event) => setStoryDescription(event)}
-        />
+      <LargeTextInput
+        label="In one sentence what is the meaning of the story?"
+        placeholder="Enter a brief description about the story..."
+        multiline={true}
+        maxLength={100}
+        onChange={(event) => setStoryDescription(event)}
+      />
     </View>
-  )
+  );
 };
 
 export default CreateStoryComponent;

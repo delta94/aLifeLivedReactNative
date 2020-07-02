@@ -17,6 +17,7 @@ const LargeTextInputComponent = ({
   inputValidation,
   autoCapitalize,
   multiline,
+  maxLength
 }) => {
   // NOTE: number of lines needs to be null or you can't see text on android
   const handleChange = (event) => {
@@ -31,6 +32,8 @@ const LargeTextInputComponent = ({
     <Input
       onEndEditing={inputValidation ? (event) => handleValidation(event.nativeEvent.text) : null}
       multiline={multiline}
+      blurOnSubmit={true}
+      maxLength={maxLength}
       autoCapitalize={autoCapitalize}
       placeholder={placeholder}
       onChangeText={handleChange}
