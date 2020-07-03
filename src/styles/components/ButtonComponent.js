@@ -15,6 +15,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.limeGreen,
   },
 
+  backButton: {
+    backgroundColor: COLOR.grey,
+  },
+
   title: {
     color: COLOR.white,
     fontWeight: "bold"

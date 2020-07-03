@@ -14,7 +14,7 @@ const ButtonComponent = ({buttonType, title, isLoading, onButtonPress, disabled,
       title={title}
       type={buttonType ? buttonType : null}
       loading={isLoading ? true : false}
-      buttonStyle={styles.button}
+      buttonStyle={title === "Back" ? styles.backButton : styles.button}
       disabledStyle={styles.disabledButton}
       titleStyle={styles.title}
       disabled={disabled}

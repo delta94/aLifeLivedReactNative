@@ -29,6 +29,13 @@ const styles = StyleSheet.create({
     flex: FLEX.flexOne,
   },
 
+  footerHeaderText: {
+    color: COLOR.grey,
+    marginLeft: 20,
+    fontWeight: 'bold',
+    fontSize: FONT_SIZE.mediumSize,
+  },
+
   contentContainer: {
     marginTop: 50
   },

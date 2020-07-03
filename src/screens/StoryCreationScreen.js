@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {View, Text, Keyboard, KeyboardAvoidingView, Button} from 'react-native';
-import { TouchableWithoutFeedback, ScrollView } from "react-native-gesture-handler";
+import {View, Text, Keyboard, KeyboardAvoidingView} from 'react-native';
+import {ScrollView } from "react-native-gesture-handler";
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -19,13 +19,12 @@ const StoryCreationScreen = ({navigation}) => {
   // Below is all basic form things
   const [step, setStep] = useState(0);
 
-  console.log(step);
-  
   // Below is input states
   const [storyAbout, setStoryAbout] = useState("");
   const [storyDescription, setStoryDescription] = useState("");
+  const [isStoryPrivate, setIsStoryPrivate] = useState(null);
 
-  const handleFormStage = () => {
+  const handleFormStage = (props) => {
     switch (step) {
       case 0:
         return (
@@ -36,9 +35,14 @@ const StoryCreationScreen = ({navigation}) => {
         )
       case 1: 
         return (
-          <CreateStoryPrivacyComponent 
-
-          />
+          <View>
+            <Text style={styles.footerHeaderText}>Do you wish to make your stroy private or public</Text>
+            <CreateStoryPrivacyComponent
+              isStoryPrivate={isStoryPrivate}
+              setStoryPrivate={() => setIsStoryPrivate(true)}
+              setStoryPublic={() => setIsStoryPrivate(false)}
+            />
+          </View>
         )
       default:
         break;
@@ -67,12 +71,17 @@ const StoryCreationScreen = ({navigation}) => {
         </View>
         <View style={styles.buttonFooter}>
           <View style={styles.buttonContainer}>
-            <ButtonComponent
-              title="Back"
-              buttonSize="small"
-              buttonType="solid"
-              onButtonPress={() => setStep(step - 1)}
-            />
+            {step <= 0 ? (
+              <View></View>
+            ) : (
+                <ButtonComponent
+                  title="Back"
+                  buttonSize="small"
+                  buttonType="solid"
+                  onButtonPress={() => setStep(step - 1)}
+                />
+            )}
+  
             <ButtonComponent
               title="Next"
               buttonSize="small"
