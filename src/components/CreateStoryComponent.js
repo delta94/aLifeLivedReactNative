@@ -1,17 +1,13 @@
 import React, {useState} from 'react';
 import {View} from 'react-native';
 
-
 // Component
 import LargeTextInput from './LargeTextInputComponent';
 
 // Style
 import styles from './../styles/components/CreateStoryComponent'
 
-const CreateStoryComponent = () => {
-  const [storyAbout, setStoryAbout] = useState("");
-  const [storyDescription, setStoryDescription] = useState("");
-
+const CreateStoryComponent = (props) => {
   return (
     <View style={styles.mainContainer}>
       <LargeTextInput
@@ -20,7 +16,7 @@ const CreateStoryComponent = () => {
         multiline={true}
         maxLength={100}
         autoCapitalize="sentences"
-        onChange={(event) => setStoryAbout(event)}
+        onChange={(event) => props.onChangeStoryAbout(event)}
       />
 
       <LargeTextInput
@@ -28,7 +24,8 @@ const CreateStoryComponent = () => {
         placeholder="Enter a brief description about the story..."
         multiline={true}
         maxLength={100}
-        onChange={(event) => setStoryDescription(event)}
+        autoCapitalize="sentences"
+        onChange={(event) => props.onChangeStoryDescription(event)}
       />
     </View>
   );

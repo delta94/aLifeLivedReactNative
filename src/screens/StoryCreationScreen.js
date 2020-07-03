@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Text, Keyboard, KeyboardAvoidingView} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, Keyboard, KeyboardAvoidingView, Button} from 'react-native';
 import { TouchableWithoutFeedback, ScrollView } from "react-native-gesture-handler";
 
 // Icon
@@ -7,6 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 // Components
 import CreateStoryComponent from './../components/CreateStoryComponent';
+import CreateStoryPrivacyComponent from './../components/CreateStoryPrivacyComponent';
 import ButtonComponent from './../components/ButtonComponent';
 
 // Styles
@@ -14,6 +15,36 @@ import styles from './../styles/screens/StoryCreationScreen';
 import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
 const StoryCreationScreen = ({navigation}) => {
+
+  // Below is all basic form things
+  const [step, setStep] = useState(0);
+
+  console.log(step);
+  
+  // Below is input states
+  const [storyAbout, setStoryAbout] = useState("");
+  const [storyDescription, setStoryDescription] = useState("");
+
+  const handleFormStage = () => {
+    switch (step) {
+      case 0:
+        return (
+          <CreateStoryComponent
+            onChangeStoryAbout={(event) => { setStoryAbout(event) }}
+            onChangeStoryDescription={(event) => { setStoryDescription(event) }}
+          />
+        )
+      case 1: 
+        return (
+          <CreateStoryPrivacyComponent 
+
+          />
+        )
+      default:
+        break;
+    }
+  };
+
   return (
     <View style={styles.mainContainer} onPress={Keyboard.dismiss}>
       <View style={styles.headerContainer}>
@@ -30,18 +61,25 @@ const StoryCreationScreen = ({navigation}) => {
         <View style={styles.footer}>
           <ScrollView keyboardShouldPersistTaps="handled">
             <View style={styles.contentContainer}>
-              <CreateStoryComponent />
-            </View>
-
-            <View style={styles.buttonContainer}>
-              <ButtonComponent
-                title="Next"
-                buttonSize="small"
-                buttonType="solid"
-                onButtonPress={() => console.log('HELLO')}
-              />
+              {handleFormStage()}
             </View>
           </ScrollView>
+        </View>
+        <View style={styles.buttonFooter}>
+          <View style={styles.buttonContainer}>
+            <ButtonComponent
+              title="Back"
+              buttonSize="small"
+              buttonType="solid"
+              onButtonPress={() => setStep(step - 1)}
+            />
+            <ButtonComponent
+              title="Next"
+              buttonSize="small"
+              buttonType="solid"
+              onButtonPress={() => setStep(step + 1)}
+            />
+          </View>
         </View>
       </KeyboardAvoidingView>
     </View>

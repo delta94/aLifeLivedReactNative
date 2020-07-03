@@ -4,11 +4,9 @@ import { FLEX, COLOR, FONT_SIZE, BORDER_RADIUS, HEADER_MARGINS } from './../styl
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: COLOR.limeGreen,
   },
 
   headerContainer: {
-    backgroundColor: COLOR.limeGreen,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'flex-start',
@@ -57,10 +55,17 @@ const styles = StyleSheet.create({
     color: 'red',
   },
 
+  buttonFooter: {
+    paddingBottom: 15,
+    backgroundColor: COLOR.white,
+  },
+
   buttonContainer: {
-    marginTop: 0,
-    marginRight: 20,
+    margin: 20,
     alignItems: 'flex-end',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: 'space-between'
   },
 });
 
