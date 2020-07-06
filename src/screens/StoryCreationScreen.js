@@ -8,6 +8,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 // Components
 import CreateStoryComponent from './../components/CreateStoryComponent';
 import CreateStoryPrivacyComponent from './../components/CreateStoryPrivacyComponent';
+import CreateStoryInterviewType from './../components/CreateStoryInterviewType';
 import ButtonComponent from './../components/ButtonComponent';
 
 // Styles
@@ -22,7 +23,11 @@ const StoryCreationScreen = ({navigation}) => {
   // Below is input states
   const [storyAbout, setStoryAbout] = useState("");
   const [storyDescription, setStoryDescription] = useState("");
+  const [intervieweeName, setIntervieweeName] = useState("");
+
+  // Below are boolean states
   const [isStoryPrivate, setIsStoryPrivate] = useState(null);
+  const [isSelfInterview, setIsSelfInterview] = useState(null);
 
   const handleFormStage = (props) => {
     switch (step) {
@@ -36,7 +41,7 @@ const StoryCreationScreen = ({navigation}) => {
       case 1: 
         return (
           <View>
-            <Text style={styles.footerHeaderText}>Do you wish to make your stroy private or public</Text>
+            <Text style={styles.footerHeaderText}>Do you wish to make your story private or public?</Text>
             <CreateStoryPrivacyComponent
               isStoryPrivate={isStoryPrivate}
               setStoryPrivate={() => setIsStoryPrivate(true)}
@@ -44,6 +49,18 @@ const StoryCreationScreen = ({navigation}) => {
             />
           </View>
         )
+      case 2: 
+          return (
+            <View>
+              <Text style={styles.footerHeaderText}>Will you be interviewing yourself or someone else?</Text>
+              <CreateStoryInterviewType
+                isSelfInterview={isSelfInterview}
+                setIsSelfInterviewTrue={() => setIsSelfInterview(true)}
+                setIsSelfInterviewFalse={() => setIsSelfInterview(false)}
+                onIntervieweeNameChange={(event) => console.log(event)}
+              />
+            </View>
+          )
       default:
         break;
     }
@@ -61,13 +78,14 @@ const StoryCreationScreen = ({navigation}) => {
         />
         <Text style={styles.headerText}> Create Your Story</Text>
       </View>
-      <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
         <View style={styles.footer}>
-          <ScrollView keyboardShouldPersistTaps="handled">
-            <View style={styles.contentContainer}>
-              {handleFormStage()}
-            </View>
-          </ScrollView>
+          <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+            <ScrollView keyboardShouldPersistTaps="handled">
+              <View style={styles.contentContainer}>
+                {handleFormStage()}
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
         </View>
         <View style={styles.buttonFooter}>
           <View style={styles.buttonContainer}>
@@ -90,7 +108,6 @@ const StoryCreationScreen = ({navigation}) => {
             />
           </View>
         </View>
-      </KeyboardAvoidingView>
     </View>
   );
 };

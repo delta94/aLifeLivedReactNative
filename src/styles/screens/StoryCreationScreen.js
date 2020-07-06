@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     marginTop: HEADER_MARGINS.marginTop,
-    marginBottom: Platform.isPad ? 500 : 200
+    marginBottom: Platform.isPad ? 500 : 50
   },
 
   headerText: {
@@ -31,13 +31,13 @@ const styles = StyleSheet.create({
 
   footerHeaderText: {
     color: COLOR.grey,
-    marginLeft: 20,
+    margin: 15,
     fontWeight: 'bold',
     fontSize: FONT_SIZE.mediumSize,
   },
 
   contentContainer: {
-    marginTop: 50
+    marginTop: 30
   },
 
   icon: {

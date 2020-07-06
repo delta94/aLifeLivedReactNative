@@ -7,7 +7,7 @@ import LargeTextInput from './LargeTextInputComponent';
 // Style
 import styles from './../styles/components/CreateStoryComponent'
 
-const CreateStoryComponent = (props) => {
+const CreateStoryComponent = ({onChangeStoryAbout, onChangeStoryDescription}) => {
   return (
     <View style={styles.mainContainer}>
       <LargeTextInput
@@ -16,7 +16,7 @@ const CreateStoryComponent = (props) => {
         multiline={true}
         maxLength={100}
         autoCapitalize="sentences"
-        onChange={(event) => props.onChangeStoryAbout(event)}
+        onChange={(event) => onChangeStoryAbout(event)}
       />
 
       <LargeTextInput
@@ -25,7 +25,7 @@ const CreateStoryComponent = (props) => {
         multiline={true}
         maxLength={100}
         autoCapitalize="sentences"
-        onChange={(event) => props.onChangeStoryDescription(event)}
+        onChange={(event) => onChangeStoryDescription(event)}
       />
     </View>
   );

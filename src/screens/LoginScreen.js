@@ -71,14 +71,15 @@ const LoginScreen = (props) => {
             style={styles.icon}
             onPress={() => navigation.navigate('Home')}
           />
-          <View style={styles.texInputContainer}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.textInputContainer}>       
               <View style={styles.textContainer}>
                 <Text style={styles.header}> HELLO </Text>
                 <Text> Sign in to your account</Text>
               </View>
             
               <TextInputComponent
+                autoCapitalize="none"
                 placeholder="Email Address"
                 keyboardType="email-address"
                 iconName="user"
@@ -87,15 +88,15 @@ const LoginScreen = (props) => {
               />
 
               <TextInputComponent
+                autoCapitalize="none"
                 placeholder="Password"
                 iconName="lock"
                 iconType="font-awesome"
                 secureTextEntry={true}
                 onChange={(event) => setPasswordValue(event)}
-              />
-            </TouchableWithoutFeedback>
+              />  
           </View>
-
+        </TouchableWithoutFeedback>
           <View style={styles.buttonContainer}>
             {errorMessage ? (
               <Text style={styles.errorMessage}> {errorMessage} </Text>
