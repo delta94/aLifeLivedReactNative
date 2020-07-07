@@ -4,6 +4,7 @@ import { FLEX, COLOR, FONT_SIZE, BORDER_RADIUS, HEADER_MARGINS } from './../styl
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
+    backgroundColor: COLOR.limeGreen,
   },
 
   headerContainer: {
@@ -11,7 +12,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     marginTop: HEADER_MARGINS.marginTop,
-    marginBottom: Platform.isPad ? 500 : 50
+    marginBottom: Platform.isPad ? 500 : 50,
   },
 
   headerText: {
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
   },
 
   contentContainer: {
-    marginTop: 30
+    marginTop: 30,
   },
 
   icon: {
@@ -70,9 +71,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     margin: 20,
     alignItems: 'flex-end',
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: 'space-between'
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

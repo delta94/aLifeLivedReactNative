@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Keyboard} from 'react-native';
+import {View, Text, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
 
 // Components
 import TextInputComponent from './TextInputComponent';
@@ -9,7 +9,7 @@ import styles from './../styles/components/CreateStoryInterviewType';
 
 const CreateStoryInterviewType = ({isSelfInterview, setIsSelfInterviewTrue, setIsSelfInterviewFalse, onIntervieweeNameChange}) => {
   return (
-    <View style={styles.container}>
+    <View>
       <TouchableOpacity style={isSelfInterview === false || isSelfInterview === null ? styles.touchableOpacityButton : styles.touchableOpacityButtonActive} onPress={setIsSelfInterviewTrue}>
         <Text style={isSelfInterview === false || isSelfInterview === null ? styles.buttonHeader : styles.buttonHeaderActive}>Myself</Text>
         <Text style={isSelfInterview === false || isSelfInterview === null ? styles.buttonSubText : styles.buttonSubTextActive}>This means no one else will be involved in the interview process.</Text>
@@ -29,7 +29,6 @@ const CreateStoryInterviewType = ({isSelfInterview, setIsSelfInterviewTrue, setI
           onChange={(event) => onIntervieweeNameChange(event)}
         />
       ) : null}
-      
     </View>
   )
 };

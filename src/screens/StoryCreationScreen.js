@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, Keyboard, KeyboardAvoidingView} from 'react-native';
 import {ScrollView } from "react-native-gesture-handler";
+import {useNavigation} from '@react-navigation/native';
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -15,10 +16,10 @@ import ButtonComponent from './../components/ButtonComponent';
 import styles from './../styles/screens/StoryCreationScreen';
 import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
-const StoryCreationScreen = ({navigation}) => {
-
+const StoryCreationScreen = ({navigation}) => {  
   // Below is all basic form things
   const [step, setStep] = useState(0);
+  
 
   // Below is input states
   const [storyAbout, setStoryAbout] = useState("");
@@ -29,7 +30,7 @@ const StoryCreationScreen = ({navigation}) => {
   const [isStoryPrivate, setIsStoryPrivate] = useState(null);
   const [isSelfInterview, setIsSelfInterview] = useState(null);
 
-  const handleFormStage = (props) => {
+  const handleFormStage = () => {
     switch (step) {
       case 0:
         return (
@@ -78,36 +79,34 @@ const StoryCreationScreen = ({navigation}) => {
         />
         <Text style={styles.headerText}> Create Your Story</Text>
       </View>
+      <KeyboardAvoidingView behavior="padding" style={styles.footer}>
         <View style={styles.footer}>
-          <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-            <ScrollView keyboardShouldPersistTaps="handled">
-              <View style={styles.contentContainer}>
-                {handleFormStage()}
-              </View>
-            </ScrollView>
-          </KeyboardAvoidingView>
+          <ScrollView keyboardShouldPersistTaps="handled">
+            <View style={styles.contentContainer}>{handleFormStage()}</View>
+          </ScrollView>
         </View>
-        <View style={styles.buttonFooter}>
-          <View style={styles.buttonContainer}>
-            {step <= 0 ? (
-              <View></View>
-            ) : (
-                <ButtonComponent
-                  title="Back"
-                  buttonSize="small"
-                  buttonType="solid"
-                  onButtonPress={() => setStep(step - 1)}
-                />
-            )}
-  
+      </KeyboardAvoidingView>
+      <View style={styles.buttonFooter}>
+        <View style={styles.buttonContainer}>
+          {step <= 0 ? (
+            <View></View>
+          ) : (
             <ButtonComponent
-              title="Next"
+              title="Back"
               buttonSize="small"
               buttonType="solid"
-              onButtonPress={() => setStep(step + 1)}
+              onButtonPress={() => setStep(step - 1)}
             />
-          </View>
+          )}
+
+          <ButtonComponent
+            title="Next"
+            buttonSize="small"
+            buttonType="solid"
+            onButtonPress={step > 2 ? navigation.navigate('Record Story') : () => setStep(step + 1)}
+          />
         </View>
+      </View>
     </View>
   );
 };
