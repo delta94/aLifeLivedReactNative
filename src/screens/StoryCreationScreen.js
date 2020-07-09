@@ -30,6 +30,14 @@ const StoryCreationScreen = ({navigation}) => {
   const [isStoryPrivate, setIsStoryPrivate] = useState(null);
   const [isSelfInterview, setIsSelfInterview] = useState(null);
 
+  const handleOnNextButton = () => {
+    if (step >= 2) {
+      return navigation.navigate('Record Story');
+    } else {
+      return setStep(step + 1)
+    }
+  }
+
   const handleFormStage = () => {
     switch (step) {
       case 0:
@@ -66,6 +74,7 @@ const StoryCreationScreen = ({navigation}) => {
         break;
     }
   };
+  console.log(step)
 
   return (
     <View style={styles.mainContainer} onPress={Keyboard.dismiss}>
@@ -103,7 +112,7 @@ const StoryCreationScreen = ({navigation}) => {
             title="Next"
             buttonSize="small"
             buttonType="solid"
-            onButtonPress={step > 2 ? navigation.navigate('Record Story') : () => setStep(step + 1)}
+            onButtonPress={handleOnNextButton}
           />
         </View>
       </View>
