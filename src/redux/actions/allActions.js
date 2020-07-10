@@ -5,3 +5,7 @@ export const REMOVE_USER_TOKEN = "REMOVE_USER_TOKEN";
 
 // Story actions
 export const SAVE_STORY_DETAILS = "SAVE_STORY_DETAILS";
+
+// Question actions
+export const SAVE_ALL_QUESTION = "SAVE_ALL_QUESTIONS";
+

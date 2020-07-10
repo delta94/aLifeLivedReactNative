@@ -1,13 +1,16 @@
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 import {BACKEND_BASE_ROUTE_TEST, LOCAL_ENV} from 'react-native-dotenv';
 
+let authToken;
+
 const axiosAPI = axios.create({
-  baseURL: BACKEND_BASE_ROUTE_TEST,
+  baseURL: LOCAL_ENV,
 });
 
 const retrieveAuthToken = async () => {
   try {
-    return AsyncStorage.getItem('A_LIFE_LIVED_AUTH_TOKEN');
+    return await AsyncStorage.getItem('A_LIFE_LIVED_TOKEN');
   } catch (err) {
     console.log('Unable to retrieve auth token from Async Storage ', err);
   }

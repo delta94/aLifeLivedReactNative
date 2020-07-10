@@ -1,6 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 
+// API
+import {getAllQuestions} from './../api/getRequests/getQuestions';
+
 // Components
 import StoryTimerComponent from './../components/StoryTimerComponent';
 import StoryRecordSectionComponent from './../components/StoryRecordSectionComponent';
@@ -19,6 +22,13 @@ const StoryRecordingScreen = ({navigation}) => {
   const [recordingStatus, setRecordingStatus] = useState("IDLE");
   const [timerSeconds, setTimerSeconds] = useState(0);
 
+  const onLoad = async () => {
+    const response = await getAllQuestions();
+    response.data.map((question) => {
+      console.log(question);
+    })
+  };
+
   // When recording mic icon
   const onRecordStart = () => {
     setRecordingStatus("RECORDING")
@@ -31,6 +41,7 @@ const StoryRecordingScreen = ({navigation}) => {
   
   // This controls the timer
   useEffect(() => {
+    onLoad();
     if (recordingStatus === "RECORDING") {
       setTimeout(() => {
         setTimerSeconds(timerSeconds + 1);
