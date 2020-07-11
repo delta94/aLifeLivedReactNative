@@ -1,21 +1,16 @@
 import {SAVE_ALL_QUESTION} from './../actions/allActions';
 
 const questionDefaultState = {
-  audioFileURL: "",
-  id: "",
-  isMasterQuestion: false,
-  isYesOrNo: false,
-  order: 0,
-  subQuestions: [],
-  suggestions: [],
-  title: ""
+  questions: null
 };
 
 const questionReducer = (state = questionDefaultState, action) => {
   switch (action.type) {
     case SAVE_ALL_QUESTION:
-
+      return state;
     default:
-      break;
+      return state;
   }
 };
+
+export default questionReducer;

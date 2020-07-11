@@ -43,8 +43,8 @@ const StoryCreationScreen = ({navigation}) => {
       case 0:
         return (
           <CreateStoryComponent
-            onChangeStoryAbout={(event) => { setStoryAbout(event) }}
-            onChangeStoryDescription={(event) => { setStoryDescription(event) }}
+            onChangeStoryAbout={(event) => {setStoryAbout(event)}}
+            onChangeStoryDescription={(event) => {setStoryDescription(event)}}
           />
         )
       case 1: 
@@ -83,7 +83,7 @@ const StoryCreationScreen = ({navigation}) => {
           size={ICON_SIZE.iconSizeMedium}
           color={COLOR.grey}
           style={styles.icon}
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.reset({routes: [{name: 'Home'}]})}
         />
         <Text style={styles.headerText}> Create Your Story</Text>
       </View>

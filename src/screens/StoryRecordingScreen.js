@@ -18,28 +18,39 @@ import styles from './../styles/screens/StoryRecordingScreen';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
 const StoryRecordingScreen = ({navigation}) => {
-
+  // Recording States
   const [recordingStatus, setRecordingStatus] = useState("IDLE");
   const [timerSeconds, setTimerSeconds] = useState(0);
 
+  // Questions state
+  const [questions, setQuestions] = useState(null);
+  const [questionIndex, setQuestionIndex] = useState(0)
+
+  // Question audio state
+  const [questionAudioPlaying, setQuestionAudioPlaying] = useState(false);
+
+  // Loads questions.
   const onLoad = async () => {
     const response = await getAllQuestions();
-    response.data.map((question) => {
-      console.log(question);
-    })
+    setQuestions(response.data);
   };
 
-  // When recording mic icon
+  // This increments the questions.
+  const handleQuestion = () => {
+    setQuestionIndex(questionIndex + 1);
+  };
+
+  // When recording mic icon.
   const onRecordStart = () => {
-    setRecordingStatus("RECORDING")
+    setRecordingStatus("RECORDING");
   };
-
-  // When user hits the pause icon
+ 
+  // When user hits the pause icon.
   const onRecordPause = () => {
-    setRecordingStatus("PAUSED")
+    setRecordingStatus("PAUSED");
   };
   
-  // This controls the timer
+  // This controls the timer and loads the questions.
   useEffect(() => {
     onLoad();
     if (recordingStatus === "RECORDING") {
@@ -58,7 +69,7 @@ const StoryRecordingScreen = ({navigation}) => {
             size={ICON_SIZE.iconSizeMedium}
             color={COLOR.grey}
             style={styles.icon}
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.reset({routes: [{ name: 'Home' }]})}
           />
         </View>
         <View style={styles.timerContainer}>
@@ -67,7 +78,12 @@ const StoryRecordingScreen = ({navigation}) => {
       </View>
 
       <View style={styles.questionContainer}>
-        <StoryQuestionSectionComponent questionTitle={"PLACEHOLDER TITLE"} />
+        <StoryQuestionSectionComponent 
+          questionTitle={questions ? questions[questionIndex].title : null}
+          questionAudioURL={questions ? questions[questionIndex].audioFileURL : null}
+          isAudioPlaying={questionAudioPlaying}
+          questionAudioPlaying={(isAudioPlaying) => setQuestionAudioPlaying(isAudioPlaying)}
+        />
       </View>
 
       <View style={styles.footer}>
@@ -76,6 +92,7 @@ const StoryRecordingScreen = ({navigation}) => {
           <ButtonComponent
             title="Skip"
             buttonSize="small"
+            onButtonPress={() => handleQuestion()}
           />
         </View>
       </View>
