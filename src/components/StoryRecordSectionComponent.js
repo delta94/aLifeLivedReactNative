@@ -8,12 +8,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 import styles from '../styles/components/StoryRecordSectionComponent';
 
-const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPause}) => {
+const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPause, pauseAudio}) => {
 
   
   const manageIconDisplay = () => {
     switch (recordingStatus) {
-      case "IDLE":
+      case 'IDLE':
         return (
           <View>
             <MaterialCommunityIcons
@@ -22,8 +22,8 @@ const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPa
               color={COLOR.white}
             />
           </View>
-        )
-      case "PAUSED": 
+        );
+      case 'PAUSED':
         return (
           <View>
             <MaterialCommunityIcons
@@ -32,15 +32,23 @@ const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPa
               color={COLOR.white}
             />
           </View>
-        )
-      case "RECORDING": 
+        );
+      case 'RECORDING':
         return (
           <MaterialCommunityIcons
             name="pause"
             size={ICON_SIZE.iconSizeLarge}
             color={COLOR.white}
           />
-        )
+        );
+      case 'PLAYING':
+        return (
+          <MaterialCommunityIcons
+            name="pause"
+            size={ICON_SIZE.iconSizeLarge}
+            color={COLOR.white}
+          />
+        );
       default:
         break;
     };
@@ -50,7 +58,16 @@ const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPa
     switch (recordingStatus) {
       case "IDLE":
         return (
-          <Text style={styles.headerText}>When you're ready to answer press the record button below</Text>
+          <View style={styles.mainContainer}>
+            <Text style={styles.headerText}>When you're ready to answer press the record button below</Text>
+            <TouchableOpacity style={styles.touchableOpacityButton} onPress={onRecordStart}>
+              <MaterialCommunityIcons
+                name="microphone-outline"
+                size={ICON_SIZE.iconSizeLarge}
+                color={COLOR.white}
+              />
+            </TouchableOpacity>
+          </View>
         )
       case "PAUSED":
         return (
@@ -58,19 +75,39 @@ const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPa
         )
       case "RECORDING": 
         return (
-          <Text style={styles.headerText}>When you're ready to answer press the record button below</Text>
+          <View style={styles.mainContainer}>
+            <Text style={styles.headerText}>When you're ready to answer press the record button below</Text>
+            <TouchableOpacity style={styles.touchableOpacityButton} onPress={onRecordPause}>
+              <MaterialCommunityIcons
+                name="pause"
+                size={ICON_SIZE.iconSizeLarge}
+                color={COLOR.white}
+              />
+            </TouchableOpacity>
+          </View>
+        )
+      case "PLAYING":
+        return (
+            <View style={styles.mainContainer}>
+              <Text style={styles.headerText}>When you're ready to answer press the record button below</Text>
+              <TouchableOpacity style={styles.touchableOpacityButton} onPress={pauseAudio}>
+                <MaterialCommunityIcons
+                  name="pause"
+                  size={ICON_SIZE.iconSizeLarge}
+                  color={COLOR.white}
+                />
+              </TouchableOpacity>
+          </View>
         )
       default:
         break;
     }
-  }
+  };
 
   return (
-    <View style={styles.mainContainer}>
+    <View>
       {handleTextDisplay()}
-      <TouchableOpacity style={styles.touchableOpacityButton} onPress={recordingStatus === "RECORDING" ? onRecordPause : onRecordStart}>
-        {manageIconDisplay()}
-      </TouchableOpacity>
+
     </View>
   );
 };

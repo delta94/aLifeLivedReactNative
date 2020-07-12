@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
+import TrackPlayer, { pause } from 'react-native-track-player';
 
 // API
 import {getAllQuestions} from './../api/getRequests/getQuestions';
@@ -16,6 +17,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 // Styles
 import styles from './../styles/screens/StoryRecordingScreen';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
+import trackPlayerServices from '../services/services';
 
 const StoryRecordingScreen = ({navigation}) => {
   // Recording States
@@ -24,21 +26,41 @@ const StoryRecordingScreen = ({navigation}) => {
 
   // Questions state
   const [questions, setQuestions] = useState(null);
+  const [trackSetUp, setTrackSetUp] = useState(false)
   const [questionIndex, setQuestionIndex] = useState(0)
-
-  // Question audio state
-  const [questionAudioPlaying, setQuestionAudioPlaying] = useState(false);
-
+  
   // Loads questions.
   const onLoad = async () => {
     const response = await getAllQuestions();
     setQuestions(response.data);
   };
 
+  // Loads track player
+  const trackPlayerOnLoad = async () => {
+    await TrackPlayer.setupPlayer().then(() => {
+      console.log('Player is set up');
+    });
+
+    TrackPlayer.registerPlaybackService(() => trackPlayerServices);
+    return setTrackSetUp(true);
+  };
+
   // This increments the questions.
   const handleQuestion = () => {
     setQuestionIndex(questionIndex + 1);
   };
+
+  // Pause Audio
+  const pauseAudio = async () => {
+    await TrackPlayer.stop();
+    return setRecordingStatus("IDLE");
+  };
+
+  // Play audio
+  const playAudio = async () => {
+    await TrackPlayer.play();
+    return setRecordingStatus("PLAYING");
+  }
 
   // When recording mic icon.
   const onRecordStart = () => {
@@ -47,13 +69,18 @@ const StoryRecordingScreen = ({navigation}) => {
  
   // When user hits the pause icon.
   const onRecordPause = () => {
-    setRecordingStatus("PAUSED");
+    setRecordingStatus("IDLE");
   };
   
   // This controls the timer and loads the questions.
   useEffect(() => {
     onLoad();
-    if (recordingStatus === "RECORDING") {
+
+    if (!trackSetUp) {
+      trackPlayerOnLoad();
+    };
+
+    if (recordingStatus === 'RECORDING') {
       setTimeout(() => {
         setTimerSeconds(timerSeconds + 1);
       }, 1000);
@@ -81,13 +108,14 @@ const StoryRecordingScreen = ({navigation}) => {
         <StoryQuestionSectionComponent 
           questionTitle={questions ? questions[questionIndex].title : null}
           questionAudioURL={questions ? questions[questionIndex].audioFileURL : null}
-          isAudioPlaying={questionAudioPlaying}
-          questionAudioPlaying={(isAudioPlaying) => setQuestionAudioPlaying(isAudioPlaying)}
+          isAudioPlaying={recordingStatus}
+          playAudio={() => playAudio()}
+          questionAudioPlaying={(isAudioPlaying) => setRecordingStatus(isAudioPlaying)}
         />
       </View>
 
       <View style={styles.footer}>
-        <StoryRecordSectionComponent recordingStatus={recordingStatus} onRecordPause={() => onRecordPause()} onRecordStart={() => onRecordStart()}  />
+        <StoryRecordSectionComponent recordingStatus={recordingStatus} pauseAudio={() => pauseAudio()} onRecordPause={() => onRecordPause()} onRecordStart={() => onRecordStart()}  />
         <View style={styles.footerButtonContainer}>
           <ButtonComponent
             title="Skip"

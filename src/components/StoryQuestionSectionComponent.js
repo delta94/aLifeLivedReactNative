@@ -1,20 +1,35 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import {Player, MediaStates} from '@react-native-community/audio-toolkit';
+import TrackPlayer from 'react-native-track-player';
 
 // Animation
 import * as Animatable from 'react-native-animatable';
 
-const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudioPlaying, questionAudioPlaying}) => {
-  const audioPlayer = new Player(questionAudioURL);
-  const playAudio = async () => {
-    await audioPlayer.play();
-    return questionAudioPlaying(true);
+const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudioPlaying, playAudio}) => {
+
+  const startAudio = async () => {
+    // Add a track to the queue
+    await TrackPlayer.add({
+      id: 'trackId',
+      url: questionAudioURL,
+      title: 'Track Title',
+      artist: 'Track Artist',
+    });
+
+    return playAudio();
   };
 
-  const pauseAudio = async () => {
-    await audioPlayer.pause();
-    return questionAudioPlaying(false);
+  const handlePlayPauseButton = () => {
+    switch (isAudioPlaying) {
+      case "IDLE":
+        return (
+          <TouchableOpacity onPress={() => startAudio()}>
+            <Text> Play question </Text>
+          </TouchableOpacity>
+        );
+      default:
+        break;
+    }
   };
 
   return (
@@ -22,18 +37,7 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudio
       <Animatable.Text animation="fadeIn" easing="ease-in">
         <Text> {questionTitle} </Text>
       </Animatable.Text>
-      {isAudioPlaying ? (
-        <TouchableOpacity onPress={() => pauseAudio()}>
-          <Text> Pause </Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity onPress={() => playAudio()}>
-          <Text> Play question </Text>
-        </TouchableOpacity>
-      )}
-      <TouchableOpacity onPress={() => pauseAudio()}>
-        <Text> Pause </Text>
-      </TouchableOpacity>
+      {handlePlayPauseButton()}
     </View>
   );
 };
