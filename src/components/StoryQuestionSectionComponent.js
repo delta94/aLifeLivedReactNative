@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import TrackPlayer from 'react-native-track-player';
 
@@ -12,7 +12,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 import styles from './../styles/components/StoryQuestionSectionComponent';
 
-const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudioPlaying, playAudio, pauseAudio, questionID}) => {
+const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudioPlaying, playAudio, pauseAudio, questionID, isLoading}) => {
+
   const startAudio = async () => {
     // Add a track to the queue
     await TrackPlayer.add({
@@ -68,7 +69,7 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudio
   return (
     <View>
       {
-        questionTitle === null ? (
+        isLoading ? (
           <View style={styles.mainContainer}>
             <Text style={styles.questionTitle}> Loading...</Text>
             {handlePlayPauseButton()}

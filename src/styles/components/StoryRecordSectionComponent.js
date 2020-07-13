@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
 
   headerText: {
     color: COLOR.grey,
+    marginTop: 0, 
     margin: 10,
     fontWeight: 'bold',
     fontSize: FONT_SIZE.largeSize,

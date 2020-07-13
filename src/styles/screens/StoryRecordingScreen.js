@@ -38,8 +38,11 @@ const styles = StyleSheet.create({
   },
 
   footerButtonContainer: {
-    alignSelf: 'flex-end',
-    marginRight: 20,
+    alignItems: 'flex-end',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: 20
   }
 });
 

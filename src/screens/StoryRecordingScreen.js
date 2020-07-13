@@ -9,6 +9,9 @@ import {getAllQuestions} from './../api/getRequests/getQuestions';
 // Actions
 import { saveAllQuestions } from './../redux/actions/questionActions';
 
+// Services
+import trackPlayerServices from '../services/services';
+
 // Components
 import StoryTimerComponent from './../components/StoryTimerComponent';
 import StoryRecordSectionComponent from './../components/StoryRecordSectionComponent';
@@ -21,9 +24,12 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 // Styles
 import styles from './../styles/screens/StoryRecordingScreen';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
-import trackPlayerServices from '../services/services';
 
 const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) => {
+
+  // Screen states
+  const [isLoading, setIsLoading] = useState(false);
+
   // Recording States
   const [recordingStatus, setRecordingStatus] = useState("IDLE");
   const [timerSeconds, setTimerSeconds] = useState(0);
@@ -36,9 +42,11 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   // Loads questions.
   const onLoad = async () => {
     if (questions === null) {
+      setIsLoading(true)
       const response = await getAllQuestions();
       saveAllQuestions(response.data);
-      return setQuestions(questionReducer.questions);
+      setQuestions(questionReducer.questions);
+      return setIsLoading(false)
     };
 
     return setQuestions(questionReducer.questions);
@@ -56,6 +64,9 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // This increments the questions.
   const handleQuestion = () => {
+    if (questionIndex === questions.length - 1) {
+      return;
+    }
     setQuestionIndex(questionIndex + 1);
   };
 
@@ -122,16 +133,28 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
           playAudio={() => playAudio()}
           pauseAudio={() => pauseAudio()}
           questionAudioPlaying={(isAudioPlaying) => setRecordingStatus(isAudioPlaying)}
+          isLoading={isLoading}
         />
       </View>
 
       <View style={styles.footer}>
         <StoryRecordSectionComponent recordingStatus={recordingStatus} pauseAudio={() => pauseAudio()} onRecordPause={() => onRecordPause()} onRecordStart={() => onRecordStart()}  />
         <View style={styles.footerButtonContainer}>
+          {questionIndex <= 0 ? (
+              <View></View>
+            ) : (
+              <ButtonComponent
+                title={"Back"}
+                buttonSize="small"
+                onButtonPress={() => setQuestionIndex(questionIndex - 1)}
+                disabled={recordingStatus === "PLAYING" || recordingStatus === "RECORDING" ? true : false}
+              />
+            )
+          }
           <ButtonComponent
-            title="Skip"
+            title={questionIndex === questions.length - 1 ? "Finish" : "Next"}
             buttonSize="small"
-            onButtonPress={() => handleQuestion()}
+            onButtonPress={questionIndex === questions.length - 1 ? () => console.log("END") : () => setQuestionIndex(questionIndex + 1)}
             disabled={recordingStatus === "PLAYING" || recordingStatus === "RECORDING" ? true : false}
           />
         </View>
