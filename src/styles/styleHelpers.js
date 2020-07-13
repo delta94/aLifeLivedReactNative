@@ -11,6 +11,8 @@ export const COLOR = {
 };
 
 export const ICON_SIZE = {
+  iconSizeXLarge: 40,
+  iconSizeLarge: 30,
   iconSizeMedium: 25
 };
 

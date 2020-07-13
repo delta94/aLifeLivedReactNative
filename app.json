@@ -1,4 +1,12 @@
 {
   "name": "aLifeLived",
-  "displayName": "aLifeLived"
+  "displayName": "aLifeLived",
+
+  "androidStatusBar": {
+    "hidden": false,
+    "translucent": false,
+    "iosBarStyle": "light-content",
+    "barStyle": "light-content",
+    "backgroundColor": "white"
+  }
 }

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, Text, Keyboard} from 'react-native';
+import { View, Text, Keyboard, ScrollView, KeyboardAvoidingView} from 'react-native';
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import {useNavigation} from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
@@ -71,14 +71,16 @@ const LoginScreen = (props) => {
             style={styles.icon}
             onPress={() => navigation.navigate('Home')}
           />
-          <View style={styles.texInputContainer}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView>
+          <KeyboardAvoidingView behavior="padding">
+            <View style={styles.textInputContainer}>       
               <View style={styles.textContainer}>
                 <Text style={styles.header}> HELLO </Text>
                 <Text> Sign in to your account</Text>
               </View>
             
               <TextInputComponent
+                autoCapitalize="none"
                 placeholder="Email Address"
                 keyboardType="email-address"
                 iconName="user"
@@ -87,15 +89,15 @@ const LoginScreen = (props) => {
               />
 
               <TextInputComponent
+                autoCapitalize="none"
                 placeholder="Password"
                 iconName="lock"
                 iconType="font-awesome"
                 secureTextEntry={true}
                 onChange={(event) => setPasswordValue(event)}
-              />
-            </TouchableWithoutFeedback>
-          </View>
-
+              />  
+            </View>
+          </KeyboardAvoidingView>
           <View style={styles.buttonContainer}>
             {errorMessage ? (
               <Text style={styles.errorMessage}> {errorMessage} </Text>
@@ -113,9 +115,8 @@ const LoginScreen = (props) => {
               onButtonPress={() => navigation.push('SignUp')}
             />
           </View>
-          
-        </Animatable.View>
-      
+        </ScrollView>
+      </Animatable.View>
     </View>
   );
 };

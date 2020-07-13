@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
   },
 
   labelStyles: {
-    marginLeft: 10
+    marginLeft: 10,
+    color: COLOR.grey
   }
 });
 

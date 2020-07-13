@@ -32,24 +32,24 @@ const TextInputComponent = ({
   }
 
   return (
-    <View>
-      <Input
-        onEndEditing={inputValidation ? (event) => handleValidation(event.nativeEvent.text) : null}
-        autoCapitalize={autoCapitalize}
-        placeholder={placeholder}
-        leftIcon={{type: iconType, name: iconName}}
-        onChangeText={handleChange}
-        disabled={disable}
-        errorMessage={errorMessage}
-        label={label}
-        isFocused={isFocused}
-        inputContainerStyle={styles.textInput}
-        inputStyle={styles.textStyle}
-        placeholderTextColor={COLOR.grey}
-        secureTextEntry={secureTextEntry}
-        keyboardType={keyboardType ? keyboardType : 'default'}
-      />
-    </View>
+    <Input
+      onEndEditing={inputValidation ? (event) => handleValidation(event.nativeEvent.text) : null}
+      autoCapitalize={autoCapitalize}
+      placeholder={placeholder}
+      leftIcon={{type: iconType, name: iconName}}
+      onChangeText={handleChange}
+      disabled={disable}
+      errorMessage={errorMessage}
+      label={label}
+      isFocused={isFocused}
+      inputContainerStyle={styles.textInput}
+      inputStyle={styles.textStyle}
+      containerStyle={styles.container}
+      labelStyle={styles.labelText}
+      placeholderTextColor={COLOR.grey}
+      secureTextEntry={secureTextEntry}
+      keyboardType={keyboardType ? keyboardType : 'default'}
+    />
   );
 };
 

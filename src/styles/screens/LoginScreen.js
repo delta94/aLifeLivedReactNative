@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-start',
     backgroundColor: COLOR.white,
-    flex: FLEX.flexOne,
   },
 
   icon: {
@@ -45,7 +44,7 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.xLargeSize,
   },
 
-  texInputContainer: {
+  textInputContainer: {
     alignItems: 'center',
   },
 

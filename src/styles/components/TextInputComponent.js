@@ -1,10 +1,11 @@
 import {StyleSheet} from 'react-native';
 import {COLOR, FONT_SIZE} from '../styleHelpers';
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({  
+
   container: {
-    marginLeft: 20,
-    marginRight: 20,
+    paddingLeft: 10,
+    paddingRight: 10
   },
 
   placeHolder: {
@@ -22,7 +23,6 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE.mediumSize,
     backgroundColor: COLOR.white,
     height: 50,
-    width: 350,
     paddingLeft: 10,
     borderWidth: 1,
     borderRadius: 6,

@@ -1,5 +1,5 @@
-import { StyleSheet, Platform } from 'react-native';
-import { FLEX, COLOR, FONT_SIZE, BORDER_RADIUS, HEADER_MARGINS } from './../styleHelpers';
+import {StyleSheet} from 'react-native';
+import {COLOR, FONT_SIZE, BORDER_RADIUS} from './../styleHelpers';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -8,63 +8,56 @@ const styles = StyleSheet.create({
   },
 
   headerContainer: {
-    backgroundColor: COLOR.limeGreen,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    marginTop: HEADER_MARGINS.marginTop,
-    marginBottom: Platform.isPad ? 500 : 250
+    flex: 1,
+    marginTop: 50,
+    marginLeft: 10,
+  },
+
+  crossIconContainer: {
+    marginLeft: 20,
+    alignSelf: "flex-start"
   },
 
   headerText: {
     color: COLOR.grey,
-    marginLeft: 20,
-    marginTop: 30,
+    marginTop: 10,
     fontWeight: 'bold',
     fontSize: FONT_SIZE.largeSize,
   },
 
   footer: {
-    flex: 1,
+    flex: 3.5,
+    backgroundColor: COLOR.white,
     borderTopEndRadius: BORDER_RADIUS.medium,
     borderTopLeftRadius: BORDER_RADIUS.medium,
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    backgroundColor: COLOR.white,
-    flex: FLEX.flexOne,
   },
 
-  icon: {
-    marginLeft: 15,
-    marginTop: 20,
+  contentContainer: {
+    marginTop: 30,
+    borderTopEndRadius: BORDER_RADIUS.medium,
+    borderTopLeftRadius: BORDER_RADIUS.medium,
   },
 
-  header: {
+  footerHeaderText: {
     color: COLOR.grey,
+    margin: 15,
     fontWeight: 'bold',
-    fontSize: FONT_SIZE.xLargeSize,
+    fontSize: FONT_SIZE.mediumSize,
   },
 
-  texInputContainer: {
-    alignItems: 'center',
-  },
-
-  textContainer: {
-    alignItems: 'center',
-    marginBottom: 100,
-  },
-
-  errorMessage: {
-    textAlign: 'center',
-    marginBottom: 10,
-    fontWeight: 'bold',
-    color: 'red',
+  buttonFooter: {
+    display: 'flex',
+    flexDirection:'column',
+    backgroundColor: COLOR.white,
   },
 
   buttonContainer: {
-    marginTop: 50,
-    marginRight: 20,
+    margin: 20,
+    marginBottom: 30,
     alignItems: 'flex-end',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 

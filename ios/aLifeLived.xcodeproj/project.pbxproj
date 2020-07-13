@@ -54,6 +54,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = aLifeLived/main.m; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* aLifeLived-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "aLifeLived-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* aLifeLived-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "aLifeLived-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		58652E9324BAA60600315402 /* aLifeLived-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "aLifeLived-Bridging-Header.h"; sourceTree = "<group>"; };
 		6F4FDBB479DE582D07333AD0 /* libPods-aLifeLived-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aLifeLived-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B06DDDCE52D03F95FC0FC7BA /* libPods-aLifeLived-aLifeLivedTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aLifeLived-aLifeLivedTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B92071C2616EFAA2EE19DA64 /* Pods-aLifeLived-aLifeLivedTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-aLifeLivedTests.debug.xcconfig"; path = "Target Support Files/Pods-aLifeLived-aLifeLivedTests/Pods-aLifeLived-aLifeLivedTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -132,6 +133,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				58652E9324BAA60600315402 /* aLifeLived-Bridging-Header.h */,
 			);
 			name = aLifeLived;
 			sourceTree = "<group>";
@@ -302,7 +304,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = K2UC8H8Q2V;
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1150;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -752,6 +754,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = aLifeLived;
+				SWIFT_OBJC_BRIDGING_HEADER = "aLifeLived-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -777,6 +780,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = aLifeLived;
+				SWIFT_OBJC_BRIDGING_HEADER = "aLifeLived-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
