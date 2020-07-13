@@ -3,10 +3,12 @@ import {combineReducers} from 'redux';
 // Individual Reducers
 import userReducer from './userReducer';
 import storyReducer from './storyReducer';
+import questionReducer from './questionReducer';
 
 const allReducers = {
   userReducer,
-  storyReducer
+  storyReducer,
+  questionReducer
 };
 
 const rootReducer = combineReducers(allReducers);

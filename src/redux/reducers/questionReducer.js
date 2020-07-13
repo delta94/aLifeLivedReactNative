@@ -7,7 +7,9 @@ const questionDefaultState = {
 const questionReducer = (state = questionDefaultState, action) => {
   switch (action.type) {
     case SAVE_ALL_QUESTION:
-      return state;
+      return {
+        questions: action.payload.questions
+      }
     default:
       return state;
   }

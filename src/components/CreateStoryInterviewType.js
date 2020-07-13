@@ -17,7 +17,7 @@ const CreateStoryInterviewType = ({isSelfInterview, setIsSelfInterviewTrue, setI
 
       <TouchableOpacity style={isSelfInterview === true || isSelfInterview === null ? styles.touchableOpacityButton : styles.touchableOpacityButtonActive} onPress={setIsSelfInterviewFalse}>
         <Text style={isSelfInterview === true || isSelfInterview === null ? styles.buttonHeader : styles.buttonHeaderActive}>Someone else</Text>
-        <Text style={isSelfInterview === true || isSelfInterview === null ? styles.buttonSubText : styles.buttonSubTextActive}>Someone else will interviewing you.</Text>
+        <Text style={isSelfInterview === true || isSelfInterview === null ? styles.buttonSubText : styles.buttonSubTextActive}>Someone else will interviewing you or you will be interviewing someone.</Text>
       </TouchableOpacity>
 
       {isSelfInterview === false ? (

@@ -14,13 +14,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: 70,
-    height: 70,
+    height: 70
   },
 
   headerText: {
     color: COLOR.grey,
-    marginTop: 10,
-    margin: 20,
+    margin: 10,
     fontWeight: 'bold',
     fontSize: FONT_SIZE.largeSize,
   },

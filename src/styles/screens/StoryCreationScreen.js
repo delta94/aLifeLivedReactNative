@@ -2,6 +2,7 @@ import { StyleSheet, Platform } from 'react-native';
 import { FLEX, COLOR, FONT_SIZE, BORDER_RADIUS, HEADER_MARGINS } from './../styleHelpers';
 
 const styles = StyleSheet.create({
+
   mainContainer: {
     flex: 1,
     backgroundColor: COLOR.limeGreen,

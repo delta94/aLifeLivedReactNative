@@ -10,51 +10,8 @@ import styles from '../styles/components/StoryRecordSectionComponent';
 
 const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPause, pauseAudio}) => {
 
-  
-  const manageIconDisplay = () => {
-    switch (recordingStatus) {
-      case 'IDLE':
-        return (
-          <View>
-            <MaterialCommunityIcons
-              name="microphone-outline"
-              size={ICON_SIZE.iconSizeLarge}
-              color={COLOR.white}
-            />
-          </View>
-        );
-      case 'PAUSED':
-        return (
-          <View>
-            <MaterialCommunityIcons
-              name="microphone-outline"
-              size={ICON_SIZE.iconSizeLarge}
-              color={COLOR.white}
-            />
-          </View>
-        );
-      case 'RECORDING':
-        return (
-          <MaterialCommunityIcons
-            name="pause"
-            size={ICON_SIZE.iconSizeLarge}
-            color={COLOR.white}
-          />
-        );
-      case 'PLAYING':
-        return (
-          <MaterialCommunityIcons
-            name="pause"
-            size={ICON_SIZE.iconSizeLarge}
-            color={COLOR.white}
-          />
-        );
-      default:
-        break;
-    };
-  };
-
-  const handleTextDisplay = () => {
+  // The below handles what icon, text and function displays based off the recording.  
+  const handleDisplay = () => {
     switch (recordingStatus) {
       case "IDLE":
         return (
@@ -71,12 +28,21 @@ const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPa
         )
       case "PAUSED":
         return (
-          <Text style={styles.headerText}>To continue to the next question hit the next button</Text>
+          <View style={styles.mainContainer}>
+            <Text style={styles.headerText}>For next question hit the next button or continue recording...</Text>
+            <TouchableOpacity style={styles.touchableOpacityButton} onPress={onRecordStart}>
+              <MaterialCommunityIcons
+                name="microphone-outline"
+                size={ICON_SIZE.iconSizeLarge}
+                color={COLOR.white}
+              />
+            </TouchableOpacity>
+          </View>
         )
       case "RECORDING": 
         return (
           <View style={styles.mainContainer}>
-            <Text style={styles.headerText}>When you're ready to answer press the record button below</Text>
+            <Text style={styles.headerText}>To pause recording press the below button...</Text>
             <TouchableOpacity style={styles.touchableOpacityButton} onPress={onRecordPause}>
               <MaterialCommunityIcons
                 name="pause"
@@ -89,7 +55,7 @@ const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPa
       case "PLAYING":
         return (
             <View style={styles.mainContainer}>
-              <Text style={styles.headerText}>When you're ready to answer press the record button below</Text>
+              <Text style={styles.headerText}>Press the below button to stop listening to question...</Text>
               <TouchableOpacity style={styles.touchableOpacityButton} onPress={pauseAudio}>
                 <MaterialCommunityIcons
                   name="pause"
@@ -106,8 +72,7 @@ const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPa
 
   return (
     <View>
-      {handleTextDisplay()}
-
+      {handleDisplay()}
     </View>
   );
 };

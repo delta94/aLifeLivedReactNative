@@ -1,7 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, Keyboard, KeyboardAvoidingView} from 'react-native';
 import {ScrollView } from "react-native-gesture-handler";
-import {useNavigation} from '@react-navigation/native';
+import {connect} from 'react-redux';
+
+// Helpers
+import { useOrientation } from './../helpers/orientation';
+
+// Actions
+import { saveAllQuestions } from './../redux/actions/questionActions';
+
+// API
+import { getAllQuestions } from './../api/getRequests/getQuestions';
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -16,7 +25,9 @@ import ButtonComponent from './../components/ButtonComponent';
 import styles from './../styles/screens/StoryCreationScreen';
 import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
-const StoryCreationScreen = ({navigation}) => {  
+const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {  
+  const orientation = useOrientation();
+
   // Below is all basic form things
   const [step, setStep] = useState(0);
   
@@ -28,6 +39,16 @@ const StoryCreationScreen = ({navigation}) => {
   // Below are boolean states
   const [isStoryPrivate, setIsStoryPrivate] = useState(null);
   const [isSelfInterview, setIsSelfInterview] = useState(null);
+
+  // Loads questions.
+  const onLoad = async () => {
+    const response = await getAllQuestions();
+    return saveAllQuestions(response.data);
+  };
+
+  useEffect(() => {
+    onLoad();
+  }, []);
 
   // Handles when the user hits next
   const handleOnNextButton = () => {
@@ -119,4 +140,10 @@ const StoryCreationScreen = ({navigation}) => {
   );
 };
 
-export default StoryCreationScreen;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions))
+  }
+};
+
+export default connect(null, mapDispatchToProps) (StoryCreationScreen);

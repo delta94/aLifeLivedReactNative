@@ -1,5 +1,5 @@
-import { StyleSheet, Platform } from 'react-native';
-import { COLOR, FONT_SIZE, BORDER_RADIUS, HEADER_MARGINS } from './../styleHelpers';
+import { StyleSheet } from 'react-native';
+import { COLOR, BORDER_RADIUS } from './../styleHelpers';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -23,11 +23,12 @@ const styles = StyleSheet.create({
 
   questionContainer: {
     flex: 1,
+    width: '100%',
     alignSelf: "center"
   },
 
   footer: {
-    flex: 1,
+    flex: 1.5,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
 
   footerButtonContainer: {
     alignSelf: 'flex-end',
-    marginRight: 20
+    marginRight: 20,
   }
 });
 
