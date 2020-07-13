@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Keyboard, KeyboardAvoidingView} from 'react-native';
+import {View, Text, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import {ScrollView } from "react-native-gesture-handler";
 import {connect} from 'react-redux';
 
@@ -108,7 +108,7 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
         />
         <Text style={styles.headerText}> Create Your Story</Text>
       </View>
-      <KeyboardAvoidingView behavior="padding" style={styles.footer}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? "padding" : "height"} style={styles.footer}>
         <View style={styles.footer}>
           <ScrollView keyboardShouldPersistTaps="handled">
             <View style={styles.contentContainer}>{handleFormStage()}</View>

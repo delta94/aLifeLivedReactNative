@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginBottom: 15,
-    borderRadius: 10,
+    borderRadius: 10
   },
 
   touchableOpacityButtonActive: {
@@ -40,14 +40,6 @@ const styles = StyleSheet.create({
 
   buttonSubTextActive: {
     color: COLOR.white,
-    fontSize: FONT_SIZE.mediumSize,
-  },
-
-  headerText: {
-    color: COLOR.grey,
-    marginTop: 20,
-    marginBottom: 15,
-    fontWeight: 'bold',
     fontSize: FONT_SIZE.mediumSize,
   },
 });

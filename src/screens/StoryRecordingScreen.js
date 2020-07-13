@@ -27,6 +27,11 @@ import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
 const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) => {
 
+  // TODO:
+  // 1. When the user hits the back button they should go back to the previous state with the recording and the timer the same. 
+  // 2. User needs to be able to record, recording should then go to the AWS server when they hit the next button. 
+
+
   // Screen states
   const [isLoading, setIsLoading] = useState(false);
 
@@ -62,14 +67,6 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     return setTrackSetUp(true);
   };
 
-  // This increments the questions.
-  const handleQuestion = () => {
-    if (questionIndex === questions.length - 1) {
-      return;
-    }
-    setQuestionIndex(questionIndex + 1);
-  };
-
   // Pause Audio
   const pauseAudio = async () => {
     await TrackPlayer.stop();
@@ -91,7 +88,18 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   const onRecordPause = () => {
     setRecordingStatus("PAUSED");
   };
-  
+
+  // When the user goes to the next question the below states are reset.
+  const onNextButton = () => {
+    if (questionIndex === questions.length - 1) {
+      console.log("END")
+      return;
+    };
+    setTimerSeconds(0);
+    setRecordingStatus("IDLE");
+    return setQuestionIndex(questionIndex + 1)
+  };
+
   // This controls the timer and loads the questions.
   useEffect(() => {
     onLoad();
@@ -154,7 +162,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
           <ButtonComponent
             title={questionIndex === questions.length - 1 ? "Finish" : "Next"}
             buttonSize="small"
-            onButtonPress={questionIndex === questions.length - 1 ? () => console.log("END") : () => setQuestionIndex(questionIndex + 1)}
+            onButtonPress={() => onNextButton()}
             disabled={recordingStatus === "PLAYING" || recordingStatus === "RECORDING" ? true : false}
           />
         </View>
