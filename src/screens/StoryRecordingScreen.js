@@ -66,9 +66,9 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     AudioRecord.start();
 
     AudioRecord.on('data', (data) => {
-      console.log(data);
+      setRecordingStatus('RECORDING');
     });
-    setRecordingStatus("RECORDING");
+    
   };
  
   // When user hits the pause icon.
