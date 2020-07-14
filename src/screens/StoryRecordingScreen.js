@@ -1,16 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
-import TrackPlayer, { pause } from 'react-native-track-player';
+import {View} from 'react-native';
 import {connect} from 'react-redux';
-
-// API
-import {getAllQuestions} from './../api/getRequests/getQuestions';
+import AudioRecord from 'react-native-audio-record';
+import TrackPlayer from 'react-native-track-player';
 
 // Actions
 import { saveAllQuestions } from './../redux/actions/questionActions';
-
-// Services
-import trackPlayerServices from '../services/services';
 
 // Components
 import StoryTimerComponent from './../components/StoryTimerComponent';
@@ -31,40 +26,27 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   // 1. When the user hits the back button they should go back to the previous state with the recording and the timer the same. 
   // 2. User needs to be able to record, recording should then go to the AWS server when they hit the next button. 
 
-
-  // Screen states
-  const [isLoading, setIsLoading] = useState(false);
+  const options = {
+    sampleRate: 16000, // default 44100
+    channels: 1, // 1 or 2, default 1
+    bitsPerSample: 16, // 8 or 16, default 16
+    audioSource: 6, // android only (see below)
+    wavFile: 'test.wav', // default 'audio.wav'
+  };
 
   // Recording States
   const [recordingStatus, setRecordingStatus] = useState("IDLE");
   const [timerSeconds, setTimerSeconds] = useState(0);
+  const [audioFile, setAudioFile] = useState(null);
 
   // Questions state
   const [questions, setQuestions] = useState(questionReducer.questions);
-  const [trackSetUp, setTrackSetUp] = useState(false)
-  const [questionIndex, setQuestionIndex] = useState(0)
-  
+  const [questionIndex, setQuestionIndex] = useState(0);
+
   // Loads questions.
   const onLoad = async () => {
-    if (questions === null) {
-      setIsLoading(true)
-      const response = await getAllQuestions();
-      saveAllQuestions(response.data);
-      setQuestions(questionReducer.questions);
-      return setIsLoading(false)
-    };
-
-    return setQuestions(questionReducer.questions);
-  };
-
-  // Loads track player
-  const trackPlayerOnLoad = async () => {
-    await TrackPlayer.setupPlayer().then(() => {
-      console.log('Player is set up');
-    });
-
-    TrackPlayer.registerPlaybackService(() => trackPlayerServices);
-    return setTrackSetUp(true);
+    AudioRecord.init(options);
+    await setQuestions(questionReducer.questions);
   };
 
   // Pause Audio
@@ -77,16 +59,23 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   const playAudio = async () => {
     await TrackPlayer.play();
     return setRecordingStatus("PLAYING");
-  }
+  };
 
   // When recording mic icon.
   const onRecordStart = () => {
+    AudioRecord.start();
+
+    AudioRecord.on('data', (data) => {
+      console.log(data);
+    });
     setRecordingStatus("RECORDING");
   };
  
   // When user hits the pause icon.
-  const onRecordPause = () => {
-    setRecordingStatus("PAUSED");
+  const onRecordPause = async () => {
+    const audioFile = await AudioRecord.stop();
+    setAudioFile(audioFile);
+    return setRecordingStatus("PAUSED");
   };
 
   // When the user goes to the next question the below states are reset.
@@ -94,7 +83,8 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     if (questionIndex === questions.length - 1) {
       console.log("END")
       return;
-    };
+    } 
+
     setTimerSeconds(0);
     setRecordingStatus("IDLE");
     return setQuestionIndex(questionIndex + 1)
@@ -103,11 +93,6 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   // This controls the timer and loads the questions.
   useEffect(() => {
     onLoad();
-
-    if (!trackSetUp) {
-      trackPlayerOnLoad();
-    };
-
     if (recordingStatus === 'RECORDING') {
       setTimeout(() => {
         setTimerSeconds(timerSeconds + 1);
@@ -141,7 +126,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
           playAudio={() => playAudio()}
           pauseAudio={() => pauseAudio()}
           questionAudioPlaying={(isAudioPlaying) => setRecordingStatus(isAudioPlaying)}
-          isLoading={isLoading}
+          capturedAudio={ audioFile}
         />
       </View>
 

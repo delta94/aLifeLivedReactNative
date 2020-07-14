@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import TrackPlayer from 'react-native-track-player';
+import TrackPlayer, { seekTo } from 'react-native-track-player';
 
 // Animation
 import * as Animatable from 'react-native-animatable';
@@ -12,10 +12,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 import styles from './../styles/components/StoryQuestionSectionComponent';
 
-const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudioPlaying, playAudio, pauseAudio, questionID, isLoading}) => {
+const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudioPlaying, playAudio, pauseAudio, questionID, capturedAudio}) => {
 
   const startAudio = async () => {
-    // Add a track to the queue
+    Add a track to the queue
     await TrackPlayer.add({
       id: questionID,
       url: questionAudioURL,
@@ -25,6 +25,16 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudio
 
     return playAudio();
   };
+
+  const replayAudio = async () => {
+    await TrackPlayer.add({
+      id: capturedAudio,
+      url: 'file://' + capturedAudio,
+      title: questionTitle,
+      artist: questionTitle,
+    });
+    return playAudio();
+  }
 
   const handlePlayPauseButton = () => {
     switch (isAudioPlaying) {
@@ -67,22 +77,19 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudio
   };
 
   return (
-    <View>
-      {
-        isLoading ? (
-          <View style={styles.mainContainer}>
-            <Text style={styles.questionTitle}> Loading...</Text>
-            {handlePlayPauseButton()}
-          </View>
-        ) : (
-          <View style={styles.mainContainer}>
-            <Animatable.Text animation="fadeIn" easing="ease-in" style={styles.questionTitleContainer}>
-              <Text style={styles.questionTitle}> {questionTitle}</Text>
-            </Animatable.Text>
-            {handlePlayPauseButton()}
-          </View>
-        )
-      }
+    <View style={styles.mainContainer}>
+      <Animatable.Text animation="fadeIn" easing="ease-in" style={styles.questionTitleContainer}>
+        <Text style={styles.questionTitle}> {questionTitle}</Text>
+      </Animatable.Text>
+      {handlePlayPauseButton()}
+      <TouchableOpacity onPress={() => replayAudio()} style={styles.touchableOpacityContainer}>
+        <MaterialCommunityIcons
+          name="stop-circle"
+          size={ICON_SIZE.iconSizeLarge}
+          color={COLOR.white}
+        />
+        <Text> Stop question </Text>
+      </TouchableOpacity>
     </View>
   );
 };

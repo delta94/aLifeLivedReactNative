@@ -30,6 +30,7 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
 
   // Below is all basic form things
   const [step, setStep] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   
   // Below is input states
   const [storyAbout, setStoryAbout] = useState("");
@@ -41,19 +42,30 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
   const [isSelfInterview, setIsSelfInterview] = useState(null);
 
   // Loads questions.
-  const onLoad = async () => {
+  const loadQuestions = async () => {
+    setIsLoading(true);
     const response = await getAllQuestions();
-    return saveAllQuestions(response.data);
+
+    if (response.status === 200) {
+      try {
+        saveAllQuestions(response.data);
+        return setIsLoading(true);
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error)
+      }
+    } else {
+      setIsLoading(false);
+      console.log(response.errorMessage);
+    }
   };
 
-  useEffect(() => {
-    onLoad();
-  }, []);
-
   // Handles when the user hits next
-  const handleOnNextButton = () => {
+  const handleOnNextButton = async () => {
     if (step >= 2) {
-      return navigation.navigate('Record Story');
+      await loadQuestions();
+      navigation.navigate('Record Story');
+      return setIsLoading(false);
     } else {
       return setStep(step + 1)
     }
@@ -132,6 +144,7 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
             title="Next"
             buttonSize="small"
             buttonType="solid"
+            isLoading={isLoading}
             onButtonPress={handleOnNextButton}
           />
         </View>
