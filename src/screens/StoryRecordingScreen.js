@@ -54,29 +54,24 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // Pause Audio
   const pauseAudio = async () => {
-    audioRecorderPlayer.stopPlayer();
-    audioRecorderPlayer.removePlayBackListener();
+    await TrackPlayer.stop();
     return setRecordingStatus("IDLE");
   };
 
   // Play audio
-  const playAudio = async () => {
+  const playAudio = async (questionAudioURL, questionID, questionTitle) => {
+
+    // Add a track to the queue
+    await TrackPlayer.add({
+      id: questionID,
+      url: questionAudioURL,
+      title: questionTitle,
+      artist: questionTitle,
+    });
 
     await TrackPlayer.play();
-
     return setRecordingStatus("PLAYING");
-    // const msg = await audioRecorderPlayer.startPlayer(audioFile);
-    // console.log('HELLO THERE', msg);
-
-    // audioRecorderPlayer.addPlayBackListener((e) => {
-    //   if (e.current_position === e.duration) {
-    //     console.log('finished');
-    //     audioRecorderPlayer.stopPlayer();
-    //     setRecordingStatus("IDLE")
-    //   }
-    //   return;
-    // });
-  };
+  }
 
   // When recording mic icon.
   const onRecordStart = async () => {
@@ -141,7 +136,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
           questionAudioURL={questions ? questions[questionIndex].audioFileURL : null}
           questionID={questions ? questions[questionIndex].id : null}
           isAudioPlaying={recordingStatus}
-          playAudio={(audioFile) => playAudio(audioFile)}
+          playAudio={(questionAudioURL, questionID, questionTitle) => playAudio(questionAudioURL, questionID, questionTitle)}
           pauseAudio={() => pauseAudio()}
           questionAudioPlaying={(isAudioPlaying) => setRecordingStatus(isAudioPlaying)}
           capturedAudio={recordedAudioFile}
