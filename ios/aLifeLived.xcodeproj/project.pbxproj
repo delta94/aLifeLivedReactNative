@@ -18,7 +18,9 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* aLifeLivedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* aLifeLivedTests.m */; };
 		55D2FE6D5C567398C8A5B05B /* libPods-aLifeLived-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F4FDBB479DE582D07333AD0 /* libPods-aLifeLived-tvOSTests.a */; };
-		8A9D8EFE380E0E6442F048B8 /* libPods-aLifeLived.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9A4D4D9B1B74D65E097351 /* libPods-aLifeLived.a */; };
+		58FCE81E24BEFC8500D77DC3 /* recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FCE81D24BEFC8500D77DC3 /* recording.swift */; };
+		58FCE82224BEFF4400D77DC3 /* recording.m in Sources */ = {isa = PBXBuildFile; fileRef = 58FCE82124BEFF4400D77DC3 /* recording.m */; };
+		745B2AA30F9D9A3CF73FF51C /* libPods-aLifeLived.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9A4D4D9B1B74D65E097351 /* libPods-aLifeLived.a */; };
 		948BBE9B3A9C74341ED0368B /* libPods-aLifeLived-aLifeLivedTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B06DDDCE52D03F95FC0FC7BA /* libPods-aLifeLived-aLifeLivedTests.a */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +47,7 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* aLifeLivedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = aLifeLivedTests.m; sourceTree = "<group>"; };
 		05FECE35DAA18F057A67C5CF /* Pods-aLifeLived-aLifeLivedTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-aLifeLivedTests.release.xcconfig"; path = "Target Support Files/Pods-aLifeLived-aLifeLivedTests/Pods-aLifeLived-aLifeLivedTests.release.xcconfig"; sourceTree = "<group>"; };
+		10D5C0CE9D924395AD9A214F /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* aLifeLived.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = aLifeLived.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = aLifeLived/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = aLifeLived/AppDelegate.m; sourceTree = "<group>"; };
@@ -52,19 +55,37 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = aLifeLived/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = aLifeLived/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = aLifeLived/main.m; sourceTree = "<group>"; };
+		2B7ECD1D801B41D3924FEA7F /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* aLifeLived-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "aLifeLived-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* aLifeLived-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "aLifeLived-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		58652E9324BAA60600315402 /* aLifeLived-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "aLifeLived-Bridging-Header.h"; sourceTree = "<group>"; };
+		38EC1111DC66447BA2ED27B1 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		4F56321AA27A46E1B7DADF76 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
+		5363BAEB6BDF4447B1A77427 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		54C1D867A32742EDB065D010 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
+		580D7AEB24BEEF4C0048C741 /* libPods-aLifeLived.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-aLifeLived.a"; path = "../../Desktop/libPods-aLifeLived.a"; sourceTree = "<group>"; };
+		58FCE81D24BEFC8500D77DC3 /* recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = recording.swift; sourceTree = "<group>"; };
+		58FCE82024BEFE9400D77DC3 /* aLifeLived-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "aLifeLived-Bridging-Header.h"; sourceTree = "<group>"; };
+		58FCE82124BEFF4400D77DC3 /* recording.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = recording.m; sourceTree = "<group>"; };
 		6F4FDBB479DE582D07333AD0 /* libPods-aLifeLived-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aLifeLived-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7656A56AC5734027B840323D /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		7DA8251F900242BAAED83D7D /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
+		816C24344D03454199B73A12 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
+		8D822E9CF66D47A690D1C68A /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
+		90881621F5F84646B239E78C /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		9FC4C81C13384CCFAA0F0563 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		B06DDDCE52D03F95FC0FC7BA /* libPods-aLifeLived-aLifeLivedTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aLifeLived-aLifeLivedTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B92071C2616EFAA2EE19DA64 /* Pods-aLifeLived-aLifeLivedTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-aLifeLivedTests.debug.xcconfig"; path = "Target Support Files/Pods-aLifeLived-aLifeLivedTests/Pods-aLifeLived-aLifeLivedTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BE9A4D4D9B1B74D65E097351 /* libPods-aLifeLived.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aLifeLived.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C683120A819C47FC870B949F /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		D907A86CAC4CCFA310D1E57F /* Pods-aLifeLived-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOSTests/Pods-aLifeLived-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		DABDAB4B5A6340B48B0EC611 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		DD63720103875A4FD2F966FB /* Pods-aLifeLived.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived.debug.xcconfig"; path = "Target Support Files/Pods-aLifeLived/Pods-aLifeLived.debug.xcconfig"; sourceTree = "<group>"; };
 		E561E797A95D9BCF4F9D2B68 /* libPods-aLifeLived-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aLifeLived-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E783AF93A5A72D5805FCA57A /* Pods-aLifeLived-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOS.release.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOS/Pods-aLifeLived-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		EF077952B5CD4FBFA004D425 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
+		EF4B3057A2E5426CA219D742 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		F8680372CD02A35954D25DB8 /* Pods-aLifeLived-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOSTests/Pods-aLifeLived-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F94368012DC3FE726D74A8FB /* Pods-aLifeLived-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOS/Pods-aLifeLived-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		FDA89E85BADF900DF2115461 /* Pods-aLifeLived.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived.release.xcconfig"; path = "Target Support Files/Pods-aLifeLived/Pods-aLifeLived.release.xcconfig"; sourceTree = "<group>"; };
@@ -83,7 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A9D8EFE380E0E6442F048B8 /* libPods-aLifeLived.a in Frameworks */,
+				745B2AA30F9D9A3CF73FF51C /* libPods-aLifeLived.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,7 +154,9 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				58652E9324BAA60600315402 /* aLifeLived-Bridging-Header.h */,
+				58FCE81D24BEFC8500D77DC3 /* recording.swift */,
+				58FCE82124BEFF4400D77DC3 /* recording.m */,
+				58FCE82024BEFE9400D77DC3 /* aLifeLived-Bridging-Header.h */,
 			);
 			name = aLifeLived;
 			sourceTree = "<group>";
@@ -141,6 +164,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				580D7AEB24BEEF4C0048C741 /* libPods-aLifeLived.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				BE9A4D4D9B1B74D65E097351 /* libPods-aLifeLived.a */,
@@ -188,6 +212,22 @@
 		C8C0B011B5AC4460AB4FE7FF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8D822E9CF66D47A690D1C68A /* AntDesign.ttf */,
+				4F56321AA27A46E1B7DADF76 /* Entypo.ttf */,
+				5363BAEB6BDF4447B1A77427 /* EvilIcons.ttf */,
+				EF077952B5CD4FBFA004D425 /* Feather.ttf */,
+				10D5C0CE9D924395AD9A214F /* FontAwesome.ttf */,
+				816C24344D03454199B73A12 /* FontAwesome5_Brands.ttf */,
+				9FC4C81C13384CCFAA0F0563 /* FontAwesome5_Regular.ttf */,
+				7DA8251F900242BAAED83D7D /* FontAwesome5_Solid.ttf */,
+				54C1D867A32742EDB065D010 /* Fontisto.ttf */,
+				DABDAB4B5A6340B48B0EC611 /* Foundation.ttf */,
+				7656A56AC5734027B840323D /* Ionicons.ttf */,
+				2B7ECD1D801B41D3924FEA7F /* MaterialCommunityIcons.ttf */,
+				90881621F5F84646B239E78C /* MaterialIcons.ttf */,
+				C683120A819C47FC870B949F /* Octicons.ttf */,
+				EF4B3057A2E5426CA219D742 /* SimpleLineIcons.ttf */,
+				38EC1111DC66447BA2ED27B1 /* Zocial.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -385,7 +425,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -640,6 +680,8 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				58FCE81E24BEFC8500D77DC3 /* recording.swift in Sources */,
+				58FCE82224BEFF4400D77DC3 /* recording.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -692,6 +734,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B92071C2616EFAA2EE19DA64 /* Pods-aLifeLived-aLifeLivedTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -715,6 +758,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05FECE35DAA18F057A67C5CF /* Pods-aLifeLived-aLifeLivedTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = aLifeLivedTests/Info.plist;
@@ -754,6 +798,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = aLifeLived;
+				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "aLifeLived-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -780,6 +825,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = aLifeLived;
+				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "aLifeLived-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

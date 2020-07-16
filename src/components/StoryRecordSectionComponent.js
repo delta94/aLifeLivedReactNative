@@ -17,7 +17,7 @@ const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPa
         return (
           <View style={styles.mainContainer}>
             <Text style={styles.headerText}>When you're ready to answer press the record button below</Text>
-            <TouchableOpacity style={styles.touchableOpacityButton} onPress={onRecordStart}>
+            <TouchableOpacity style={styles.touchableOpacityButton} onPress={() => onRecordStart()}>
               <MaterialCommunityIcons
                 name="microphone-outline"
                 size={ICON_SIZE.iconSizeLarge}
@@ -30,7 +30,7 @@ const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPa
         return (
           <View style={styles.mainContainer}>
             <Text style={styles.headerText}>For next question hit the next button or continue recording...</Text>
-            <TouchableOpacity style={styles.touchableOpacityButton} onPress={onRecordStart}>
+            <TouchableOpacity style={styles.touchableOpacityButton} onPress={() => onRecordStart()}>
               <MaterialCommunityIcons
                 name="microphone-outline"
                 size={ICON_SIZE.iconSizeLarge}
@@ -43,7 +43,7 @@ const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPa
         return (
           <View style={styles.mainContainer}>
             <Text style={styles.headerText}>To pause recording press the below button...</Text>
-            <TouchableOpacity style={styles.touchableOpacityButton} onPress={onRecordPause}>
+            <TouchableOpacity style={styles.touchableOpacityButton} onPress={() => onRecordPause()}>
               <MaterialCommunityIcons
                 name="pause"
                 size={ICON_SIZE.iconSizeLarge}
@@ -56,7 +56,7 @@ const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPa
         return (
             <View style={styles.mainContainer}>
               <Text style={styles.headerText}>Press the below button to stop listening to question...</Text>
-              <TouchableOpacity style={styles.touchableOpacityButton} onPress={pauseAudio}>
+              <TouchableOpacity style={styles.touchableOpacityButton} onPress={() => pauseAudio()}>
                 <MaterialCommunityIcons
                   name="pause"
                   size={ICON_SIZE.iconSizeLarge}

@@ -1,8 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {View} from 'react-native';
 import {connect} from 'react-redux';
-import AudioRecord from 'react-native-audio-record';
-import TrackPlayer from 'react-native-track-player';
+import TrackPlayer, { pause } from 'react-native-track-player';
+
+//TEST
+import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+
+// API 
+import {imageUpload} from './../api/postRequests/imageUpload';
 
 // Actions
 import { saveAllQuestions } from './../redux/actions/questionActions';
@@ -19,25 +24,24 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 // Styles
 import styles from './../styles/screens/StoryRecordingScreen';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
+import { Platform } from 'react-native';
 
 const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) => {
 
   // TODO:
   // 1. When the user hits the back button they should go back to the previous state with the recording and the timer the same. 
   // 2. User needs to be able to record, recording should then go to the AWS server when they hit the next button. 
+  const audioRecorderPlayer = new AudioRecorderPlayer();
 
-  const options = {
-    sampleRate: 16000, // default 44100
-    channels: 1, // 1 or 2, default 1
-    bitsPerSample: 16, // 8 or 16, default 16
-    audioSource: 6, // android only (see below)
-    wavFile: 'test.wav', // default 'audio.wav'
-  };
+  const path = Platform.select({
+    ios: 'testplay.mp4',
+    android: 'test/testrecord.mp4'
+  })
 
   // Recording States
   const [recordingStatus, setRecordingStatus] = useState("IDLE");
   const [timerSeconds, setTimerSeconds] = useState(0);
-  const [audioFile, setAudioFile] = useState(null);
+  const [recordedAudioFile, setAudioFile] = useState(null);
 
   // Questions state
   const [questions, setQuestions] = useState(questionReducer.questions);
@@ -45,36 +49,50 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // Loads questions.
   const onLoad = async () => {
-    AudioRecord.init(options);
     await setQuestions(questionReducer.questions);
   };
 
   // Pause Audio
   const pauseAudio = async () => {
-    await TrackPlayer.stop();
+    audioRecorderPlayer.stopPlayer();
+    audioRecorderPlayer.removePlayBackListener();
     return setRecordingStatus("IDLE");
   };
 
   // Play audio
   const playAudio = async () => {
+
     await TrackPlayer.play();
+
     return setRecordingStatus("PLAYING");
+    // const msg = await audioRecorderPlayer.startPlayer(audioFile);
+    // console.log('HELLO THERE', msg);
+
+    // audioRecorderPlayer.addPlayBackListener((e) => {
+    //   if (e.current_position === e.duration) {
+    //     console.log('finished');
+    //     audioRecorderPlayer.stopPlayer();
+    //     setRecordingStatus("IDLE")
+    //   }
+    //   return;
+    // });
   };
 
   // When recording mic icon.
-  const onRecordStart = () => {
-    AudioRecord.start();
-
-    AudioRecord.on('data', (data) => {
-      setRecordingStatus('RECORDING');
+  const onRecordStart = async () => {
+    const result = await audioRecorderPlayer.startRecorder(path);
+    audioRecorderPlayer.addRecordBackListener((e) => {
+      return;
     });
-    
+    setAudioFile(result);
+    return setRecordingStatus("RECORDING")
   };
  
   // When user hits the pause icon.
   const onRecordPause = async () => {
-    const audioFile = await AudioRecord.stop();
-    setAudioFile(audioFile);
+    const result = await audioRecorderPlayer.stopRecorder();
+    audioRecorderPlayer.removeRecordBackListener();
+
     return setRecordingStatus("PAUSED");
   };
 
@@ -123,10 +141,10 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
           questionAudioURL={questions ? questions[questionIndex].audioFileURL : null}
           questionID={questions ? questions[questionIndex].id : null}
           isAudioPlaying={recordingStatus}
-          playAudio={() => playAudio()}
+          playAudio={(audioFile) => playAudio(audioFile)}
           pauseAudio={() => pauseAudio()}
           questionAudioPlaying={(isAudioPlaying) => setRecordingStatus(isAudioPlaying)}
-          capturedAudio={ audioFile}
+          capturedAudio={recordedAudioFile}
         />
       </View>
 
