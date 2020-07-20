@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View} from 'react-native';
 import {Buffer} from 'buffer';
 import {connect} from 'react-redux';
-import TrackPlayer, { pause } from 'react-native-track-player';
+import TrackPlayer, {pause, useTrackPlayerEvents, useTrackPlayerProgress, TrackPlayerEvents, STATE_PLAYING} from 'react-native-track-player';
 import RNFS from 'react-native-fs'; 
 
 import AudioRecord from 'react-native-audio-record';
@@ -33,10 +33,19 @@ import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
 const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) => {
 
-  // TODO:
-  // 1. When the user hits the back button they should go back to the previous state with the recording and the timer the same. 
-  // 2. User needs to be able to record, recording should then go to the AWS server when they hit the next button.
+  const {position, bufferedPosition, duration} = useTrackPlayerProgress(); // Gets the position and duration of the recording. 
+  const events = [
+    TrackPlayerEvents.PLAYBACK_STATE,
+    TrackPlayerEvents.PLAYBACK_ERROR,
+    TrackPlayerEvents.PLAYBACK_QUEUE_ENDED,
+  ];  
+
+  // Gets the state of the player and also get resets state when player ends
+  useTrackPlayerEvents(events, async (event) => {
+    event.type === 'playback-queue-ended' ? setPlayerState("IDLE") : null;
+  });
   
+  // This sets the recording options
   const options = {
     sampleRate: 16000, // default 44100
     channels: 1, // 1 or 2, default 1
@@ -50,10 +59,12 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   const [isLoading, setIsLoading] = useState(false);
 
   // Recording States
-  const [recordingStatus, setRecordingStatus] = useState("IDLE");
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [recordedAudioFile, setAudioFile] = useState(null);
   const [recordedURL, setRecordedURL] = useState("");
+
+  const [playerState, setPlayerState] = useState("IDLE");
+
 
   // Questions state
   const [questions, setQuestions] = useState(questionReducer.questions);
@@ -67,8 +78,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // Pause Audio
   const pauseAudio = async () => {
-    await TrackPlayer.stop();
-    return setRecordingStatus("IDLE");
+    return await TrackPlayer.stop();
   };
 
   // Play audio
@@ -95,9 +105,8 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
         artist: questionTitle,
       });
     }
-
     await TrackPlayer.play();
-    return setRecordingStatus("PLAYING");
+    return setPlayerState("PLAYING")
   }
 
   // Start recording
@@ -109,7 +118,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     });
 
     setSkipOption(false);
-    return setRecordingStatus("RECORDING")
+    return setPlayerState('RECORDING');
   };
  
   // When user hits the pause.
@@ -139,7 +148,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
       console.log(error);
     };
   
-    return setRecordingStatus("PAUSED");
+    return setPlayerState('PAUSED');
   };
 
   // When the user goes to the next question the below states are reset.
@@ -164,7 +173,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     // Reset states
     setTimerSeconds(0);
     setSkipOption(true);
-    setRecordingStatus("IDLE");
+    setPlayerState('IDLE');
     setIsLoading(false);
     return setQuestionIndex(questionIndex + 1)
   };
@@ -183,12 +192,12 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   // This controls the timer and loads the questions.
   useEffect(() => {
     onLoad();
-    if (recordingStatus === 'RECORDING') {
+    if (playerState === 'RECORDING') {
       setTimeout(() => {
         setTimerSeconds(timerSeconds + 1);
       }, 1000);
     }
-  }, [timerSeconds, recordingStatus]);
+  }, [timerSeconds, playerState, playerState]);
 
   return (
     <View style={styles.mainContainer}>
@@ -204,7 +213,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
         </View>
         <View style={styles.timerContainer}>
           <StoryTimerComponent
-            recordingStatus={recordingStatus}
+            recordingStatus={playerState}
             timerSeconds={timerSeconds}
           />
         </View>
@@ -217,13 +226,13 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
             questions ? questions[questionIndex].audioFileURL : null
           }
           questionID={questions ? questions[questionIndex].id : null}
-          isAudioPlaying={recordingStatus}
+          playerState={playerState}
           playAudio={(questionAudioURL, questionID, questionTitle) =>
             playAudio(questionAudioURL, questionID, questionTitle)
           }
           pauseAudio={() => pauseAudio()}
           questionAudioPlaying={(isAudioPlaying) =>
-            setRecordingStatus(isAudioPlaying)
+            setPlayerState(isAudioPlaying)
           }
           capturedAudio={recordedAudioFile}
         />
@@ -231,7 +240,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
       <View style={styles.footer}>
         <StoryRecordSectionComponent
-          recordingStatus={recordingStatus}
+          playerState={playerState}
           pauseAudio={() => pauseAudio()}
           onRecordPause={() => onRecordPause()}
           onRecordStart={() => onRecordStart()}
@@ -245,7 +254,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
               buttonSize="small"
               onButtonPress={() => setQuestionIndex(questionIndex - 1)}
               disabled={
-                recordingStatus === 'PLAYING' || recordingStatus === 'RECORDING'
+                playerState === 'playing' || playerState === 'RECORDING'
                   ? true
                   : false
               }
@@ -256,7 +265,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
             buttonSize="small"
             onButtonPress={() => onNextButton()}
             disabled={
-              recordingStatus === 'PLAYING' || recordingStatus === 'RECORDING'
+              playerState === 'playing' || playerState === 'RECORDING'
                 ? true
                 : false
             }

@@ -1,7 +1,5 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import TrackPlayer, { seekTo } from 'react-native-track-player';
-import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 
 // Animation
 import * as Animatable from 'react-native-animatable';
@@ -13,10 +11,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 import styles from './../styles/components/StoryQuestionSectionComponent';
 
-const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudioPlaying, playAudio, pauseAudio, questionID, capturedAudio}) => {
+const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, playerState, playAudio, pauseAudio, questionID}) => {
 
   const handlePlayPauseButton = () => {
-    switch (isAudioPlaying) {
+    switch (playerState) {
       case "IDLE":
         return (
           <TouchableOpacity onPress={() => playAudio(questionAudioURL, questionID, questionTitle)} style={styles.touchableOpacityContainer}>

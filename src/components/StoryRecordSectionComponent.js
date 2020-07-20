@@ -8,24 +8,16 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 import styles from '../styles/components/StoryRecordSectionComponent';
 
-const StoryRecordSectionComponent = ({recordingStatus, onRecordStart, onRecordPause, pauseAudio, questionID}) => {
-
-  const options = {
-    sampleRate: 16000, // default 44100
-    channels: 1, // 1 or 2, default 1
-    bitsPerSample: 16, // 8 or 16, default 16
-    audioSource: 6, // android only (see below)
-    wavFile: questionID + '.wav', // default 'audio.wav'
-  };
+const StoryRecordSectionComponent = ({playerState, onRecordStart, onRecordPause, pauseAudio, questionID}) => {
 
   // The below handles what icon, text and function displays based off the recording.  
   const handleDisplay = () => {
-    switch (recordingStatus) {
+    switch (playerState) {
       case "IDLE":
         return (
           <View style={styles.mainContainer}>
             <Text style={styles.headerText}>When you're ready to answer press the record button below</Text>
-            <TouchableOpacity style={styles.touchableOpacityButton} onPress={() => onRecordStart(options)}>
+            <TouchableOpacity style={styles.touchableOpacityButton} onPress={() => onRecordStart()}>
               <MaterialCommunityIcons
                 name="microphone-outline"
                 size={ICON_SIZE.iconSizeLarge}
