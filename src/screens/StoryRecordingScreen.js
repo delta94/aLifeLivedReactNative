@@ -35,7 +35,8 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // TODO:
   // 1. When the user hits the back button they should go back to the previous state with the recording and the timer the same. 
-  // 2. User needs to be able to record, recording should then go to the AWS server when they hit the next button. 
+  // 2. User needs to be able to record, recording should then go to the AWS server when they hit the next button.
+  
   const options = {
     sampleRate: 16000, // default 44100
     channels: 1, // 1 or 2, default 1
@@ -43,6 +44,10 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     audioSource: 6, // android only (see below)
     wavFile: 'changedFile.wav', // default 'audio.wav'
   };
+
+  // Button states
+  const [skipOption, setSkipOption] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Recording States
   const [recordingStatus, setRecordingStatus] = useState("IDLE");
@@ -85,17 +90,19 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     return setRecordingStatus("PLAYING");
   }
 
-  // When recording mic icon.
+  // Start recording
   const onRecordStart = async () => {
     AudioRecord.start();
     const audioData = AudioRecord.on('data', (data) => {
       // const bufferChunk = Buffer.from(data, 'base64');
       // audioStream(bufferChunk);
     });
+
+    setSkipOption(false);
     return setRecordingStatus("RECORDING")
   };
  
-  // When user hits the pause icon.
+  // When user hits the pause.
   const onRecordPause = async () => {
     const audioFile = await AudioRecord.stop();
    
@@ -128,15 +135,29 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // When the user goes to the next question the below states are reset.
   const onNextButton = () => {
+    setIsLoading(true);
     
     if (questionIndex === questions.length - 1) {
       console.log("END")
       return;
     };
 
+    // If no recording then user skips 
+    if (skipOption === false) {
+      try {
+        createResponse(recordedURL, questions[questionIndex].id);
+        setSkipOption(true);
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error) 
+      }
+    };
+
+    // Reset states
     setTimerSeconds(0);
+    setSkipOption(true);
     setRecordingStatus("IDLE");
-    !recordedURL ? null : createResponse(recordedURL, questions[questionIndex].id)
+    setIsLoading(false);
     return setQuestionIndex(questionIndex + 1)
   };
 
@@ -144,7 +165,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   const onNextButtonText = () => {
     if (questionIndex === questions.length - 1) {
       return "Finish"
-    } else if (!recordedURL) {
+    } else if (skipOption) {
       return "Skip"
     } else {
       return "Next"
@@ -231,6 +252,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
                 ? true
                 : false
             }
+            isLoading={isLoading}
           />
         </View>
       </View>

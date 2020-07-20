@@ -25,7 +25,7 @@ const axiosPostWithAuth = async (api, params) => {
     const options = {
       headers: {Authorization: authToken},
     };
-    console.log("HELLO", params);
+
     return axiosAPI.post(api, params, options);
   } catch (err) {
     console.log(`axiosPostWithAuth err ${err}`);

@@ -121,7 +121,6 @@ const SignUpScreen = (props) => {
         uri: Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
       };
        
-      console.log(file);
       setImageObject(file)
       setAvatarURI(photo.uri)
     });
