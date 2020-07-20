@@ -8,7 +8,7 @@ import RNFS from 'react-native-fs';
 import AudioRecord from 'react-native-audio-record';
 
 // API
-import {audioStream} from './../api/postRequests/audioStream';
+import {audioStream, initialiseStream, finaliseStream} from './../api/postRequests/audioStream';
 import {imageUpload} from './../api/postRequests/imageUpload';
 
 // Actions
@@ -87,6 +87,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // When recording mic icon.
   const onRecordStart = async () => {
+    initialiseStream('filename_goes_here.wav');
     AudioRecord.start();
     const audioData = AudioRecord.on('data', (data) => {
       const bufferChunk = Buffer.from(data, 'base64');
@@ -97,8 +98,12 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
  
   // When user hits the pause icon.
   const onRecordPause = async () => {
-    const audioFile = await AudioRecord.stop();
-    setAudioFile(audioFile);
+    // const audioFile = await AudioRecord.stop();
+    // setAudioFile(audioFile);
+
+    // TODO: check final chunk has been uploaded
+    // TODO: any further action required?
+    finaliseStream();
 
     const file = await RNFS.readDir(RNFS.DocumentDirectoryPath).then(async (result) => {
       // Search file looks through the file in the directory and finds the correct file to play.
