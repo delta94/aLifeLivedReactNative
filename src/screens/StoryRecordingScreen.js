@@ -9,7 +9,8 @@ import AudioRecord from 'react-native-audio-record';
 
 // API
 import {audioStream} from './../api/postRequests/audioStream';
-import {imageUpload} from './../api/postRequests/imageUpload';
+import {imageUpload} from './../api/postRequests/imageUpload'; // This will eventually be changed to a file upload or a file stream.
+import {createResponse} from './../api/postRequests/response';
 
 // Actions
 import { saveAllQuestions } from './../redux/actions/questionActions';
@@ -48,6 +49,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   const [recordingStatus, setRecordingStatus] = useState("IDLE");
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [recordedAudioFile, setAudioFile] = useState(null);
+  const [recordedURL, setRecordedURL] = useState("");
 
   // Questions state
   const [questions, setQuestions] = useState(questionReducer.questions);
@@ -72,7 +74,6 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
       return searchFile(result, recordedAudioFile)
     });
 
-    console.log(await file);
     // Add a track to the queue
     await TrackPlayer.add({
       id: questionID,
@@ -89,8 +90,8 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   const onRecordStart = async () => {
     AudioRecord.start();
     const audioData = AudioRecord.on('data', (data) => {
-      const bufferChunk = Buffer.from(data, 'base64');
-      audioStream(bufferChunk);
+      // const bufferChunk = Buffer.from(data, 'base64');
+      // audioStream(bufferChunk);
     });
     return setRecordingStatus("RECORDING")
   };
@@ -98,37 +99,57 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   // When user hits the pause icon.
   const onRecordPause = async () => {
     const audioFile = await AudioRecord.stop();
-    setAudioFile(audioFile);
-
+   
     const file = await RNFS.readDir(RNFS.DocumentDirectoryPath).then(async (result) => {
       // Search file looks through the file in the directory and finds the correct file to play.
-      return searchFile(result, recordedAudioFile);
+      return searchFile(result, audioFile);
     });
     
-    let audioSuffix = file.path.split('.').pop();
+    try {
+      let audioSuffix = file.path.split('.').pop();
+      const filePath = file.path;
+      const fileName = file.name;
 
-    const fileUpload = {
-      type: `audio/${audioSuffix}`,
-      name: file.name,
-      uri: file.path
+      const fileUpload = {
+        type: `audio/${audioSuffix}`,
+        name: fileName,
+        uri: filePath,
+      };
+
+      let formData = new FormData();
+      formData.append('file', fileUpload);
+      const response = await imageUpload(formData);
+      setRecordedURL(response.data);
+    } catch (error) {
+      console.log(error);
     };
-
-    let formData = new FormData();
-    formData.append('file', fileUpload);
-    await imageUpload(formData);
+  
     return setRecordingStatus("PAUSED");
   };
 
   // When the user goes to the next question the below states are reset.
   const onNextButton = () => {
+    
     if (questionIndex === questions.length - 1) {
       console.log("END")
       return;
-    } 
+    };
 
     setTimerSeconds(0);
     setRecordingStatus("IDLE");
+    !recordedURL ? null : createResponse(recordedURL)
     return setQuestionIndex(questionIndex + 1)
+  };
+
+  // The below handles what text will display on the button
+  const onNextButtonText = () => {
+    if (questionIndex === questions.length - 1) {
+      return "Finish"
+    } else if (!recordedURL) {
+      return "Skip"
+    } else {
+      return "Next"
+    }
   };
 
   // This controls the timer and loads the questions.
@@ -150,46 +171,67 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
             size={ICON_SIZE.iconSizeMedium}
             color={COLOR.grey}
             style={styles.icon}
-            onPress={() => navigation.reset({routes: [{ name: 'Home' }]})}
+            onPress={() => navigation.reset({routes: [{name: 'Home'}]})}
           />
         </View>
         <View style={styles.timerContainer}>
-          <StoryTimerComponent recordingStatus={recordingStatus} timerSeconds={timerSeconds} />
+          <StoryTimerComponent
+            recordingStatus={recordingStatus}
+            timerSeconds={timerSeconds}
+          />
         </View>
       </View>
 
       <View style={styles.questionContainer}>
-        <StoryQuestionSectionComponent 
+        <StoryQuestionSectionComponent
           questionTitle={questions ? questions[questionIndex].title : null}
-          questionAudioURL={questions ? questions[questionIndex].audioFileURL : null}
+          questionAudioURL={
+            questions ? questions[questionIndex].audioFileURL : null
+          }
           questionID={questions ? questions[questionIndex].id : null}
           isAudioPlaying={recordingStatus}
-          playAudio={(questionAudioURL, questionID, questionTitle) => playAudio(questionAudioURL, questionID, questionTitle)}
+          playAudio={(questionAudioURL, questionID, questionTitle) =>
+            playAudio(questionAudioURL, questionID, questionTitle)
+          }
           pauseAudio={() => pauseAudio()}
-          questionAudioPlaying={(isAudioPlaying) => setRecordingStatus(isAudioPlaying)}
+          questionAudioPlaying={(isAudioPlaying) =>
+            setRecordingStatus(isAudioPlaying)
+          }
           capturedAudio={recordedAudioFile}
         />
       </View>
 
       <View style={styles.footer}>
-        <StoryRecordSectionComponent recordingStatus={recordingStatus} pauseAudio={() => pauseAudio()} onRecordPause={() => onRecordPause()} onRecordStart={() => onRecordStart()}  />
+        <StoryRecordSectionComponent
+          recordingStatus={recordingStatus}
+          pauseAudio={() => pauseAudio()}
+          onRecordPause={() => onRecordPause()}
+          onRecordStart={() => onRecordStart()}
+        />
         <View style={styles.footerButtonContainer}>
           {questionIndex <= 0 ? (
-              <View></View>
-            ) : (
-              <ButtonComponent
-                title={"Back"}
-                buttonSize="small"
-                onButtonPress={() => setQuestionIndex(questionIndex - 1)}
-                disabled={recordingStatus === "PLAYING" || recordingStatus === "RECORDING" ? true : false}
-              />
-            )
-          }
+            <View></View>
+          ) : (
+            <ButtonComponent
+              title={'Back'}
+              buttonSize="small"
+              onButtonPress={() => setQuestionIndex(questionIndex - 1)}
+              disabled={
+                recordingStatus === 'PLAYING' || recordingStatus === 'RECORDING'
+                  ? true
+                  : false
+              }
+            />
+          )}
           <ButtonComponent
-            title={questionIndex === questions.length - 1 ? "Finish" : "Next"}
+            title={onNextButtonText()}
             buttonSize="small"
             onButtonPress={() => onNextButton()}
-            disabled={recordingStatus === "PLAYING" || recordingStatus === "RECORDING" ? true : false}
+            disabled={
+              recordingStatus === 'PLAYING' || recordingStatus === 'RECORDING'
+                ? true
+                : false
+            }
           />
         </View>
       </View>

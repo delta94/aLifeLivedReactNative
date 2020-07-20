@@ -2,6 +2,11 @@
 - Audio Player: https://github.com/react-native-kit/react-native-track-player 
 - Audio Recording: https://github.com/dooboolab/react-native-audio-recorder-player 
 
+# How to run project
+- Step 1: `npm i`
+- Step 2: `cd ios` & `pod install`
+- Step 3: 
+
 # Bug list fix
 - Below is some bugs I have faced and how to fix them. 
   ### iOS
