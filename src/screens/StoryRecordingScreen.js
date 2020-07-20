@@ -1,16 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import {View} from 'react-native';
+import {Buffer} from 'buffer';
 import {connect} from 'react-redux';
 import TrackPlayer, { pause } from 'react-native-track-player';
+import RNFS from 'react-native-fs'; 
 
-//TEST
-import AudioRecorderPlayer from 'react-native-audio-recorder-player';
+import AudioRecord from 'react-native-audio-record';
 
-// API 
+// API
+import {audioStream} from './../api/postRequests/audioStream';
 import {imageUpload} from './../api/postRequests/imageUpload';
 
 // Actions
 import { saveAllQuestions } from './../redux/actions/questionActions';
+
+// Helpers
+import {searchFile} from './../helpers/searchFile';
 
 // Components
 import StoryTimerComponent from './../components/StoryTimerComponent';
@@ -31,12 +36,13 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   // TODO:
   // 1. When the user hits the back button they should go back to the previous state with the recording and the timer the same. 
   // 2. User needs to be able to record, recording should then go to the AWS server when they hit the next button. 
-  const audioRecorderPlayer = new AudioRecorderPlayer();
-
-  const path = Platform.select({
-    ios: 'testplay.mp4',
-    android: 'test/testrecord.mp4'
-  })
+  const options = {
+    sampleRate: 16000, // default 44100
+    channels: 1, // 1 or 2, default 1
+    bitsPerSample: 16, // 8 or 16, default 16
+    audioSource: 6, // android only (see below)
+    wavFile: 'changedFile.wav', // default 'audio.wav'
+  };
 
   // Recording States
   const [recordingStatus, setRecordingStatus] = useState("IDLE");
@@ -49,6 +55,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // Loads questions.
   const onLoad = async () => {
+    AudioRecord.init(options);
     await setQuestions(questionReducer.questions);
   };
 
@@ -60,11 +67,16 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // Play audio
   const playAudio = async (questionAudioURL, questionID, questionTitle) => {
+    const file = RNFS.readDir(RNFS.DocumentDirectoryPath).then((result) => {
+      // Search file looks through the file in the directory and finds the correct file to play. 
+      return searchFile(result, recordedAudioFile)
+    });
 
+    console.log(await file);
     // Add a track to the queue
     await TrackPlayer.add({
       id: questionID,
-      url: questionAudioURL,
+      url: recordedAudioFile,
       title: questionTitle,
       artist: questionTitle,
     });
@@ -75,19 +87,35 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // When recording mic icon.
   const onRecordStart = async () => {
-    const result = await audioRecorderPlayer.startRecorder(path);
-    audioRecorderPlayer.addRecordBackListener((e) => {
-      return;
+    AudioRecord.start();
+    const audioData = AudioRecord.on('data', (data) => {
+      const bufferChunk = Buffer.from(data, 'base64');
+      audioStream(bufferChunk);
     });
-    setAudioFile(result);
     return setRecordingStatus("RECORDING")
   };
  
   // When user hits the pause icon.
   const onRecordPause = async () => {
-    const result = await audioRecorderPlayer.stopRecorder();
-    audioRecorderPlayer.removeRecordBackListener();
+    const audioFile = await AudioRecord.stop();
+    setAudioFile(audioFile);
 
+    const file = await RNFS.readDir(RNFS.DocumentDirectoryPath).then(async (result) => {
+      // Search file looks through the file in the directory and finds the correct file to play.
+      return searchFile(result, recordedAudioFile);
+    });
+    
+    let audioSuffix = file.path.split('.').pop();
+
+    const fileUpload = {
+      type: `audio/${audioSuffix}`,
+      name: file.name,
+      uri: file.path
+    };
+
+    let formData = new FormData();
+    formData.append('file', fileUpload);
+    await imageUpload(formData);
     return setRecordingStatus("PAUSED");
   };
 
