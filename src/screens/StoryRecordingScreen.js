@@ -81,10 +81,20 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     // Add a track to the queue
     await TrackPlayer.add({
       id: questionID,
-      url: recordedAudioFile,
+      url: questionAudioURL,
       title: questionTitle,
       artist: questionTitle,
     });
+
+    // IF there is a recording it will play the recording after the question. As if it was the real thing
+    if (recordedURL) {
+      await TrackPlayer.add({
+        id: 'recording',
+        url: recordedURL,
+        title: questionTitle,
+        artist: questionTitle,
+      });
+    }
 
     await TrackPlayer.play();
     return setRecordingStatus("PLAYING");
@@ -105,7 +115,6 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   // When user hits the pause.
   const onRecordPause = async () => {
     const audioFile = await AudioRecord.stop();
-   
     const file = await RNFS.readDir(RNFS.DocumentDirectoryPath).then(async (result) => {
       // Search file looks through the file in the directory and finds the correct file to play.
       return searchFile(result, audioFile);
@@ -146,7 +155,6 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     if (skipOption === false) {
       try {
         createResponse(recordedURL, questions[questionIndex].id);
-        setSkipOption(true);
       } catch (error) {
         setIsLoading(false);
         console.log(error) 
