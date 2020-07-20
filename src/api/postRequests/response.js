@@ -1,8 +1,6 @@
 import {axiosPostWithAuth} from './../axiosWithAuth';
 
-export const createResponse = async ({audioFileURL, questionID}) => {
-    console.log(audioFileURL, );
-
+export const createResponse = async (audioFileURL, questionID) => {
   try {
     const data = await axiosPostWithAuth("/response", {
       audioFileURL,

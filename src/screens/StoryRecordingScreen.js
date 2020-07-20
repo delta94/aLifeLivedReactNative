@@ -30,7 +30,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 // Styles
 import styles from './../styles/screens/StoryRecordingScreen';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
-import { Platform } from 'react-native';
 
 const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) => {
 
@@ -137,7 +136,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
     setTimerSeconds(0);
     setRecordingStatus("IDLE");
-    !recordedURL ? null : createResponse(recordedURL)
+    !recordedURL ? null : createResponse(recordedURL, questions[questionIndex].id)
     return setQuestionIndex(questionIndex + 1)
   };
 
