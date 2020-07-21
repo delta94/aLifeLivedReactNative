@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    flex: 1.5,
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-evenly',
@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    margin: 20
+    margin: 20,
+    marginTop: 5,
   }
 });
 

@@ -5,11 +5,15 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'; 
 import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
+import TrackPlayer from 'react-native-track-player';
 
 // Icon imports
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+// Services
+import trackPlayerServices from '../services/services';
 
 // Redux Actions
 import { setUserToken } from './../redux/actions/userActions';
@@ -80,7 +84,19 @@ const LoginAndSignUpStackScreen = () => (
 const AppNavigation = (props) => {
   // The below is used for authentication
   const userToken = props.userReducer.id
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+
+  // sets up track player
+  const trackPlayerOnLoad = async () => {
+    setIsLoading(true);
+    await TrackPlayer.setupPlayer().then(() => {
+      console.log('Player is set up');
+    });
+
+    TrackPlayer.registerPlaybackService(() => trackPlayerServices);
+    return setIsLoading(false);
+  };
 
   const getToken = async () => {
     try {
@@ -98,6 +114,7 @@ const AppNavigation = (props) => {
   };
 
   useEffect(() => {
+    trackPlayerOnLoad();
     getToken();
     setTimeout(() => {
       setIsLoading(false)

@@ -1,6 +1,5 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import TrackPlayer from 'react-native-track-player';
 
 // Animation
 import * as Animatable from 'react-native-animatable';
@@ -12,25 +11,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 import styles from './../styles/components/StoryQuestionSectionComponent';
 
-const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudioPlaying, playAudio, pauseAudio, questionID, isLoading}) => {
-
-  const startAudio = async () => {
-    // Add a track to the queue
-    await TrackPlayer.add({
-      id: questionID,
-      url: questionAudioURL,
-      title: questionTitle,
-      artist: questionTitle,
-    });
-
-    return playAudio();
-  };
+const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, playerState, playAudio, pauseAudio, questionID}) => {
 
   const handlePlayPauseButton = () => {
-    switch (isAudioPlaying) {
+    switch (playerState) {
       case "IDLE":
         return (
-          <TouchableOpacity onPress={() => startAudio()} style={styles.touchableOpacityContainer}>
+          <TouchableOpacity onPress={() => playAudio(questionAudioURL, questionID, questionTitle)} style={styles.touchableOpacityContainer}>
             <MaterialCommunityIcons
               name="play-circle"
               size={ICON_SIZE.iconSizeLarge}
@@ -41,7 +28,7 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudio
         );
       case "PAUSED":
         return (
-          <TouchableOpacity onPress={() => startAudio()} style={styles.touchableOpacityContainer}>
+          <TouchableOpacity onPress={() => playAudio(questionAudioURL, questionID, questionTitle)} style={styles.touchableOpacityContainer}>
             <MaterialCommunityIcons
               name="play-circle"
               size={ICON_SIZE.iconSizeLarge}
@@ -67,22 +54,11 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudio
   };
 
   return (
-    <View>
-      {
-        isLoading ? (
-          <View style={styles.mainContainer}>
-            <Text style={styles.questionTitle}> Loading...</Text>
-            {handlePlayPauseButton()}
-          </View>
-        ) : (
-          <View style={styles.mainContainer}>
-            <Animatable.Text animation="fadeIn" easing="ease-in" style={styles.questionTitleContainer}>
-              <Text style={styles.questionTitle}> {questionTitle}</Text>
-            </Animatable.Text>
-            {handlePlayPauseButton()}
-          </View>
-        )
-      }
+    <View style={styles.mainContainer}>
+      <Animatable.Text animation="fadeIn" easing="ease-in" style={styles.questionTitleContainer}>
+        <Text style={styles.questionTitle}> {questionTitle}</Text>
+      </Animatable.Text>
+      {handlePlayPauseButton()}
     </View>
   );
 };
