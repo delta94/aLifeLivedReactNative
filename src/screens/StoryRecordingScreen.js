@@ -33,7 +33,8 @@ import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
 const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) => {
 
-  const {position, bufferedPosition, duration} = useTrackPlayerProgress(); // Gets the position and duration of the recording. 
+  const {position, bufferedPosition, duration} = useTrackPlayerProgress(); // Gets the position and duration of the recording.
+
   const events = [
     TrackPlayerEvents.PLAYBACK_STATE,
     TrackPlayerEvents.PLAYBACK_ERROR,
@@ -61,7 +62,6 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // Recording States
   const [timerSeconds, setTimerSeconds] = useState(0);
-  const [recordedAudioFile, setAudioFile] = useState(null);
   const [recordedURL, setRecordedURL] = useState("");
 
   // Questions state
@@ -76,28 +76,27 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // Pause Audio
   const pauseAudio = async () => {
-    return await TrackPlayer.stop();
+    await TrackPlayer.stop();
+    return setPlayerState('IDLE');
   };
 
   // Play audio
-  const playAudio = async (questionAudioURL, questionID, questionTitle) => {
-    // Add a track to the queue
-    await TrackPlayer.add({
-      id: questionID,
-      url: questionAudioURL,
-      title: questionTitle,
-      artist: questionTitle,
-    });
+  const playAudio = async (track) => {
 
-    // IF there is a recording it will play the recording after the question. As if it was the real thing
+    await TrackPlayer.add([track]);
+
     if (recordedURL) {
-      await TrackPlayer.add({
+      const recordedTrack = {
         id: 'recording',
         url: recordedURL,
-        title: questionTitle,
-        artist: questionTitle,
-      });
-    }
+        title: 'TEST',
+        artist: 'TEST',
+      };
+
+      // IF there is a recording it will play the recording after the question. As if it was the real thing
+      await TrackPlayer.add([recordedTrack]);
+    };
+ 
     await TrackPlayer.play();
     return setPlayerState("PLAYING")
   }
@@ -219,16 +218,17 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
           questionAudioURL={questions ? questions[questionIndex].audioFileURL : null}
           questionID={questions ? questions[questionIndex].id : null}
           playerState={playerState}
-          playAudio={(questionAudioURL, questionID, questionTitle) => playAudio(questionAudioURL, questionID, questionTitle)}
+          playAudio={(track) => playAudio(track)}
           pauseAudio={() => pauseAudio()}
           questionAudioPlaying={(isAudioPlaying) => setPlayerState(isAudioPlaying)}
-          capturedAudio={recordedAudioFile}
         />
       </View>
 
       <View style={styles.footer}>
         <StoryRecordSectionComponent
           playerState={playerState}
+          recordedURL={recordedURL}
+
           pauseAudio={() => pauseAudio()}
           onRecordPause={() => onRecordPause()}
           onRecordStart={() => onRecordStart()}

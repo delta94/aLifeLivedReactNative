@@ -13,11 +13,19 @@ import styles from './../styles/components/StoryQuestionSectionComponent';
 
 const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, playerState, playAudio, pauseAudio, questionID}) => {
 
+  const track = {
+    id: questionID,
+    url: questionAudioURL,
+    title: questionTitle,
+    artist: questionTitle,
+  };
+
+
   const handlePlayPauseButton = () => {
     switch (playerState) {
       case "IDLE":
         return (
-          <TouchableOpacity onPress={() => playAudio(questionAudioURL, questionID, questionTitle)} style={styles.touchableOpacityContainer}>
+          <TouchableOpacity onPress={() => playAudio(track)} style={styles.touchableOpacityContainer}>
             <MaterialCommunityIcons
               name="play-circle"
               size={ICON_SIZE.iconSizeLarge}
@@ -28,7 +36,7 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, playerS
         );
       case "PAUSED":
         return (
-          <TouchableOpacity onPress={() => playAudio(questionAudioURL, questionID, questionTitle)} style={styles.touchableOpacityContainer}>
+          <TouchableOpacity onPress={() => playAudio(track)} style={styles.touchableOpacityContainer}>
             <MaterialCommunityIcons
               name="play-circle"
               size={ICON_SIZE.iconSizeLarge}
