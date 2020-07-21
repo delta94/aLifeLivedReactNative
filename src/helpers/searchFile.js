@@ -6,7 +6,8 @@ export function searchFile(array, filePath) {
         path: array[i].path,
         size: array[i].size
       };
-      
+
+      console.log(file);
       return file
     }
   }

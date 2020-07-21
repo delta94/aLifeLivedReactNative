@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View} from 'react-native';
 import {Buffer} from 'buffer';
 import {connect} from 'react-redux';
-import TrackPlayer, {pause, useTrackPlayerEvents, useTrackPlayerProgress, TrackPlayerEvents, STATE_PLAYING} from 'react-native-track-player';
+import TrackPlayer, {useTrackPlayerEvents, useTrackPlayerProgress, TrackPlayerEvents} from 'react-native-track-player';
 import RNFS from 'react-native-fs'; 
 
 import AudioRecord from 'react-native-audio-record';
@@ -51,20 +51,18 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     channels: 1, // 1 or 2, default 1
     bitsPerSample: 16, // 8 or 16, default 16
     audioSource: 6, // android only (see below)
-    wavFile: 'changedFile.wav', // default 'audio.wav'
+    wavFile: 'audio.wav', // default 'audio.wav'
   };
 
   // Button states
   const [skipOption, setSkipOption] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [playerState, setPlayerState] = useState("IDLE");
 
   // Recording States
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [recordedAudioFile, setAudioFile] = useState(null);
   const [recordedURL, setRecordedURL] = useState("");
-
-  const [playerState, setPlayerState] = useState("IDLE");
-
 
   // Questions state
   const [questions, setQuestions] = useState(questionReducer.questions);
@@ -83,11 +81,6 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // Play audio
   const playAudio = async (questionAudioURL, questionID, questionTitle) => {
-    const file = RNFS.readDir(RNFS.DocumentDirectoryPath).then((result) => {
-      // Search file looks through the file in the directory and finds the correct file to play. 
-      return searchFile(result, recordedAudioFile)
-    });
-
     // Add a track to the queue
     await TrackPlayer.add({
       id: questionID,
@@ -113,8 +106,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   const onRecordStart = async () => {
     AudioRecord.start();
     const audioData = AudioRecord.on('data', (data) => {
-      // const bufferChunk = Buffer.from(data, 'base64');
-      // audioStream(bufferChunk);
+      // TO DO - JAMES STREAMING
     });
 
     setSkipOption(false);
@@ -124,6 +116,8 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   // When user hits the pause.
   const onRecordPause = async () => {
     const audioFile = await AudioRecord.stop();
+
+    // TODO: Remove the below section when streaming file is complete and working. 
     const file = await RNFS.readDir(RNFS.DocumentDirectoryPath).then(async (result) => {
       // Search file looks through the file in the directory and finds the correct file to play.
       return searchFile(result, audioFile);
@@ -197,7 +191,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
         setTimerSeconds(timerSeconds + 1);
       }, 1000);
     }
-  }, [timerSeconds, playerState, playerState]);
+  }, [timerSeconds, playerState]);
 
   return (
     <View style={styles.mainContainer}>
@@ -222,18 +216,12 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
       <View style={styles.questionContainer}>
         <StoryQuestionSectionComponent
           questionTitle={questions ? questions[questionIndex].title : null}
-          questionAudioURL={
-            questions ? questions[questionIndex].audioFileURL : null
-          }
+          questionAudioURL={questions ? questions[questionIndex].audioFileURL : null}
           questionID={questions ? questions[questionIndex].id : null}
           playerState={playerState}
-          playAudio={(questionAudioURL, questionID, questionTitle) =>
-            playAudio(questionAudioURL, questionID, questionTitle)
-          }
+          playAudio={(questionAudioURL, questionID, questionTitle) => playAudio(questionAudioURL, questionID, questionTitle)}
           pauseAudio={() => pauseAudio()}
-          questionAudioPlaying={(isAudioPlaying) =>
-            setPlayerState(isAudioPlaying)
-          }
+          questionAudioPlaying={(isAudioPlaying) => setPlayerState(isAudioPlaying)}
           capturedAudio={recordedAudioFile}
         />
       </View>
@@ -253,22 +241,14 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
               title={'Back'}
               buttonSize="small"
               onButtonPress={() => setQuestionIndex(questionIndex - 1)}
-              disabled={
-                playerState === 'playing' || playerState === 'RECORDING'
-                  ? true
-                  : false
-              }
+              disabled={playerState === 'playing' || playerState === 'RECORDING' ? true : false}
             />
           )}
           <ButtonComponent
             title={onNextButtonText()}
             buttonSize="small"
             onButtonPress={() => onNextButton()}
-            disabled={
-              playerState === 'playing' || playerState === 'RECORDING'
-                ? true
-                : false
-            }
+            disabled={playerState === 'playing' || playerState === 'RECORDING' ? true : false}
             isLoading={isLoading}
           />
         </View>
