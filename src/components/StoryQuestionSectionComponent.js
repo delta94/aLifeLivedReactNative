@@ -66,7 +66,8 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, playerS
       <Animatable.Text animation="fadeIn" easing="ease-in" style={styles.questionTitleContainer}>
         <Text style={styles.questionTitle}> {questionTitle}</Text>
       </Animatable.Text>
-      {handlePlayPauseButton()}
+      { questionAudioURL ? handlePlayPauseButton() : null}
+      
     </View>
   );
 };

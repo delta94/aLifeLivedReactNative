@@ -42,7 +42,7 @@ const StoryRecordSectionComponent = ({playerState, onRecordStart, onRecordPause,
       case "RECORDING": 
         return (
           <View style={styles.mainContainer}>
-            <Text style={styles.headerText}>To pause recording press the below button...</Text>
+            <Text style={styles.headerText}>To stop recording press the below button...</Text>
             <TouchableOpacity style={styles.touchableOpacityButton} onPress={onRecordPause}>
               <MaterialCommunityIcons
                 name="pause"

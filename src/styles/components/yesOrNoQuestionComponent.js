@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {COLOR, FONT_SIZE} from './../styleHelpers';
+import {COLOR, FONT_SIZE} from '../styleHelpers';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -7,22 +7,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  touchableOpacityButton: {
-    margin: 10,
-    borderRadius: 40,
-    backgroundColor: COLOR.limeGreen,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 70,
-    height: 70,
+  buttonContainer: {
+    margin: 20,
+    marginBottom: 30,
+    alignItems: 'flex-end',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 
-  headerText: {
-    color: COLOR.grey,
-    marginTop: 0,
-    margin: 10,
-    fontWeight: 'bold',
-    fontSize: FONT_SIZE.largeSize,
+  footerButtonContainer: {
+    alignItems: 'flex-end',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: 20,
+    marginTop: 5,
   },
 });
 

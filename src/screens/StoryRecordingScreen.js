@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 import {Buffer} from 'buffer';
 import {connect} from 'react-redux';
 import TrackPlayer, {useTrackPlayerEvents, useTrackPlayerProgress, TrackPlayerEvents} from 'react-native-track-player';
@@ -22,7 +22,7 @@ import {searchFile} from './../helpers/searchFile';
 import StoryTimerComponent from './../components/StoryTimerComponent';
 import StoryRecordSectionComponent from './../components/StoryRecordSectionComponent';
 import StoryQuestionSectionComponent from './../components/StoryQuestionSectionComponent';
-import ButtonComponent from './../components/ButtonComponent';
+import StoryButtonsComponent from '../components/StoryButtonsComponent';
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -148,6 +148,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   const onNextButton = () => {
     setIsLoading(true);
     
+    // End of the questions
     if (questionIndex === questions.length - 1) {
       console.log("END")
       return;
@@ -169,17 +170,6 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     setPlayerState('IDLE');
     setIsLoading(false);
     return setQuestionIndex(questionIndex + 1)
-  };
-
-  // The below handles what text will display on the button
-  const onNextButtonText = () => {
-    if (questionIndex === questions.length - 1) {
-      return "Finish"
-    } else if (skipOption) {
-      return "Skip"
-    } else {
-      return "Next"
-    }
   };
 
   // This controls the timer and loads the questions.
@@ -214,9 +204,9 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
       <View style={styles.questionContainer}>
         <StoryQuestionSectionComponent
-          questionTitle={questions ? questions[questionIndex].title : null}
-          questionAudioURL={questions ? questions[questionIndex].audioFileURL : null}
-          questionID={questions ? questions[questionIndex].id : null}
+          questionTitle={questions[questionIndex].title}
+          questionAudioURL={questions[questionIndex].isYesOrNo ? null : questions[questionIndex].audioFileURL}
+          questionID={questions[questionIndex].id}
           playerState={playerState}
           playAudio={(track) => playAudio(track)}
           pauseAudio={() => pauseAudio()}
@@ -225,33 +215,27 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
       </View>
 
       <View style={styles.footer}>
-        <StoryRecordSectionComponent
-          playerState={playerState}
-          recordedURL={recordedURL}
-
-          pauseAudio={() => pauseAudio()}
-          onRecordPause={() => onRecordPause()}
-          onRecordStart={() => onRecordStart()}
-        />
-        <View style={styles.footerButtonContainer}>
-          {questionIndex <= 0 ? (
-            <View></View>
-          ) : (
-            <ButtonComponent
-              title={'Back'}
-              buttonSize="small"
-              onButtonPress={() => setQuestionIndex(questionIndex - 1)}
-              disabled={playerState === 'playing' || playerState === 'RECORDING' ? true : false}
-            />
-          )}
-          <ButtonComponent
-            title={onNextButtonText()}
-            buttonSize="small"
-            onButtonPress={() => onNextButton()}
-            disabled={playerState === 'playing' || playerState === 'RECORDING' ? true : false}
-            isLoading={isLoading}
+        { questions[questionIndex].isYesOrNo ? (
+          <Text style={styles.headerText}>Please select one of the below options...</Text>
+        ) : 
+          <StoryRecordSectionComponent
+            playerState={playerState}
+            recordedURL={recordedURL}
+            pauseAudio={() => pauseAudio()}
+            onRecordPause={() => onRecordPause()}
+            onRecordStart={() => onRecordStart()}
           />
-        </View>
+        }
+        <StoryButtonsComponent  
+          questionIndex={questionIndex}
+          playerState={playerState}
+          isLoading={isLoading}
+          questions={questions}
+          isYesOrNo={questions[questionIndex].isYesOrNo}
+          onNextButton={() => onNextButton()}
+          setQuestionIndex={() => setQuestionIndex(questionIndex - 1)}
+          skipOption={skipOption}
+        />
       </View>
     </View>
   );

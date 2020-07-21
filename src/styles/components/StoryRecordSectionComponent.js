@@ -2,8 +2,8 @@ import { StyleSheet } from 'react-native';
 import { COLOR, FONT_SIZE } from './../styleHelpers';
 
 const styles = StyleSheet.create({
-  mainContainer: { 
-    display: 'flex', 
+  mainContainer: {
+    display: 'flex',
     alignItems: 'center',
   },
 
@@ -14,13 +14,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: 70,
-    height: 70
+    height: 70,
   },
 
   headerText: {
     color: COLOR.grey,
-    marginTop: 0, 
-    margin: 10,
+    marginTop: 0,
+    textAlign: 'left',
+    marginLeft: 10,
+    marginRight: 5,
     fontWeight: 'bold',
     fontSize: FONT_SIZE.largeSize,
   },
