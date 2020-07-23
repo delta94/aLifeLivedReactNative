@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, PermissionsAndroid, Platform} from 'react-native';
 import {Buffer} from 'buffer';
 import {connect} from 'react-redux';
 import TrackPlayer, {useTrackPlayerEvents, useTrackPlayerProgress, TrackPlayerEvents} from 'react-native-track-player';
@@ -11,6 +11,7 @@ import AudioRecord from 'react-native-audio-record';
 import {audioStream} from './../api/postRequests/audioStream';
 import {imageUpload} from './../api/postRequests/imageUpload'; // This will eventually be changed to a file upload or a file stream.
 import {createResponse} from './../api/postRequests/response';
+import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
 
 // Actions
 import { saveAllQuestions } from './../redux/actions/questionActions';
@@ -68,9 +69,19 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   const [questions, setQuestions] = useState(questionReducer.questions);
   const [questionIndex, setQuestionIndex] = useState(0);
 
+  // Sub Question state
+  const [subQuestionActive, setSubQuestionActive] = useState(false);
+  const [subQuestions, setSubQuestions] = useState(null);
+  const [subQuestionIndex, setSubQuestionIndex] = useState(0);
+
   // Loads questions.
   const onLoad = async () => {
-    AudioRecord.init(options);
+    Platform.OS === "android" ? (    
+      await PermissionsAndroid.requestMultiple([
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+    ])) : null;
+
+    await AudioRecord.init(options);
     await setQuestions(questionReducer.questions);
   };
 
@@ -105,7 +116,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   const onRecordStart = async () => {
     AudioRecord.start();
     const audioData = AudioRecord.on('data', (data) => {
-      // TO DO - JAMES STREAMING
+
     });
 
     setSkipOption(false);
@@ -115,7 +126,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   // When user hits the pause.
   const onRecordPause = async () => {
     const audioFile = await AudioRecord.stop();
-
+    
     // TODO: Remove the below section when streaming file is complete and working. 
     const file = await RNFS.readDir(RNFS.DocumentDirectoryPath).then(async (result) => {
       // Search file looks through the file in the directory and finds the correct file to play.
@@ -144,17 +155,18 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     return setPlayerState('PAUSED');
   };
 
+
   // When the user goes to the next question the below states are reset.
   const onNextButton = () => {
     setIsLoading(true);
-    
-    // End of the questions
+  
+    // When there are no more questions left
     if (questionIndex === questions.length - 1) {
       console.log("END")
       return;
     };
 
-    // If no recording then user skips 
+    // If no recording then user can skip 
     if (skipOption === false) {
       try {
         createResponse(recordedURL, questions[questionIndex].id);
@@ -164,6 +176,21 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
       }
     };
 
+    // Handle if master question has sub question
+    if (subQuestions[subQuestionIndex]) {
+      setSubQuestionActive(true);
+      console.log(subQuestions[subQuestionIndex]);
+      setSubQuestionIndex(subQuestionIndex + 1);
+      setIsLoading(false);
+      return;
+    } else if (!subQuestions[subQuestionIndex]) {
+      setQuestionIndex(questionIndex + 1);
+      setSubQuestionIndex(0);
+      setIsLoading(false);
+      return;
+    };
+
+
     // Reset states
     setTimerSeconds(0);
     setSkipOption(true);
@@ -172,15 +199,26 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     return setQuestionIndex(questionIndex + 1)
   };
 
+  // TO DO: Handle subQuestions
+  // The below handles if there is a subQuestion linked to the master question
+  const handleIfSubQuestion = async () => {
+    if (questions[questionIndex].subQuestions) {
+      const responseData = await getSubQuestionFromQuestionID(questions[questionIndex].id);
+      return setSubQuestions(responseData);
+    }
+  };
+
   // This controls the timer and loads the questions.
   useEffect(() => {
+    handleIfSubQuestion();
     onLoad();
+
     if (playerState === 'RECORDING') {
       setTimeout(() => {
         setTimerSeconds(timerSeconds + 1);
       }, 1000);
     }
-  }, [timerSeconds, playerState]);
+  }, [timerSeconds, playerState, questionIndex, subQuestionIndex]);
 
   return (
     <View style={styles.mainContainer}>

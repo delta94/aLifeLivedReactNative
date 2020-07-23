@@ -5,7 +5,7 @@ import {BACKEND_BASE_ROUTE_TEST, LOCAL_ENV} from 'react-native-dotenv';
 let authToken;
 
 const axiosAPI = axios.create({
-  baseURL: BACKEND_BASE_ROUTE_TEST,
+  baseURL: LOCAL_ENV,
 });
 
 const retrieveAuthToken = async () => {

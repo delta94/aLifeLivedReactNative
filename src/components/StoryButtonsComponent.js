@@ -29,12 +29,12 @@ const StoryButtonsComponent = ({questionIndex, questions, isLoading, playerState
             <ButtonComponent
               title="No"
               buttonSize="small"
-              onButtonPress={() => console.log("NO")}
+              onButtonPress={() => console.log('NO')}
             />
             <ButtonComponent
               title="Yes"
               buttonSize="small"
-              onButtonPress={() => console.log('YES')}
+              onButtonPress={() => onNextButton()}
             />
           </View>
         );
