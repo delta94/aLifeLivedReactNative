@@ -11,8 +11,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 import styles from './../styles/components/StoryQuestionSectionComponent';
 
-const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, playerState, playAudio, pauseAudio, questionID}) => {
-
+const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, questionID, playerState, playAudio, pauseAudio, subQuestionActive, subQuestion}) => {
   const track = {
     id: questionID,
     url: questionAudioURL,
@@ -20,6 +19,13 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, playerS
     artist: questionTitle,
   };
 
+  const handleTextDisplay = () => {
+    if (!subQuestion) {
+      return questionTitle
+    } else {
+      return subQuestion.title
+    }
+  };
 
   const handlePlayPauseButton = () => {
     switch (playerState) {
@@ -64,7 +70,7 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, playerS
   return (
     <View style={styles.mainContainer}>
       <Animatable.Text animation="fadeIn" easing="ease-in" style={styles.questionTitleContainer}>
-        <Text style={styles.questionTitle}> {questionTitle}</Text>
+        <Text style={styles.questionTitle}>{handleTextDisplay()}</Text>
       </Animatable.Text>
       { questionAudioURL ? handlePlayPauseButton() : null}
       
