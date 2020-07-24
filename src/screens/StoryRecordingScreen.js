@@ -72,7 +72,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   // Sub Question state
   const [subQuestionActive, setSubQuestionActive] = useState(false);
   const [subQuestions, setSubQuestions] = useState(null);
-  const [subQuestionIndex, setSubQuestionIndex] = useState(0);
+  const [subQuestionIndex, setSubQuestionIndex] = useState(null);
 
   // Loads questions.
   const onLoad = async () => {
@@ -177,21 +177,19 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     };
 
     // Handle if master question has sub question
-    if (subQuestions[subQuestionIndex]) {
-      setSubQuestionActive(true);
-      console.log(subQuestions[subQuestionIndex]);
-      setSubQuestionIndex(subQuestionIndex + 1);
+    if (subQuestionIndex === subQuestions.length - 1) {
       setIsLoading(false);
-      return;
-    } else if (!subQuestions[subQuestionIndex]) {
-      setQuestionIndex(questionIndex + 1);
-      setSubQuestionIndex(0);
+    } else if (subQuestions && subQuestionIndex <= subQuestions.length -1) {
+      // Below handles the onload, default set to null to handle the first question. 
+      subQuestionIndex === null ? setSubQuestionIndex(0) : setSubQuestionIndex(subQuestionIndex + 1);
+      setSubQuestionActive(true);
       setIsLoading(false);
       return;
     };
 
-
     // Reset states
+    setSubQuestionIndex(null);
+    setSubQuestionActive(false);
     setTimerSeconds(0);
     setSkipOption(true);
     setPlayerState('IDLE');
@@ -244,6 +242,8 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
         <StoryQuestionSectionComponent
           questionTitle={questions[questionIndex].title}
           questionAudioURL={questions[questionIndex].isYesOrNo ? null : questions[questionIndex].audioFileURL}
+          subQuestion={subQuestionActive ? subQuestions[subQuestionIndex] : null}
+          subQuestionActive={subQuestionActive}
           questionID={questions[questionIndex].id}
           playerState={playerState}
           playAudio={(track) => playAudio(track)}
