@@ -8,7 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 import styles from '../styles/components/StoryRecordSectionComponent';
 
-const StoryRecordSectionComponent = ({playerState, onRecordStart, onRecordPause, pauseAudio, questionID}) => {
+const StoryRecordSectionComponent = ({playerState, onRecordStart, onRecordPause, pauseAudio}) => {
 
   // The below handles what icon, text and function displays based off the recording.  
   const handleDisplay = () => {
@@ -42,7 +42,7 @@ const StoryRecordSectionComponent = ({playerState, onRecordStart, onRecordPause,
       case "RECORDING": 
         return (
           <View style={styles.mainContainer}>
-            <Text style={styles.headerText}>To pause recording press the below button...</Text>
+            <Text style={styles.headerText}>To stop recording press the below button...</Text>
             <TouchableOpacity style={styles.touchableOpacityButton} onPress={onRecordPause}>
               <MaterialCommunityIcons
                 name="pause"
@@ -56,7 +56,7 @@ const StoryRecordSectionComponent = ({playerState, onRecordStart, onRecordPause,
         return (
             <View style={styles.mainContainer}>
               <Text style={styles.headerText}>Press the below button to stop listening to question...</Text>
-              <TouchableOpacity style={styles.touchableOpacityButton} onPress={pauseAudio}>
+              <TouchableOpacity style={styles.touchableOpacityButton} onPress={() => pauseAudio()}>
                 <MaterialCommunityIcons
                   name="pause"
                   size={ICON_SIZE.iconSizeLarge}

@@ -13,11 +13,19 @@ import styles from './../styles/components/StoryQuestionSectionComponent';
 
 const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, playerState, playAudio, pauseAudio, questionID}) => {
 
+  const track = {
+    id: questionID,
+    url: questionAudioURL,
+    title: questionTitle,
+    artist: questionTitle,
+  };
+
+
   const handlePlayPauseButton = () => {
     switch (playerState) {
       case "IDLE":
         return (
-          <TouchableOpacity onPress={() => playAudio(questionAudioURL, questionID, questionTitle)} style={styles.touchableOpacityContainer}>
+          <TouchableOpacity onPress={() => playAudio(track)} style={styles.touchableOpacityContainer}>
             <MaterialCommunityIcons
               name="play-circle"
               size={ICON_SIZE.iconSizeLarge}
@@ -28,7 +36,7 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, playerS
         );
       case "PAUSED":
         return (
-          <TouchableOpacity onPress={() => playAudio(questionAudioURL, questionID, questionTitle)} style={styles.touchableOpacityContainer}>
+          <TouchableOpacity onPress={() => playAudio(track)} style={styles.touchableOpacityContainer}>
             <MaterialCommunityIcons
               name="play-circle"
               size={ICON_SIZE.iconSizeLarge}
@@ -58,7 +66,8 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, playerS
       <Animatable.Text animation="fadeIn" easing="ease-in" style={styles.questionTitleContainer}>
         <Text style={styles.questionTitle}> {questionTitle}</Text>
       </Animatable.Text>
-      {handlePlayPauseButton()}
+      { questionAudioURL ? handlePlayPauseButton() : null}
+      
     </View>
   );
 };

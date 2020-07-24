@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View} from 'react-native';
+import {View, Text, PermissionsAndroid, Platform} from 'react-native';
 import {Buffer} from 'buffer';
 import {connect} from 'react-redux';
 import TrackPlayer, {useTrackPlayerEvents, useTrackPlayerProgress, TrackPlayerEvents} from 'react-native-track-player';
@@ -11,6 +11,7 @@ import AudioRecord from 'react-native-audio-record';
 import {audioStream} from './../api/postRequests/audioStream';
 import {imageUpload} from './../api/postRequests/imageUpload'; // This will eventually be changed to a file upload or a file stream.
 import {createResponse} from './../api/postRequests/response';
+import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
 
 // Actions
 import { saveAllQuestions } from './../redux/actions/questionActions';
@@ -22,7 +23,7 @@ import {searchFile} from './../helpers/searchFile';
 import StoryTimerComponent from './../components/StoryTimerComponent';
 import StoryRecordSectionComponent from './../components/StoryRecordSectionComponent';
 import StoryQuestionSectionComponent from './../components/StoryQuestionSectionComponent';
-import ButtonComponent from './../components/ButtonComponent';
+import StoryButtonsComponent from '../components/StoryButtonsComponent';
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -33,7 +34,8 @@ import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
 const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) => {
 
-  const {position, bufferedPosition, duration} = useTrackPlayerProgress(); // Gets the position and duration of the recording. 
+  const {position, bufferedPosition, duration} = useTrackPlayerProgress(); // Gets the position and duration of the recording.
+
   const events = [
     TrackPlayerEvents.PLAYBACK_STATE,
     TrackPlayerEvents.PLAYBACK_ERROR,
@@ -61,43 +63,51 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // Recording States
   const [timerSeconds, setTimerSeconds] = useState(0);
-  const [recordedAudioFile, setAudioFile] = useState(null);
   const [recordedURL, setRecordedURL] = useState("");
 
   // Questions state
   const [questions, setQuestions] = useState(questionReducer.questions);
   const [questionIndex, setQuestionIndex] = useState(0);
 
+  // Sub Question state
+  const [subQuestionActive, setSubQuestionActive] = useState(false);
+  const [subQuestions, setSubQuestions] = useState(null);
+  const [subQuestionIndex, setSubQuestionIndex] = useState(0);
+
   // Loads questions.
   const onLoad = async () => {
-    AudioRecord.init(options);
+    Platform.OS === "android" ? (    
+      await PermissionsAndroid.requestMultiple([
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+    ])) : null;
+
+    await AudioRecord.init(options);
     await setQuestions(questionReducer.questions);
   };
 
   // Pause Audio
   const pauseAudio = async () => {
-    return await TrackPlayer.stop();
+    await TrackPlayer.stop();
+    return setPlayerState('IDLE');
   };
 
   // Play audio
-  const playAudio = async (questionAudioURL, questionID, questionTitle) => {
-    // Add a track to the queue
-    await TrackPlayer.add({
-      id: questionID,
-      url: questionAudioURL,
-      title: questionTitle,
-      artist: questionTitle,
-    });
+  const playAudio = async (track) => {
 
-    // IF there is a recording it will play the recording after the question. As if it was the real thing
+    await TrackPlayer.add([track]);
+
     if (recordedURL) {
-      await TrackPlayer.add({
+      const recordedTrack = {
         id: 'recording',
         url: recordedURL,
-        title: questionTitle,
-        artist: questionTitle,
-      });
-    }
+        title: 'TEST',
+        artist: 'TEST',
+      };
+
+      // IF there is a recording it will play the recording after the question. As if it was the real thing
+      await TrackPlayer.add([recordedTrack]);
+    };
+ 
     await TrackPlayer.play();
     return setPlayerState("PLAYING")
   }
@@ -106,7 +116,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   const onRecordStart = async () => {
     AudioRecord.start();
     const audioData = AudioRecord.on('data', (data) => {
-      // TO DO - JAMES STREAMING
+
     });
 
     setSkipOption(false);
@@ -116,7 +126,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   // When user hits the pause.
   const onRecordPause = async () => {
     const audioFile = await AudioRecord.stop();
-
+    
     // TODO: Remove the below section when streaming file is complete and working. 
     const file = await RNFS.readDir(RNFS.DocumentDirectoryPath).then(async (result) => {
       // Search file looks through the file in the directory and finds the correct file to play.
@@ -145,16 +155,18 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     return setPlayerState('PAUSED');
   };
 
+
   // When the user goes to the next question the below states are reset.
   const onNextButton = () => {
     setIsLoading(true);
-    
+  
+    // When there are no more questions left
     if (questionIndex === questions.length - 1) {
       console.log("END")
       return;
     };
 
-    // If no recording then user skips 
+    // If no recording then user can skip 
     if (skipOption === false) {
       try {
         createResponse(recordedURL, questions[questionIndex].id);
@@ -164,6 +176,21 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
       }
     };
 
+    // Handle if master question has sub question
+    if (subQuestions[subQuestionIndex]) {
+      setSubQuestionActive(true);
+      console.log(subQuestions[subQuestionIndex]);
+      setSubQuestionIndex(subQuestionIndex + 1);
+      setIsLoading(false);
+      return;
+    } else if (!subQuestions[subQuestionIndex]) {
+      setQuestionIndex(questionIndex + 1);
+      setSubQuestionIndex(0);
+      setIsLoading(false);
+      return;
+    };
+
+
     // Reset states
     setTimerSeconds(0);
     setSkipOption(true);
@@ -172,26 +199,26 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     return setQuestionIndex(questionIndex + 1)
   };
 
-  // The below handles what text will display on the button
-  const onNextButtonText = () => {
-    if (questionIndex === questions.length - 1) {
-      return "Finish"
-    } else if (skipOption) {
-      return "Skip"
-    } else {
-      return "Next"
+  // TO DO: Handle subQuestions
+  // The below handles if there is a subQuestion linked to the master question
+  const handleIfSubQuestion = async () => {
+    if (questions[questionIndex].subQuestions) {
+      const responseData = await getSubQuestionFromQuestionID(questions[questionIndex].id);
+      return setSubQuestions(responseData);
     }
   };
 
   // This controls the timer and loads the questions.
   useEffect(() => {
+    handleIfSubQuestion();
     onLoad();
+
     if (playerState === 'RECORDING') {
       setTimeout(() => {
         setTimerSeconds(timerSeconds + 1);
       }, 1000);
     }
-  }, [timerSeconds, playerState]);
+  }, [timerSeconds, playerState, questionIndex, subQuestionIndex]);
 
   return (
     <View style={styles.mainContainer}>
@@ -215,43 +242,38 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
       <View style={styles.questionContainer}>
         <StoryQuestionSectionComponent
-          questionTitle={questions ? questions[questionIndex].title : null}
-          questionAudioURL={questions ? questions[questionIndex].audioFileURL : null}
-          questionID={questions ? questions[questionIndex].id : null}
+          questionTitle={questions[questionIndex].title}
+          questionAudioURL={questions[questionIndex].isYesOrNo ? null : questions[questionIndex].audioFileURL}
+          questionID={questions[questionIndex].id}
           playerState={playerState}
-          playAudio={(questionAudioURL, questionID, questionTitle) => playAudio(questionAudioURL, questionID, questionTitle)}
+          playAudio={(track) => playAudio(track)}
           pauseAudio={() => pauseAudio()}
           questionAudioPlaying={(isAudioPlaying) => setPlayerState(isAudioPlaying)}
-          capturedAudio={recordedAudioFile}
         />
       </View>
 
       <View style={styles.footer}>
-        <StoryRecordSectionComponent
-          playerState={playerState}
-          pauseAudio={() => pauseAudio()}
-          onRecordPause={() => onRecordPause()}
-          onRecordStart={() => onRecordStart()}
-        />
-        <View style={styles.footerButtonContainer}>
-          {questionIndex <= 0 ? (
-            <View></View>
-          ) : (
-            <ButtonComponent
-              title={'Back'}
-              buttonSize="small"
-              onButtonPress={() => setQuestionIndex(questionIndex - 1)}
-              disabled={playerState === 'playing' || playerState === 'RECORDING' ? true : false}
-            />
-          )}
-          <ButtonComponent
-            title={onNextButtonText()}
-            buttonSize="small"
-            onButtonPress={() => onNextButton()}
-            disabled={playerState === 'playing' || playerState === 'RECORDING' ? true : false}
-            isLoading={isLoading}
+        { questions[questionIndex].isYesOrNo ? (
+          <Text style={styles.headerText}>Please select one of the below options...</Text>
+        ) : 
+          <StoryRecordSectionComponent
+            playerState={playerState}
+            recordedURL={recordedURL}
+            pauseAudio={() => pauseAudio()}
+            onRecordPause={() => onRecordPause()}
+            onRecordStart={() => onRecordStart()}
           />
-        </View>
+        }
+        <StoryButtonsComponent  
+          questionIndex={questionIndex}
+          playerState={playerState}
+          isLoading={isLoading}
+          questions={questions}
+          isYesOrNo={questions[questionIndex].isYesOrNo}
+          onNextButton={() => onNextButton()}
+          setQuestionIndex={() => setQuestionIndex(questionIndex - 1)}
+          skipOption={skipOption}
+        />
       </View>
     </View>
   );

@@ -11,7 +11,5 @@ export default async function trackPlayerServices () {
 
   TrackPlayer.addEventListener('playback-state', (state) => {});
 
-  TrackPlayer.addEventListener('playback-queue-ended', () => {
-    return true
-  })
+  TrackPlayer.addEventListener('playback-queue-ended', () => {})
 };

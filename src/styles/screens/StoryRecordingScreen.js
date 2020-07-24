@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLOR, BORDER_RADIUS } from './../styleHelpers';
+import { COLOR, BORDER_RADIUS, FONT_SIZE } from './../styleHelpers';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -14,17 +14,26 @@ const styles = StyleSheet.create({
 
   crossIconContainer: {
     marginLeft: 20,
-    alignSelf: "flex-start"
+    alignSelf: 'flex-start',
   },
 
   timerContainer: {
-    alignSelf: "center"
+    alignSelf: 'center',
   },
 
   questionContainer: {
     flex: 1,
     width: '100%',
-    alignSelf: "center"
+    alignSelf: 'center',
+  },
+
+  headerText: {
+    color: COLOR.grey,
+    marginTop: 0,
+    textAlign: 'left',
+    marginLeft: 20,
+    fontWeight: 'bold',
+    fontSize: FONT_SIZE.largeSize,
   },
 
   footer: {
@@ -36,15 +45,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: BORDER_RADIUS.medium,
     backgroundColor: COLOR.white,
   },
-
-  footerButtonContainer: {
-    alignItems: 'flex-end',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 20,
-    marginTop: 5,
-  }
 });
 
 export default styles;
