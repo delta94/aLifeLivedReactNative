@@ -32,7 +32,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './../styles/screens/StoryRecordingScreen';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
-const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) => {
+const StoryRecordingScreen = ({navigation, questionReducer}) => {
 
   const {position, bufferedPosition, duration} = useTrackPlayerProgress(); // Gets the position and duration of the recording.
 
@@ -109,8 +109,8 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     };
  
     await TrackPlayer.play();
-    return setPlayerState("PLAYING")
-  }
+    return setPlayerState("PLAYING");
+  };
 
   // Start recording
   const onRecordStart = async () => {
@@ -155,9 +155,8 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     return setPlayerState('PAUSED');
   };
 
-
   // When the user goes to the next question the below states are reset.
-  const onNextButton = () => {
+  const onNextButton = (userSelectedOption) => {
     setIsLoading(true);
   
     // When there are no more questions left
@@ -176,6 +175,19 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
       }
     };
 
+    // Handle if the user selects yes or no then filters the subQuestions accordingly.
+    if (userSelectedOption) {
+      // Filters the array and sees if there are any yes decision types
+      const filteredSubQuestions = subQuestions.filter((subQuestion) => {
+        return subQuestion.decisionType == "YES";
+      });
+      filteredSubQuestions.length <= 0 ? setSubQuestions([]) : setSubQuestions(filteredSubQuestions);
+      return setQuestionIndex(questionIndex + 1);
+    } else if (!userSelectedOption) {
+
+    };
+
+    // TODO: Maybe make this into a function and put into a helper file and put the above yes or no handlers in.
     // Handle if master question has sub question
     if (subQuestionIndex === subQuestions.length - 1) {
       setIsLoading(false);
@@ -194,10 +206,9 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     setSkipOption(true);
     setPlayerState('IDLE');
     setIsLoading(false);
-    return setQuestionIndex(questionIndex + 1)
+    return setQuestionIndex(questionIndex + 1);
   };
 
-  // TO DO: Handle subQuestions
   // The below handles if there is a subQuestion linked to the master question
   const handleIfSubQuestion = async () => {
     if (questions[questionIndex].subQuestions) {
@@ -270,7 +281,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
           isLoading={isLoading}
           questions={questions}
           isYesOrNo={questions[questionIndex].isYesOrNo}
-          onNextButton={() => onNextButton()}
+          handleOnYesOrNoButtonPress={(userSelectedOption) => onNextButton(userSelectedOption)}
           setQuestionIndex={() => setQuestionIndex(questionIndex - 1)}
           skipOption={skipOption}
         />

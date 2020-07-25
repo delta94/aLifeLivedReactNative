@@ -12,6 +12,7 @@ import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 import styles from './../styles/components/StoryQuestionSectionComponent';
 
 const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, questionID, playerState, playAudio, pauseAudio, subQuestionActive, subQuestion}) => {
+
   const track = {
     id: questionID,
     url: questionAudioURL,

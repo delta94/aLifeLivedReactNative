@@ -7,20 +7,35 @@ import ButtonComponent from './ButtonComponent';
 // Styles
 import styles from '../styles/components/YesOrNoQuestionComponent';
 
-const StoryButtonsComponent = ({questionIndex, questions, isLoading, playerState, skipOption, onNextButton, setQuestionIndex, isYesOrNo}) => {
-
+const StoryButtonsComponent = ({
+  questionIndex,
+  questions,
+  isLoading,
+  playerState,
+  skipOption,
+  onNextButton,
+  setQuestionIndex,
+  handleOnYesOrNoButtonPress,
+  isYesOrNo,
+}) => {
   // The below handles what text will display on the button
   const onNextButtonText = () => {
     if (questionIndex === questions.length - 1) {
-      return "Finish"
+      return 'Finish';
     } else if (skipOption) {
-      return "Skip"
+      return 'Skip';
     } else {
-      return "Next"
+      return 'Next';
     }
   };
 
-  // The Below handles what buttons display. 
+  // The below handles if the user selects yes for multi choice
+  // const handleOnYesOrNoButtonPress = (userSelectedOption) => {
+  //   return userSelectedOption;
+  // };
+
+
+  // The Below handles what buttons display.
   const handleYesOrNoQuestion = () => {
     switch (isYesOrNo) {
       case true:
@@ -29,18 +44,18 @@ const StoryButtonsComponent = ({questionIndex, questions, isLoading, playerState
             <ButtonComponent
               title="No"
               buttonSize="small"
-              onButtonPress={() => console.log('NO')}
+              onButtonPress={() => handleOnYesOrNoButtonPress(false)}
             />
             <ButtonComponent
               title="Yes"
               buttonSize="small"
-              onButtonPress={() => onNextButton()}
+              onButtonPress={() => handleOnYesOrNoButtonPress(true)}
             />
           </View>
         );
       case false:
         return (
-          <View style={styles.footerButtonContainer}> 
+          <View style={styles.footerButtonContainer}>
             {questionIndex <= 0 ? (
               <View></View>
             ) : (
@@ -48,14 +63,22 @@ const StoryButtonsComponent = ({questionIndex, questions, isLoading, playerState
                 title={'Back'}
                 buttonSize="small"
                 onButtonPress={() => setQuestionIndex()}
-                disabled={playerState === 'playing' || playerState === 'RECORDING' ? true : false}
+                disabled={
+                  playerState === 'playing' || playerState === 'RECORDING'
+                    ? true
+                    : false
+                }
               />
             )}
             <ButtonComponent
               title={onNextButtonText()}
               buttonSize="small"
               onButtonPress={() => onNextButton()}
-              disabled={playerState === 'playing' || playerState === 'RECORDING' ? true : false}
+              disabled={
+                playerState === 'playing' || playerState === 'RECORDING'
+                  ? true
+                  : false
+              }
               isLoading={isLoading}
             />
           </View>
@@ -65,11 +88,7 @@ const StoryButtonsComponent = ({questionIndex, questions, isLoading, playerState
     }
   };
 
-  return (
-    <>
-     {handleYesOrNoQuestion()}
-    </>
-  );
+  return <>{handleYesOrNoQuestion()}</>;
 };
 
 export default StoryButtonsComponent;
