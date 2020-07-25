@@ -13,18 +13,18 @@ const PACKETS_TO_CHUNK = 200;
 
 
 
+
 export const initialiseStream = async () => {
   try {
     console.log(`initialiseStream()`);
-    const response = await axiosAudioAPI.post("/requestChannel");
-    
-    channelId = response.channelId;
-
-    console.log('received channelId ', channelId);
-
     packets = [];
     chunkNum = 1;
-    chunks = [];
+    chunkResponses = [];
+
+    const response = await axiosAudioAPI.get("/requestChannel");
+    channelId = response.data.channelId;
+
+    console.log('received channelId ', channelId);
   }
   catch(err) {
     console.error('initialise Stream ', err);
@@ -37,7 +37,6 @@ export const audioStream = async (packet) => {
     if (packets.length % 10 === 0)
       console.log('packets length ', packets.length);
     if (packets.length === PACKETS_TO_CHUNK) {
-      console.log('lets call it a chunk');
       uploadChunk();
     }
   }
@@ -52,9 +51,10 @@ const uploadChunk = async () => {
     const chunk = Buffer.concat(packets);
     packets = [];
     console.log(`chunk byte length ${Buffer.byteLength(chunk)}`);
-    const result = await axiosAudioAPI.post({channelId, chunk});
-    console.log(result);
-    chunkResponses.push({chunkNum, chunkId: result.chunkId});
+    //console.log(chunk);
+    const result = await axiosAudioAPI.post('/uploadChunk', {channelId, chunk}/*, axiosConfig*/);
+    console.log('got chunkId ', result.data.chunkId);
+    chunkResponses.push({chunkNum, chunkId: result.data.chunkId});
     chunkNum++;
   } catch (error) {
     console.log(error);
@@ -74,7 +74,7 @@ export const finaliseStream = async () => {
       channelId,
       chunkResponses
     });
-    console.log(result);
+    //console.log(result);
   } catch (error) {
       console.log(error);
   }

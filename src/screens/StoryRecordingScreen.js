@@ -88,7 +88,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // When recording mic icon.
   const onRecordStart = async () => {
-    initialiseStream(`audiotest/${moment().format('YYYY-MM-DD-hh:mm:ss')}.wav`);
+    initialiseStream();
     AudioRecord.start();
     const audioData = AudioRecord.on('data', (data) => {
       const bufferChunk = Buffer.from(data, 'base64');
