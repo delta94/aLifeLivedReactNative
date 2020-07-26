@@ -4,7 +4,6 @@ import {Buffer} from 'buffer';
 import {connect} from 'react-redux';
 import TrackPlayer, { pause } from 'react-native-track-player';
 import RNFS from 'react-native-fs'; 
-import moment from 'moment';
 
 import AudioRecord from 'react-native-audio-record';
 
@@ -100,28 +99,9 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   // When user hits the pause icon.
   const onRecordPause = async () => {
     const audioFile = await AudioRecord.stop();
-    // setAudioFile(audioFile);
 
-    // TODO: check final chunk has been uploaded
-    // TODO: any further action required?
     finaliseStream();
 
-    //const file = await RNFS.readDir(RNFS.DocumentDirectoryPath).then(async (result) => {
-      // Search file looks through the file in the directory and finds the correct file to play.
-      //return searchFile(result, recordedAudioFile);
-    //});
-    
-    //let audioSuffix = file.path.split('.').pop();
-
-    // const fileUpload = {
-    //   type: `audio/${audioSuffix}`,
-    //   name: file.name,
-    //   uri: file.path
-    // };
-
-    // let formData = new FormData();
-    // formData.append('file', fileUpload);
-    // await imageUpload(formData);
     return setRecordingStatus("PAUSED");
   };
 
