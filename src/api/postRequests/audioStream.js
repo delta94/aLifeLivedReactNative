@@ -7,6 +7,7 @@ const PACKETS_TO_CHUNK = 100; // chunk RAM size == 2kB x PACKETS_TO_CHUNK
 // this should be called as soon as the screen is displayed to the user
 export const initialiseStream = async () => {
   try {
+
     console.log(`initialiseStream()`);
     packets = [];
     chunkNum = 1;
