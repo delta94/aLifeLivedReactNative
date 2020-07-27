@@ -193,7 +193,7 @@ const StoryRecordingScreen = ({
       setSubQuestionActive(true);
       saveSubQuestions(filteredSubQuestions);
     } else if (userSelectedOption === false) {
-      handleNoDecision();
+      handleNoDecision(questionReducer.subQuestions);
     }
 
     // TODO: Maybe make this into a function and put into a helper file and put the above yes or no handlers in.
