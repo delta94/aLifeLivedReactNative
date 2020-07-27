@@ -155,9 +155,9 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
   };
 
   // When the user goes to the next question the below states are reset.
-  const onNextButton = (userSelectedOption) => {
+  const onNextButton = async (userSelectedOption) => {
     setIsLoading(true);
-  
+
     // When there are no more questions left
     if (questionIndex === questions.length - 1) {
       console.log("END")
@@ -176,26 +176,31 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
 
     // Handle if the user selects yes or no then filters the subQuestions accordingly.
     if (userSelectedOption === true) {
-      console.log("HELLO");
       // Filters the array and sees if there are any yes decision types
       const filteredSubQuestions = subQuestions.filter((subQuestion) => {
-        return subQuestion.decisionType == "YES";
+        return subQuestion.decisionType == 'YES';
       });
-      filteredSubQuestions.length <= 0 ? setSubQuestions([]) : setSubQuestions(filteredSubQuestions);
+      
+      if (filteredSubQuestions.length <= 0) {
+        return setQuestionIndex(questionIndex + 1);
+      };
+
+      setSubQuestionActive(true);
+      setSubQuestions(filteredSubQuestions);
     } else if (userSelectedOption === false) {
       // Filters the array and sees if there are any yes decision types
       const filteredSubQuestions = subQuestions.filter((subQuestion) => {
-        return subQuestion.decisionType == "NO";
+        return subQuestion.decisionType == 'NO';
       });
-      filteredSubQuestions.length <= 0 ? setSubQuestions([]) : setSubQuestions(filteredSubQuestions);
+      setSubQuestions(filteredSubQuestions);
     };
 
     // TODO: Maybe make this into a function and put into a helper file and put the above yes or no handlers in.
     // Handle if master question has sub question
     if (subQuestionIndex === subQuestions.length - 1) {
       setIsLoading(false);
-    } else if (subQuestions && subQuestionIndex <= subQuestions.length -1) {
-      // Below handles the onload, default set to null to handle the first question. 
+    } else if (subQuestions && subQuestionIndex <= subQuestions.length - 1) {
+      // Below handles the onload, default set to null to handle the first question.
       subQuestionIndex === null ? setSubQuestionIndex(0) : setSubQuestionIndex(subQuestionIndex + 1);
       setSubQuestionActive(true);
       setIsLoading(false);
@@ -209,6 +214,7 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
     setSkipOption(true);
     setPlayerState('IDLE');
     setIsLoading(false);
+    console.log("MAX");
     return setQuestionIndex(questionIndex + 1);
   };
 
@@ -222,8 +228,8 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
 
   // This controls the timer and loads the questions.
   useEffect(() => {
-    handleIfSubQuestion();
     onLoad();
+    handleIfSubQuestion();
 
     if (playerState === 'RECORDING') {
       setTimeout(() => {
@@ -287,7 +293,7 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
           subQuestionActive={subQuestionActive}
           handleOnYesOrNoButtonPress={(userSelectedOption) => onNextButton(userSelectedOption)}
           setQuestionIndex={() => setQuestionIndex(questionIndex - 1)}
-          onSkip={() => onNextButton()}
+          onNextButton={() => onNextButton()}
           skipOption={skipOption}
         />
       </View>
