@@ -1,12 +1,38 @@
-export const userSelectionHandlers = (userSelection) => {
-  switch (userSelection) {
-    case true:
-      
-      break;
-    case false: 
+import store from './../redux/store';
 
-      break;
-    default:
-      break;
-  }
-}
+// Actions
+import { saveAllQuestions, incrementQuestionIndex, resetQuestionIndex, saveSubQuestions, setSubQuestionActiveTrue } from './../redux/actions/questionActions';
+
+const subQuestions = store.getState().questionReducer.subQuestions;
+
+export const handleYesDecision = () => {
+
+  console.log(subQuestions);
+  // Filters the array and sees if there are any yes decision types
+  const filteredSubQuestions = subQuestions.filter(
+    (subQuestion) => {
+      return subQuestion.decisionType == 'YES';
+    },
+  );
+
+  if (filteredSubQuestions.length <= 0) {
+    return incrementQuestionIndex();
+  };
+
+  // console.log(store.dispatch(saveSubQuestions(filteredSubQuestions)));
+  // return store.dispatch(saveSubQuestions(filteredSubQuestions));
+  return "YES"
+};
+
+export const handleNoDecision = () => {
+
+  console.log(subQuestions);
+  // Filters the array and sees if there are any yes decision types
+  const filteredSubQuestions = subQuestions.filter((subQuestion) => {
+    return subQuestion.decisionType == 'NO';
+  });
+
+  store.dispatch(saveSubQuestions(filteredSubQuestions));
+  console.log(store.dispatch(setSubQuestionActiveTrue()))
+  // saveSubQuestions(filteredSubQuestions);
+};
