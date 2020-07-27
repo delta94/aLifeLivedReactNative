@@ -17,6 +17,7 @@ const StoryButtonsComponent = ({
   setQuestionIndex,
   handleOnYesOrNoButtonPress,
   isYesOrNo,
+  onSkip,
   subQuestionActive
 }) => {
   // The below handles what text will display on the button
@@ -47,7 +48,7 @@ const StoryButtonsComponent = ({
           />
         </View>
       )
-    } else if (isYesOrNo === false) {
+    } else if (isYesOrNo === false || subQuestionActive === true) {
       return (
         <View style={styles.footerButtonContainer}>
           {questionIndex <= 0 ? (
@@ -67,7 +68,7 @@ const StoryButtonsComponent = ({
           <ButtonComponent
             title={onNextButtonText()}
             buttonSize="small"
-            onButtonPress={() => onNextButton()}
+            onButtonPress={() => onSkip()}
             disabled={
               playerState === 'playing' || playerState === 'RECORDING'
                 ? true

@@ -287,6 +287,7 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
           subQuestionActive={subQuestionActive}
           handleOnYesOrNoButtonPress={(userSelectedOption) => onNextButton(userSelectedOption)}
           setQuestionIndex={() => setQuestionIndex(questionIndex - 1)}
+          onSkip={() => onNextButton()}
           skipOption={skipOption}
         />
       </View>
