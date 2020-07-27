@@ -8,7 +8,6 @@ import RNFS from 'react-native-fs';
 import AudioRecord from 'react-native-audio-record';
 
 // API
-import {audioStream} from './../api/postRequests/audioStream';
 import {imageUpload} from './../api/postRequests/imageUpload'; // This will eventually be changed to a file upload or a file stream.
 import {createResponse} from './../api/postRequests/response';
 import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
@@ -32,7 +31,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './../styles/screens/StoryRecordingScreen';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
-const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) => {
+const StoryRecordingScreen = ({navigation, questionReducer}) => {
 
   const {position, bufferedPosition, duration} = useTrackPlayerProgress(); // Gets the position and duration of the recording.
 
@@ -109,8 +108,8 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     };
  
     await TrackPlayer.play();
-    return setPlayerState("PLAYING")
-  }
+    return setPlayerState("PLAYING");
+  };
 
   // Start recording
   const onRecordStart = async () => {
@@ -155,9 +154,8 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     return setPlayerState('PAUSED');
   };
 
-
   // When the user goes to the next question the below states are reset.
-  const onNextButton = () => {
+  const onNextButton = (userSelectedOption) => {
     setIsLoading(true);
   
     // When there are no more questions left
@@ -176,6 +174,23 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
       }
     };
 
+    // Handle if the user selects yes or no then filters the subQuestions accordingly.
+    if (userSelectedOption === true) {
+      console.log("HELLO");
+      // Filters the array and sees if there are any yes decision types
+      const filteredSubQuestions = subQuestions.filter((subQuestion) => {
+        return subQuestion.decisionType == "YES";
+      });
+      filteredSubQuestions.length <= 0 ? setSubQuestions([]) : setSubQuestions(filteredSubQuestions);
+    } else if (userSelectedOption === false) {
+      // Filters the array and sees if there are any yes decision types
+      const filteredSubQuestions = subQuestions.filter((subQuestion) => {
+        return subQuestion.decisionType == "NO";
+      });
+      filteredSubQuestions.length <= 0 ? setSubQuestions([]) : setSubQuestions(filteredSubQuestions);
+    };
+
+    // TODO: Maybe make this into a function and put into a helper file and put the above yes or no handlers in.
     // Handle if master question has sub question
     if (subQuestionIndex === subQuestions.length - 1) {
       setIsLoading(false);
@@ -194,10 +209,9 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
     setSkipOption(true);
     setPlayerState('IDLE');
     setIsLoading(false);
-    return setQuestionIndex(questionIndex + 1)
+    return setQuestionIndex(questionIndex + 1);
   };
 
-  // TO DO: Handle subQuestions
   // The below handles if there is a subQuestion linked to the master question
   const handleIfSubQuestion = async () => {
     if (questions[questionIndex].subQuestions) {
@@ -241,7 +255,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
       <View style={styles.questionContainer}>
         <StoryQuestionSectionComponent
           questionTitle={questions[questionIndex].title}
-          questionAudioURL={questions[questionIndex].isYesOrNo ? null : questions[questionIndex].audioFileURL}
+          questionAudioURL={questions[questionIndex].isYesOrNo && subQuestionActive === false ? null : questions[questionIndex].audioFileURL}
           subQuestion={subQuestionActive ? subQuestions[subQuestionIndex] : null}
           subQuestionActive={subQuestionActive}
           questionID={questions[questionIndex].id}
@@ -253,7 +267,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
       </View>
 
       <View style={styles.footer}>
-        { questions[questionIndex].isYesOrNo ? (
+        { questions[questionIndex].isYesOrNo && subQuestionActive === false ? (
           <Text style={styles.headerText}>Please select one of the below options...</Text>
         ) : 
           <StoryRecordSectionComponent
@@ -270,7 +284,8 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
           isLoading={isLoading}
           questions={questions}
           isYesOrNo={questions[questionIndex].isYesOrNo}
-          onNextButton={() => onNextButton()}
+          subQuestionActive={subQuestionActive}
+          handleOnYesOrNoButtonPress={(userSelectedOption) => onNextButton(userSelectedOption)}
           setQuestionIndex={() => setQuestionIndex(questionIndex - 1)}
           skipOption={skipOption}
         />
