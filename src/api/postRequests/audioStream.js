@@ -42,11 +42,13 @@ const uploadChunk = async () => {
     const chunk = Buffer.concat(packets);
     packets = [];
     console.log(`chunk byte length ${Buffer.byteLength(chunk)}`);
+    const chunkResponse = { chunkNum };
+    chunkNum++;
     uploadChunkPromise = axiosAudioAPI.post('/uploadChunk', {channelId, chunk});
     const result = await uploadChunkPromise; // uploadChunkPromise is used to avoid a race condition in finaliseStream
     console.log('got chunkId ', result.data.chunkId);
-    chunkResponses.push({chunkNum, chunkId: result.data.chunkId});
-    chunkNum++;
+    chunkResponse.chunkId = result.data.chunkId;
+    chunkResponses.push(chunkResponse);
   } catch (error) {
     console.log(error);
   }
