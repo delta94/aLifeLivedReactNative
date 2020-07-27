@@ -69,7 +69,7 @@ export const sequenceStream = async () => {
       channelId,
       chunkResponses
     });
-    console.log('got result ', result);
+    console.log('got wavFilepath ', result.data.wavFilepath);
   } catch (error) {
       console.log(error);
   }

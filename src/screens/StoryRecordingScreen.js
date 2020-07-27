@@ -8,7 +8,7 @@ import RNFS from 'react-native-fs';
 import AudioRecord from 'react-native-audio-record';
 
 // API
-import {audioStream, initialiseStream, finaliseStream} from './../api/postRequests/audioStream';
+import {audioStream, initialiseStream, sequenceStream} from './../api/postRequests/audioStream';
 import {imageUpload} from './../api/postRequests/imageUpload';
 
 // Actions
@@ -100,7 +100,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   const onRecordPause = async () => {
     const audioFile = await AudioRecord.stop();
 
-    finaliseStream();
+    sequenceStream();
 
     return setRecordingStatus("PAUSED");
   };
