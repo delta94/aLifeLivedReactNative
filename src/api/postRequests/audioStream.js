@@ -12,7 +12,7 @@ export const initialiseStream = async () => {
     chunkNum = 1;
     chunkResponses = [];
 
-    const response = await axiosAudioAPI.get("/requestChannel");
+    const response = await axiosAudioAPI.post("/requestChannel", {userId: '123'}); // TODO: send the actual userId
     channelId = response.data.channelId;
 
     console.log('received channelId ', channelId);
@@ -53,22 +53,37 @@ const uploadChunk = async () => {
 }
 
 
-// called when user stops recording OR leaves the screen
-export const finaliseStream = async () => {
+// called when user pauses recording
+export const sequenceStream = async () => {
   try {
-    console.log('finaliseStream() with chunkNum', chunkNum);
+    console.log('sequenceStream() with chunkNum', chunkNum);
     // In case a prior chunk upload is still in progress, wait for it to finish
     await uploadChunkPromise;
 
     // Now upload the final partial chunk
     await uploadChunk();
 
-    console.log('finaliseChannel() with chunkResponses ', chunkResponses);
-    const result = await axiosAudioAPI.post('/finaliseChannel',
+    console.log('sequenceChannel() with chunkResponses ', chunkResponses);
+    const result = await axiosAudioAPI.post('/sequenceChannel',
     {
       channelId,
       chunkResponses
     });
+    console.log('got result ', result);
+  } catch (error) {
+      console.log(error);
+  }
+}
+
+// called when user leaves a screen
+export const terminateStream = async () => {
+  try {
+    console.log('terminateStream');
+    const result = await axiosAudioAPI.post('/terminateChannel',
+    {
+      channelId
+    });
+    console.log('got result ', result);
   } catch (error) {
       console.log(error);
   }
