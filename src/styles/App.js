@@ -1,12 +1,10 @@
 import { StyleSheet } from "react-native";
-import {FLEX} from './../styles/styleHelpers';
+import {FLEX, COLOR} from './../styles/styleHelpers';
 
 const styles = StyleSheet.create({
   container: {
     flex: FLEX.flexOne,
-
-   
-   
+    backgroundColor: COLOR.white
   }
 });
 

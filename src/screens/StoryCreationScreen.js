@@ -1,12 +1,162 @@
-import React from 'react';
-import {View, Text, Button} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
+import {ScrollView } from "react-native-gesture-handler";
+import {connect} from 'react-redux';
 
-const StoryCreationScreen = ({navigation}) => {
+// Helpers
+import { useOrientation } from './../helpers/orientation';
+
+// Actions
+import { saveAllQuestions } from './../redux/actions/questionActions';
+
+// API
+import { getAllQuestions } from './../api/getRequests/getQuestions';
+
+// Icon
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+// Components
+import CreateStoryComponent from './../components/CreateStoryComponent';
+import CreateStoryPrivacyComponent from './../components/CreateStoryPrivacyComponent';
+import CreateStoryInterviewType from './../components/CreateStoryInterviewType';
+import ButtonComponent from './../components/ButtonComponent';
+
+// Styles
+import styles from './../styles/screens/StoryCreationScreen';
+import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
+
+const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {  
+  const orientation = useOrientation();
+
+  // Below is all basic form things
+  const [step, setStep] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Below is input states
+  const [storyAbout, setStoryAbout] = useState("");
+  const [storyDescription, setStoryDescription] = useState("");
+  const [intervieweeName, setIntervieweeName] = useState("");
+
+  // Below are boolean states
+  const [isStoryPrivate, setIsStoryPrivate] = useState(null);
+  const [isSelfInterview, setIsSelfInterview] = useState(null);
+
+  // Loads questions.
+  const loadQuestions = async () => {
+    setIsLoading(true);
+    const response = await getAllQuestions();
+
+    if (response.status === 200) {
+      try {
+        saveAllQuestions(response.data);
+        return setIsLoading(true);
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error)
+      }
+    } else {
+      setIsLoading(false);
+      console.log(response.errorMessage);
+    }
+  };
+
+  // Handles when the user hits next
+  const handleOnNextButton = async () => {
+    if (step >= 2) {
+      await loadQuestions();
+      navigation.navigate('Record Story');
+      return setIsLoading(false);
+    } else {
+      return setStep(step + 1)
+    }
+  };
+
+  const handleFormStage = () => {
+    switch (step) {
+      case 0:
+        return (
+          <CreateStoryComponent
+            onChangeStoryAbout={(event) => {setStoryAbout(event)}}
+            onChangeStoryDescription={(event) => {setStoryDescription(event)}}
+          />
+        )
+      case 1: 
+        return (
+          <View>
+            <Text style={styles.footerHeaderText}>Do you wish to make your story private or public?</Text>
+            <CreateStoryPrivacyComponent
+              isStoryPrivate={isStoryPrivate}
+              setStoryPrivate={() => setIsStoryPrivate(true)}
+              setStoryPublic={() => setIsStoryPrivate(false)}
+            />
+          </View>
+        )
+      case 2: 
+          return (
+            <View>
+              <Text style={styles.footerHeaderText}>Will you be interviewing yourself or someone else?</Text>
+              <CreateStoryInterviewType
+                isSelfInterview={isSelfInterview}
+                setIsSelfInterviewTrue={() => setIsSelfInterview(true)}
+                setIsSelfInterviewFalse={() => setIsSelfInterview(false)}
+                onIntervieweeNameChange={(event) => console.log(event)}
+              />
+            </View>
+          )
+      default:
+        break;
+    }
+  };
+
   return (
-    <View>
-      <Text>CREATE YOUR STORY!! </Text>
+    <View style={styles.mainContainer} onPress={Keyboard.dismiss}>
+      <View style={styles.headerContainer}>
+        <AntDesign
+          name="close"
+          size={ICON_SIZE.iconSizeMedium}
+          color={COLOR.grey}
+          style={styles.icon}
+          onPress={() => navigation.reset({routes: [{name: 'Home'}]})}
+        />
+        <Text style={styles.headerText}> Create Your Story</Text>
+      </View>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? "padding" : "height"} style={styles.footer}>
+        <View style={styles.footer}>
+          <ScrollView keyboardShouldPersistTaps="handled">
+            <View style={styles.contentContainer}>{handleFormStage()}</View>
+          </ScrollView>
+        </View>
+      </KeyboardAvoidingView>
+      <View style={styles.buttonFooter}>
+        <View style={styles.buttonContainer}>
+          {step <= 0 ? (
+            <View></View>
+          ) : (
+            <ButtonComponent
+              title="Back"
+              buttonSize="small"
+              buttonType="solid"
+              onButtonPress={() => setStep(step - 1)}
+            />
+          )}
+
+          <ButtonComponent
+            title="Next"
+            buttonSize="small"
+            buttonType="solid"
+            isLoading={isLoading}
+            onButtonPress={handleOnNextButton}
+          />
+        </View>
+      </View>
     </View>
   );
 };
 
-export default StoryCreationScreen;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions))
+  }
+};
+
+export default connect(null, mapDispatchToProps) (StoryCreationScreen);

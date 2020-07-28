@@ -3,12 +3,20 @@ import React, {useState, useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'; 
+import AsyncStorage from '@react-native-community/async-storage';
+import {connect} from 'react-redux';
+import TrackPlayer from 'react-native-track-player';
 
 // Icon imports
-import AntIcons from 'react-native-vector-icons/AntDesign';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+// Services
+import trackPlayerServices from '../services/services';
+
+// Redux Actions
+import { setUserToken } from './../redux/actions/userActions';
 
 // Screens
 import LoginScreen from './../screens/LoginScreen';
@@ -19,6 +27,7 @@ import ProfileScreen from './../screens/ProfileScreen';
 import NotificationsScreen from './../screens/NotificationsScreen';
 import StoryCreationScreen from './../screens/StoryCreationScreen';
 import SearchScreen from './../screens/SearchScreen';
+import StoryRecordingScreen from './../screens/StoryRecordingScreen';
 
 // Styles
 import {COLOR, ICON_SIZE} from './../styles/styleHelpers';
@@ -42,16 +51,14 @@ const HomeStackScreen = () => (
 
 const NotificationsStackScreen = () => (
   <NotificationsStack.Navigator>
-    <NotificationsStack.Screen
-      name="Notifications"
-      component={NotificationsScreen}
-    />
+    <NotificationsStack.Screen name="Notifications" component={NotificationsScreen} />
   </NotificationsStack.Navigator>
 );
 
 const StoryCreationStackScreen = () => (
-  <StoryCreationStack.Navigator>
-    <StoryCreationStack.Screen name="Create Story" component={StoryCreationScreen} />
+  <StoryCreationStack.Navigator screenOptions={{ headerShown: false }}>
+    <StoryCreationStack.Screen name="Create Story" component={StoryCreationScreen} options={{cardStyle: {backgroundColor: COLOR.white}}} />
+    <StoryCreationStack.Screen name="Record Story" component={StoryRecordingScreen} />
   </StoryCreationStack.Navigator>
 );
 
@@ -68,30 +75,49 @@ const ProfileStackScreen = () => (
 );
 
 const LoginAndSignUpStackScreen = () => (
-  <LoginAndSignUpStack.Navigator>
-    <LoginAndSignUpStack.Screen 
-      name="Login" 
-      component={LoginScreen} 
-    />
-    <LoginAndSignUpStack.Screen 
-      name="SignUp" 
-      component={SignUpScreen} 
-    />
+  <LoginAndSignUpStack.Navigator screenOptions={{ headerShown: false}}>
+    <LoginAndSignUpStack.Screen name="Login" component={LoginScreen} />
+    <LoginAndSignUpStack.Screen name="SignUp" component={SignUpScreen}/>
   </LoginAndSignUpStack.Navigator>
 );
 
 const AppNavigation = (props) => {
+  // The below is used for authentication
+  const userToken = props.userReducer.id
+  const [isLoading, setIsLoading] = useState(false);
 
-  // TODO: Handle loading of the application.
-  const [isLoading, setIsLoading] = useState(true);
-  const [userToken, setUserToken] = useState('12345678');
+
+  // sets up track player
+  const trackPlayerOnLoad = async () => {
+    setIsLoading(true);
+    await TrackPlayer.setupPlayer({
+      iosCategoryMode: 'spokenAudio'
+    }).then(() => {
+      console.log('Player is set up');
+    });
+
+    TrackPlayer.registerPlaybackService(() => trackPlayerServices);
+    return setIsLoading(false);
+  };
+
+  const getToken = async () => {
+    try {
+      const encryptedToken = await AsyncStorage.getItem("A_LIFE_LIVED_TOKEN");
+      return props.setUserToken(encryptedToken);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // The below handles the basic tab options 
   const tabDefaultOptions = {
     showLabel: false,
+    tabBarVisible: false
   };
 
   useEffect(() => {
+    trackPlayerOnLoad();
+    getToken();
     setTimeout(() => {
       setIsLoading(false)
     }, 1000);
@@ -101,98 +127,94 @@ const AppNavigation = (props) => {
   if (isLoading) {
     return <SplashScreen />;
   };
+ 
+  // The below sets the icon for drawer
+  function screenOptions (route) {
+    const screenOptions = {
+      tabBarIcon: ({focused}) => {
+        let iconName;
+
+        switch (route.name) {
+          case 'Home':
+            iconName = focused ? 'home' : 'home-outline';
+            return (
+              <MaterialCommunityIcons
+                name={iconName}
+                size={ICON_SIZE.iconSizeMedium}
+                color={COLOR.grey}
+              />
+            );
+          case 'Notifications':
+            iconName = focused ? 'bell' : 'bell-outline';
+            return (
+              <MaterialCommunityIcons
+                name={iconName}
+                size={ICON_SIZE.iconSizeMedium}
+                color={COLOR.grey}
+              />
+            );
+          case 'Create Story':
+            iconName = focused ? 'microphone' : 'microphone-outline';
+            return (
+              <MaterialCommunityIcons
+                name={iconName}
+                size={ICON_SIZE.iconSizeMedium}
+                color={COLOR.grey}
+              />
+            );
+          case 'Search':
+            iconName = focused ? 'md-search' : 'ios-search';
+            return (
+              <IonIcons
+                name={iconName}
+                size={ICON_SIZE.iconSizeMedium}
+                color={COLOR.grey}
+              />
+            );
+          case 'Profile':
+            iconName = focused ? 'user' : 'user-o';
+            return (
+              <FontAwesomeIcons
+                name={iconName}
+                size={ICON_SIZE.iconSizeMedium}
+                color={COLOR.grey}
+              />
+            );
+          case 'SignUp': 
+            const tabBarVisible = false
+            return tabBarVisible
+          default:
+            break;
+        }
+      }
+    };  
+
+    return screenOptions        
+  };
 
   return (
     <NavigationContainer>
-      {userToken ? (
-        <Tabs.Navigator 
-        tabBarOptions={tabDefaultOptions} 
-        screenOptions={({route}) => ({
-            tabBarIcon: ({focused}) => {
-              let iconName;
-
-              switch (route.name) {
-                case "Home":
-                  iconName = focused ? 'home' : 'home-outline';
-                  return (
-                    <MaterialCommunityIcons
-                      name={iconName}
-                      size={ICON_SIZE.iconSizeMedium}
-                      color={COLOR.grey}
-                    />
-                  ); 
-                case "Notifications":
-                  iconName = focused ? 'bell' : 'bell-outline';
-                  return (
-                    <MaterialCommunityIcons
-                      name={iconName}
-                      size={ICON_SIZE.iconSizeMedium}
-                      color={COLOR.grey}
-                    />
-                  ); 
-                case "Create Story":
-                  iconName = focused ? 'microphone' : 'microphone-outline';
-                  return (
-                    <MaterialCommunityIcons
-                      name={iconName}
-                      size={ICON_SIZE.iconSizeMedium}
-                      color={COLOR.grey}
-                    />
-                  ); 
-                case "Search":
-                  iconName = focused ? 'md-search' : 'ios-search';
-                  return (
-                    <IonIcons
-                      name={iconName}
-                      size={ICON_SIZE.iconSizeMedium}
-                      color={COLOR.grey}
-                    />
-                  ); 
-                case "Profile":
-                  iconName = focused ? 'user' : 'user-o';
-                  return (
-                    <FontAwesomeIcons
-                      name={iconName}
-                      size={ICON_SIZE.iconSizeMedium}
-                      color={COLOR.grey}
-                    />
-                  ); 
-                default:
-                  break;
-              }
-            }
-          })}
-        >
-          <Tabs.Screen
-            name="Home"
-            component={HomeStackScreen}
-          />
-          <Tabs.Screen
-            name="Notifications"
-            component={NotificationsStackScreen}
-          />
-          <Tabs.Screen
-            name="Create Story"
-            component={StoryCreationStackScreen}
-          />
-          <Tabs.Screen
-            name="Search"
-            component={SearchStackScreen}
-          />
-          <Tabs.Screen
-            name="Profile"
-            component={ProfileStackScreen}
-          />
-        </Tabs.Navigator>
-      ) : (
-        <Tabs.Navigator>
-          <Tabs.Screen name="Login" component={LoginAndSignUpStackScreen} />
+        <Tabs.Navigator tabBarOptions={tabDefaultOptions} screenOptions={({route}) => screenOptions(route)}>
           <Tabs.Screen name="Home" component={HomeStackScreen} />
+          <Tabs.Screen name="Notifications" component={userToken ? NotificationsStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} />
+          <Tabs.Screen name="Create Story" component={userToken ? StoryCreationStackScreen : LoginAndSignUpStackScreen} options={{tabBarVisible: false}} /> 
+          <Tabs.Screen name="Search" component={SearchStackScreen} />
+          <Tabs.Screen name="Profile" component={userToken ? ProfileStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} />
         </Tabs.Navigator>
-      )}
     </NavigationContainer>
   );
 };
 
-export default AppNavigation;
+function mapStateToProps(state) {
+  return {
+    userReducer: state.userReducer
+  }
+};
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUserToken: (encryptedToken) => dispatch(setUserToken(encryptedToken)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppNavigation);
