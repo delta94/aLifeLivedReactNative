@@ -13,7 +13,7 @@ import {createResponse} from './../api/postRequests/response';
 import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
 
 // Actions
-import { saveAllQuestions, incrementQuestionIndex, resetQuestionIndex, saveSubQuestions } from './../redux/actions/questionActions';
+import { saveAllQuestions, incrementQuestionIndex, resetQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
 
 // Helpers
 import {searchFile} from './../helpers/searchFile';
@@ -36,11 +36,12 @@ const StoryRecordingScreen = ({
   navigation,
   questionReducer,
   incrementQuestionIndex,
+  decrementQuestionIndex,
+  incrementSubQuestionIndex,
+  decrementSubQuestionIndex,
   resetQuestionIndex,
   saveSubQuestions,
 }) => {
-  const {position, bufferedPosition, duration} = useTrackPlayerProgress(); // Gets the position and duration of the recording.
-
   const events = [
     TrackPlayerEvents.PLAYBACK_STATE,
     TrackPlayerEvents.PLAYBACK_ERROR,
@@ -77,7 +78,7 @@ const StoryRecordingScreen = ({
   // Sub Question state
   const [subQuestionActive, setSubQuestionActive] = useState(false);
   const [subQuestions, setSubQuestions] = useState([]);
-  const [subQuestionIndex, setSubQuestionIndex] = useState(-1);
+  const subQuestionIndex = questionReducer.subQuestionIndex;
 
   // Loads questions.
   const onLoad = async () => {
@@ -179,6 +180,7 @@ const StoryRecordingScreen = ({
       }
     };
 
+    
     if (subQuestionIndex === subQuestions.length - 1) {
       setIsLoading(false);
     } else if (subQuestions && subQuestionIndex <= subQuestions.length - 1) {
@@ -194,9 +196,6 @@ const StoryRecordingScreen = ({
           
           setSubQuestionActive(true);
           setSubQuestions(filteredYesSubQuestions);
-      console.log(subQuestions);
-
-          setSubQuestionIndex(0);
         case false:
           const filteredNoSubQuestions = handleNoDecision(subQuestions);
 
@@ -206,34 +205,30 @@ const StoryRecordingScreen = ({
 
           setSubQuestionActive(true);
           setSubQuestions(filteredNoSubQuestions);
-          setSubQuestionIndex(0);
         default:
           break;
-      };
+      }
 
       // Below handles the onload, default set to null to handle the first question.
-
-      setSubQuestionIndex(subQuestionIndex + 1);
       setSubQuestionActive(true);
       setIsLoading(false);
-      return;
-    };
+      incrementSubQuestionIndex();
+    } else {
 
-    // Reset states
-    setSubQuestionIndex(null);
-    setSubQuestionActive(false);
-    setTimerSeconds(0);
-    setSkipOption(true);
-    setPlayerState('IDLE');
-    setIsLoading(false);
-    return incrementQuestionIndex();
+      // Reset states
+      setSubQuestionActive(false);
+      setTimerSeconds(0);
+      setSkipOption(true);
+      setPlayerState('IDLE');
+      setIsLoading(false);
+      return incrementQuestionIndex();
+    };
   };
 
   // The below handles if there is a subQuestion linked to the master question
   const handleIfSubQuestion = async () => {
     if (questions[questionIndex].subQuestions) {
       const responseData = await getSubQuestionFromQuestionID(questions[questionIndex].id);
-      console.log("HELLO THERE");
       return setSubQuestions(responseData);
     }
   };
@@ -254,7 +249,7 @@ const StoryRecordingScreen = ({
         setTimerSeconds(timerSeconds + 1);
       }, 1000);
     }
-  }, [timerSeconds, playerState, questionIndex]);
+  }, [timerSeconds, playerState, questionIndex, subQuestionIndex]);
 
   return (
     <View style={styles.mainContainer}>
@@ -279,22 +274,14 @@ const StoryRecordingScreen = ({
       <View style={styles.questionContainer}>
         <StoryQuestionSectionComponent
           questionTitle={questions[questionIndex].title}
-          questionAudioURL={
-            questions[questionIndex].isYesOrNo && subQuestionActive === false
-              ? null
-              : questions[questionIndex].audioFileURL
-          }
-          subQuestion={
-            subQuestionActive ? subQuestions[subQuestionIndex] : null
-          }
+          questionAudioURL={questions[questionIndex].isYesOrNo && subQuestionActive === false ? null : questions[questionIndex].audioFileURL}
+          subQuestion={subQuestionActive ? subQuestions[subQuestionIndex] : null}
           subQuestionActive={subQuestionActive}
           questionID={questions[questionIndex].id}
           playerState={playerState}
           playAudio={(track) => playAudio(track)}
           pauseAudio={() => pauseAudio()}
-          questionAudioPlaying={(isAudioPlaying) =>
-            setPlayerState(isAudioPlaying)
-          }
+          questionAudioPlaying={(isAudioPlaying) => setPlayerState(isAudioPlaying)}
         />
       </View>
 
@@ -319,9 +306,7 @@ const StoryRecordingScreen = ({
           questions={questions}
           isYesOrNo={questions[questionIndex].isYesOrNo}
           subQuestionActive={subQuestionActive}
-          handleOnYesOrNoButtonPress={(userSelectedOption) =>
-            onNextButton(userSelectedOption)
-          }
+          handleOnYesOrNoButtonPress={(userSelectedOption) => onNextButton(userSelectedOption)}
           setQuestionIndex={() => incrementQuestionIndex()}
           onNextButton={() => onNextButton()}
           skipOption={skipOption}
@@ -342,6 +327,9 @@ const mapDispatchToProps = (dispatch) => {
     saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions)),
     saveSubQuestions:  (subQuestions) => dispatch(saveSubQuestions(subQuestions)), 
     incrementQuestionIndex: () => dispatch(incrementQuestionIndex()),
+    decrementQuestionIndex: () => dispatch(decrementQuestionIndex()),
+    incrementSubQuestionIndex: () => dispatch(incrementSubQuestionIndex()),
+    decrementSubQuestionIndex: () => dispatch(decrementSubQuestionIndex()),
     resetQuestionIndex: () => dispatch(resetQuestionIndex()),
   }
 };

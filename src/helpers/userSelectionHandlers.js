@@ -1,8 +1,3 @@
-import store from './../redux/store';
-
-// Actions
-import { saveAllQuestions, incrementQuestionIndex, resetQuestionIndex, saveSubQuestions, setSubQuestionActiveTrue } from './../redux/actions/questionActions';
-
 export const handleYesDecision = (subQuestions) => {
 
   // Filters the array and sees if there are any yes decision types
