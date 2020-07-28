@@ -29,18 +29,22 @@ const questionReducer = (state = questionDefaultState, action) => {
       };
     case SET_SUB_QUESTION_ACTIVE_FALSE: 
       return {
+        ...state,
         subQuestionActive: false
       }
     case SET_SUB_QUESTION_ACTIVE_TRUE:
       return {
+        ...state,
         subQuestionActive: true
       }
     case INCREMENT_QUESTION_INDEX:
       return { 
+        ...state,
         questionIndex: state.questionIndex + 1
       }
     case RESET_QUESTION_INDEX:
       return {
+        ...state,
         questionIndex: 0
       }
     default:

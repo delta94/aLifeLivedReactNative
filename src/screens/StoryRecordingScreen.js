@@ -76,8 +76,8 @@ const StoryRecordingScreen = ({
 
   // Sub Question state
   const [subQuestionActive, setSubQuestionActive] = useState(false);
-  const subQuestions = questionReducer.subQuestions;
-  const [subQuestionIndex, setSubQuestionIndex] = useState(null);
+  const [subQuestions, setSubQuestions] = useState([]);
+  const [subQuestionIndex, setSubQuestionIndex] = useState(-1);
 
   // Loads questions.
   const onLoad = async () => {
@@ -169,7 +169,7 @@ const StoryRecordingScreen = ({
       return;
     }
 
-    // If no recording then user can skip
+    // If no recording then user can't skip
     if (skipOption === false) {
       try {
         createResponse(recordedURL, questions[questionIndex].id);
@@ -177,38 +177,47 @@ const StoryRecordingScreen = ({
         setIsLoading(false);
         console.log(error);
       }
-    }
+    };
 
-    // Handle if the user selects yes or no then filters the subQuestions accordingly.
-    if (userSelectedOption === true) {
-      // Filters the array and sees if there are any yes decision types
-      const filteredSubQuestions = questionReducer.subQuestions.filter((subQuestion) => {
-        return subQuestion.decisionType == 'YES';
-      });
-
-      if (filteredSubQuestions.length <= 0) {
-        return incrementQuestionIndex();
-      }
-
-      setSubQuestionActive(true);
-      saveSubQuestions(filteredSubQuestions);
-    } else if (userSelectedOption === false) {
-      handleNoDecision(questionReducer.subQuestions);
-    }
-
-    // TODO: Maybe make this into a function and put into a helper file and put the above yes or no handlers in.
-    // Handle if master question has sub question
-    if (subQuestionIndex === questionReducer.subQuestions.length - 1) {
+    if (subQuestionIndex === subQuestions.length - 1) {
       setIsLoading(false);
-    } else if (questionReducer.subQuestions && subQuestionIndex <= questionReducer.subQuestions.length - 1) {
+    } else if (subQuestions && subQuestionIndex <= subQuestions.length - 1) {
+      // Handle if the user selects yes or no then filters the subQuestions accordingly.
+      switch (userSelectedOption) {
+        case true:
+          // Filters the array and sees if there are any yes decision types
+          const filteredYesSubQuestions = handleYesDecision(subQuestions);
+
+          if (filteredYesSubQuestions.length <= 0) {
+            return incrementQuestionIndex();
+          };
+          
+          setSubQuestionActive(true);
+          setSubQuestions(filteredYesSubQuestions);
+      console.log(subQuestions);
+
+          setSubQuestionIndex(0);
+        case false:
+          const filteredNoSubQuestions = handleNoDecision(subQuestions);
+
+          if (filteredNoSubQuestions.length <= 0) {
+            return incrementQuestionIndex();
+          };
+
+          setSubQuestionActive(true);
+          setSubQuestions(filteredNoSubQuestions);
+          setSubQuestionIndex(0);
+        default:
+          break;
+      };
+
       // Below handles the onload, default set to null to handle the first question.
-      subQuestionIndex === null
-        ? setSubQuestionIndex(0)
-        : setSubQuestionIndex(subQuestionIndex + 1);
+
+      setSubQuestionIndex(subQuestionIndex + 1);
       setSubQuestionActive(true);
       setIsLoading(false);
       return;
-    }
+    };
 
     // Reset states
     setSubQuestionIndex(null);
@@ -224,7 +233,8 @@ const StoryRecordingScreen = ({
   const handleIfSubQuestion = async () => {
     if (questions[questionIndex].subQuestions) {
       const responseData = await getSubQuestionFromQuestionID(questions[questionIndex].id);
-      return saveSubQuestions(responseData);
+      console.log("HELLO THERE");
+      return setSubQuestions(responseData);
     }
   };
 
@@ -244,7 +254,7 @@ const StoryRecordingScreen = ({
         setTimerSeconds(timerSeconds + 1);
       }, 1000);
     }
-  }, [timerSeconds, playerState, questionIndex, subQuestionIndex]);
+  }, [timerSeconds, playerState, questionIndex]);
 
   return (
     <View style={styles.mainContainer}>
