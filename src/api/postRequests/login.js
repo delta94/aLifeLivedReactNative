@@ -12,6 +12,6 @@ export const login = async (emailAddress, password) => {
     return {
       error,
       errorMessage: error.response.data.message
-    };
-  }
+    }
+  };
 };

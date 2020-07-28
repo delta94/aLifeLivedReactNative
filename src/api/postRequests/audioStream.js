@@ -51,7 +51,7 @@ const uploadChunk = async () => {
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 
 // called when user pauses recording
@@ -74,7 +74,7 @@ export const sequenceStream = async () => {
   } catch (error) {
       console.log(error);
   }
-}
+};
 
 // called when user leaves a screen
 export const terminateStream = async () => {
@@ -88,4 +88,4 @@ export const terminateStream = async () => {
   } catch (error) {
       console.log(error);
   }
-}
+};
