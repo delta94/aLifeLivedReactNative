@@ -53,6 +53,7 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
   const [questions, setQuestions] = useState(questionReducer.questions);
   const [questionIndex, setQuestionIndex] = useState(0);
 
+  const streamInitialised = false;
   // Loads questions.
   const onLoad = async () => {
     AudioRecord.init(options);
@@ -87,7 +88,6 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // When recording mic icon.
   const onRecordStart = async () => {
-    initialiseStream();
     AudioRecord.start();
     const audioData = AudioRecord.on('data', (data) => {
       const bufferChunk = Buffer.from(data, 'base64');
@@ -119,13 +119,14 @@ const StoryRecordingScreen = ({navigation, questionReducer, saveAllQuestions}) =
 
   // This controls the timer and loads the questions.
   useEffect(() => {
+    if (!streamInitialised) initialiseStream();
     onLoad();
-    if (recordingStatus === 'RECORDING') {
-      setTimeout(() => {
-        setTimerSeconds(timerSeconds + 1);
-      }, 1000);
-    }
-  }, [timerSeconds, recordingStatus]);
+  //   if (recordingStatus === 'RECORDING') {
+  //     setTimeout(() => {
+  //       setTimerSeconds(timerSeconds + 1);
+  //     }, 1000);
+  //   }
+   }, []);
 
   return (
     <View style={styles.mainContainer}>

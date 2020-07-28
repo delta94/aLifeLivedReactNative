@@ -1,5 +1,6 @@
 import {axiosAudioAPI} from './../axiosWithAuth';
 import {Buffer} from 'buffer';
+import {AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
 let channelId, chunkNum, chunkResponses, uploadChunkPromise, packets;
 
 const PACKETS_TO_CHUNK = 100; // chunk RAM size == 2kB x PACKETS_TO_CHUNK
@@ -65,13 +66,21 @@ export const sequenceStream = async () => {
     // Now upload the final partial chunk
     await uploadChunk();
 
+    // sort chunkResponses by chunkNum
+    chunkResponses.sort((a, b) => a.chunkNum - b.chunkNum);
+
     console.log('sequenceChannel() with chunkResponses ', chunkResponses);
     const result = await axiosAudioAPI.post('/sequenceChannel',
     {
       channelId,
       chunkResponses
     });
-    console.log('got wavFilepath ', result.data.wavFilepath);
+    console.log(`streaming link: ${AUDIO_API_BASE_ROUTE}/${result.data.wavFilepath}`);
+
+    // reset these to allow multiple consecutive sequencing ops on the same channel
+    chunkNum = 1;
+    chunkResponses = [];
+
   } catch (error) {
       console.log(error);
   }

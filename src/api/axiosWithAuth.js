@@ -9,7 +9,8 @@ const axiosAPI = axios.create({
 });
 
 const axiosAudioAPI = axios.create({
-  baseURL: AUDIO_API_BASE_ROUTE,
+  //baseURL: 'https://a-life-lived-audio-server-live.herokuapp.com',
+  baseURL: 'http://192.168.1.101:4000',
 });
 
 const retrieveAuthToken = async () => {
