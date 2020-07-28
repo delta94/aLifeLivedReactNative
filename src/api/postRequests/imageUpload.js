@@ -2,7 +2,6 @@ import {axiosAPI} from './../axiosWithAuth';
 
 
 export const imageUpload = async (formData) => {
-  console.log("HELLO THERE", formData);
   const config = {
     headers: {
       Accept: "application/json",

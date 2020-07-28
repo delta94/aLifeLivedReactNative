@@ -1,5 +1,4 @@
 export function searchFile(array, filePath) {
-  console.log();
   for (let i = 0; i < array.length; i++) {
     if (array[i].path === filePath) {
       const file = {
@@ -8,6 +7,7 @@ export function searchFile(array, filePath) {
         size: array[i].size
       };
 
+      console.log(file);
       return file
     }
   }

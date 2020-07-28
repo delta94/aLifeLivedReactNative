@@ -90,7 +90,9 @@ const AppNavigation = (props) => {
   // sets up track player
   const trackPlayerOnLoad = async () => {
     setIsLoading(true);
-    await TrackPlayer.setupPlayer().then(() => {
+    await TrackPlayer.setupPlayer({
+      iosCategoryMode: 'spokenAudio'
+    }).then(() => {
       console.log('Player is set up');
     });
 

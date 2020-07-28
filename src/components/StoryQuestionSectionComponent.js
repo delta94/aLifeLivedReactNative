@@ -1,7 +1,5 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import TrackPlayer, { seekTo } from 'react-native-track-player';
-import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 
 // Animation
 import * as Animatable from 'react-native-animatable';
@@ -13,13 +11,28 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 import styles from './../styles/components/StoryQuestionSectionComponent';
 
-const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudioPlaying, playAudio, pauseAudio, questionID, capturedAudio}) => {
+const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, questionID, playerState, playAudio, pauseAudio, subQuestionActive, subQuestion}) => {
+
+  const track = {
+    id: questionID,
+    url: questionAudioURL,
+    title: questionTitle,
+    artist: questionTitle,
+  };
+
+  const handleTextDisplay = () => {
+    if (!subQuestion) {
+      return questionTitle
+    } else {
+      return subQuestion.title
+    }
+  };
 
   const handlePlayPauseButton = () => {
-    switch (isAudioPlaying) {
+    switch (playerState) {
       case "IDLE":
         return (
-          <TouchableOpacity onPress={() => playAudio(questionAudioURL, questionID, questionTitle)} style={styles.touchableOpacityContainer}>
+          <TouchableOpacity onPress={() => playAudio(track)} style={styles.touchableOpacityContainer}>
             <MaterialCommunityIcons
               name="play-circle"
               size={ICON_SIZE.iconSizeLarge}
@@ -30,7 +43,7 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudio
         );
       case "PAUSED":
         return (
-          <TouchableOpacity onPress={() => playAudio(questionAudioURL, questionID, questionTitle)} style={styles.touchableOpacityContainer}>
+          <TouchableOpacity onPress={() => playAudio(track)} style={styles.touchableOpacityContainer}>
             <MaterialCommunityIcons
               name="play-circle"
               size={ICON_SIZE.iconSizeLarge}
@@ -58,9 +71,10 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, isAudio
   return (
     <View style={styles.mainContainer}>
       <Animatable.Text animation="fadeIn" easing="ease-in" style={styles.questionTitleContainer}>
-        <Text style={styles.questionTitle}> {questionTitle}</Text>
+        <Text style={styles.questionTitle}>{handleTextDisplay()}</Text>
       </Animatable.Text>
-      {handlePlayPauseButton()}
+      { questionAudioURL ? handlePlayPauseButton() : null}
+      
     </View>
   );
 };
