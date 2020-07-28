@@ -1,11 +1,15 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
-import {BACKEND_BASE_ROUTE_TEST, LOCAL_ENV} from 'react-native-dotenv';
+import {BACKEND_BASE_ROUTE_TEST, LOCAL_ENV, AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
 
 let authToken;
 
 const axiosAPI = axios.create({
   baseURL: LOCAL_ENV,
+});
+
+const axiosAudioAPI = axios.create({
+  baseURL: AUDIO_API_BASE_ROUTE,
 });
 
 const retrieveAuthToken = async () => {
@@ -47,4 +51,4 @@ const axiosGetWithAuth = async (api) => {
   }
 };
 
-module.exports = {axiosAPI, axiosGetWithAuth, axiosPostWithAuth}
+module.exports = {axiosAPI, axiosAudioAPI, axiosGetWithAuth, axiosPostWithAuth}

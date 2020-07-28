@@ -5,7 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "iPhone8": "react-native run-ios --simulator=iPhone 8",
-    "iosDevice": "node node_modules/react-native/local-cli/cli.js run-ios --device \"iPhone\"",
+    "iosDevice": "node node_modules/react-native/local-cli/cli.js run-ios --device \"Soyun의 iPad\"",
     "iPadDevice": "node_modules/react-native/local-cli/cli.js run-ios --device \"iPad\"",
     "xCode": "xed ios",
     "ios": "react-native run-ios",
@@ -19,6 +19,7 @@
     "@react-navigation/bottom-tabs": "^5.5.2",
     "@react-navigation/native": "^5.5.1",
     "@react-navigation/stack": "^5.5.1",
+    "aws-sdk": "^2.715.0",
     "axios": "^0.19.2",
     "buffer": "^5.6.0",
     "moment": "^2.27.0",

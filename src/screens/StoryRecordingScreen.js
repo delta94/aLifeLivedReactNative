@@ -1,22 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, PermissionsAndroid, Platform} from 'react-native';
-import {Buffer} from 'buffer';
 import {connect} from 'react-redux';
-import TrackPlayer, {useTrackPlayerEvents, useTrackPlayerProgress, TrackPlayerEvents} from 'react-native-track-player';
-import RNFS from 'react-native-fs'; 
+import TrackPlayer, {useTrackPlayerEvents, useTrackPlayerProgress, TrackPlayerEvents} from 'react-native-track-player'; 
 
 import AudioRecord from 'react-native-audio-record';
 
 // API
-import {imageUpload} from './../api/postRequests/imageUpload'; // This will eventually be changed to a file upload or a file stream.
+import {audioStream, initialiseStream, sequenceStream} from './../api/postRequests/audioStream';
 import {createResponse} from './../api/postRequests/response';
 import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
 
 // Actions
 import { saveAllQuestions } from './../redux/actions/questionActions';
-
-// Helpers
-import {searchFile} from './../helpers/searchFile';
 
 // Components
 import StoryTimerComponent from './../components/StoryTimerComponent';
@@ -32,8 +27,6 @@ import styles from './../styles/screens/StoryRecordingScreen';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
 const StoryRecordingScreen = ({navigation, questionReducer}) => {
-
-  const {position, bufferedPosition, duration} = useTrackPlayerProgress(); // Gets the position and duration of the recording.
 
   const events = [
     TrackPlayerEvents.PLAYBACK_STATE,
@@ -113,45 +106,19 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
 
   // Start recording
   const onRecordStart = async () => {
+    initialiseStream();
     AudioRecord.start();
-    const audioData = AudioRecord.on('data', (data) => {
-
-    });
-
+    // This is needed or it sends warns
+    const audioData = AudioRecord.on('data', (data) => {});
     setSkipOption(false);
     return setPlayerState('RECORDING');
   };
  
   // When user hits the pause.
   const onRecordPause = async () => {
-    const audioFile = await AudioRecord.stop();
-    
-    // TODO: Remove the below section when streaming file is complete and working. 
-    const file = await RNFS.readDir(RNFS.DocumentDirectoryPath).then(async (result) => {
-      // Search file looks through the file in the directory and finds the correct file to play.
-      return searchFile(result, audioFile);
-    });
-    
-    try {
-      let audioSuffix = file.path.split('.').pop();
-      const filePath = file.path;
-      const fileName = file.name;
-
-      const fileUpload = {
-        type: `audio/${audioSuffix}`,
-        name: fileName,
-        uri: filePath,
-      };
-
-      let formData = new FormData();
-      formData.append('file', fileUpload);
-      const response = await imageUpload(formData);
-      setRecordedURL(response.data);
-    } catch (error) {
-      console.log(error);
-    };
-  
-    return setPlayerState('PAUSED');
+    await AudioRecord.stop();
+    sequenceStream();
+    return setPlayerState("PAUSED");
   };
 
   // When the user goes to the next question the below states are reset.
@@ -176,7 +143,6 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
 
     // Handle if the user selects yes or no then filters the subQuestions accordingly.
     if (userSelectedOption === true) {
-      console.log("HELLO");
       // Filters the array and sees if there are any yes decision types
       const filteredSubQuestions = subQuestions.filter((subQuestion) => {
         return subQuestion.decisionType == "YES";
