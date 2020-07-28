@@ -88,10 +88,10 @@ export const sequenceStream = async () => {
 };
 
 // called when user leaves a screen
-export const terminateStream = async () => {
+export const finaliseStream = async () => {
   try {
-    console.log('terminateStream');
-    const result = await axiosAudioAPI.post('/terminateChannel',
+    console.log('finaliseStream');
+    const result = await axiosAudioAPI.post('/finaliseChannel',
     {
       channelId
     });
