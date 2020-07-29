@@ -11,4 +11,5 @@ export const resetRecorderState = () => {
   return {
     type: RESET_RECORDER_STATE
   }
-} 
+};
+
