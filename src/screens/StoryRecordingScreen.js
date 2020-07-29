@@ -14,6 +14,7 @@ import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions
 
 // Actions
 import { saveAllQuestions, incrementQuestionIndex, resetQuestionReducerToOriginalState, resetSubQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
+import {setPlayerState, resetRecorderState} from './../redux/actions/recorderActions';
 
 // Helpers
 import {searchFile} from './../helpers/searchFile';
@@ -33,7 +34,7 @@ import styles from './../styles/screens/StoryRecordingScreen';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
 const StoryRecordingScreen = ({
-  navigation,
+  // Question Reducer
   questionReducer,
   saveSubQuestions,
   incrementQuestionIndex,
@@ -42,6 +43,14 @@ const StoryRecordingScreen = ({
   decrementSubQuestionIndex,
   resetSubQuestionIndex,
   resetQuestionReducerToOriginalState,
+  
+  // Recorder Reducer
+  recorderReducer,
+  setPlayerState,
+  resetRecorderState,
+
+  // Other
+  navigation,
 }) => {
   const events = [
     TrackPlayerEvents.PLAYBACK_STATE,
@@ -66,7 +75,7 @@ const StoryRecordingScreen = ({
   // Button states
   const [skipOption, setSkipOption] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [playerState, setPlayerState] = useState('IDLE');
+  const playerState = recorderReducer.playerState;
 
   // Recording States
   const [timerSeconds, setTimerSeconds] = useState(0);
@@ -170,19 +179,6 @@ const StoryRecordingScreen = ({
       console.log('END');
       return;
     };
-
-    // Below handles the 
-    // if (skipOption === true) {
-    //   try {
-    //     createResponse(recordedURL, questions[questionIndex].id);
-    //   } catch (error) {
-    //     setIsLoading(false);
-    //     console.log(error);
-    //   }
-    // } else if (!skipOption) {
-    //   return incrementQuestionIndex();
-    // };
-
     
     if (subQuestionIndex === subQuestions.length - 1) {
       // Reset states to original 
@@ -239,6 +235,7 @@ const StoryRecordingScreen = ({
   // When user presses the close button
   const onClose = () => {
     navigation.reset({routes: [{name: 'Home'}]});
+    resetRecorderState();
     return resetQuestionReducerToOriginalState();
   };
 
@@ -247,6 +244,7 @@ const StoryRecordingScreen = ({
     onLoad();
     handleIfSubQuestion();
 
+    // Need to figure out a better timer
     // if (playerState === 'RECORDING') {
     //   setTimeout(() => {
     //     setTimerSeconds(timerSeconds + 1);
@@ -321,12 +319,18 @@ const StoryRecordingScreen = ({
 
 function mapStateToProps(state) {
   return {
-    questionReducer: state.questionReducer
+    questionReducer: state.questionReducer,
+    recorderReducer: state.recorderReducer
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    // Recorder reducer actions
+    setPlayerState: (playerState) => dispatch(setPlayerState(playerState)),
+    resetRecorderState: () => dispatch(resetRecorderState()),
+
+    // Question reducer actions
     saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions)),
     saveSubQuestions:  (subQuestions) => dispatch(saveSubQuestions(subQuestions)), 
     incrementQuestionIndex: () => dispatch(incrementQuestionIndex()),

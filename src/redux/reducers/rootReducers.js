@@ -4,11 +4,13 @@ import {combineReducers} from 'redux';
 import userReducer from './userReducer';
 import storyReducer from './storyReducer';
 import questionReducer from './questionReducer';
+import recorderReducer from './recorderReducer';
 
 const allReducers = {
   userReducer,
   storyReducer,
-  questionReducer
+  questionReducer,
+  recorderReducer
 };
 
 const rootReducer = combineReducers(allReducers);
