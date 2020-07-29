@@ -4,10 +4,11 @@ import {
   INCREMENT_SUB_QUESTION_INDEX,
   DECREMENT_QUESTION_INDEX,
   DECREMENT_SUB_QUESTION_INDEX,
-  RESET_QUESTION_INDEX,
+  RESET_QUESTION_REDUCER_TO_ORIGINAL_STATE,
   SAVE_SUB_QUESTION,
   SET_SUB_QUESTION_ACTIVE_FALSE,
   SET_SUB_QUESTION_ACTIVE_TRUE,
+  RESET_SUB_QUESTION_INDEX,
 } from './../actions/allActions';
 
 const questionDefaultState = {
@@ -15,7 +16,7 @@ const questionDefaultState = {
   questionIndex: 0,
   subQuestionActive: false,
   subQuestions: null,
-  subQuestionIndex: 0
+  subQuestionIndex: -1
 };
 
 const questionReducer = (state = questionDefaultState, action) => {
@@ -60,7 +61,12 @@ const questionReducer = (state = questionDefaultState, action) => {
         ...state, 
         questionIndex: state.questionIndex - 1
       }
-    case RESET_QUESTION_INDEX:
+    case RESET_SUB_QUESTION_INDEX: 
+      return {
+        ...state,
+        subQuestionIndex: -1
+      };
+    case RESET_QUESTION_REDUCER_TO_ORIGINAL_STATE:
       return questionDefaultState;
     default:
       return state;

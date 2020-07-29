@@ -4,8 +4,10 @@ import {
   INCREMENT_SUB_QUESTION_INDEX,
   SET_SUB_QUESTION_ACTIVE_TRUE,
   SAVE_SUB_QUESTION,
-  RESET_QUESTION_INDEX,
   DECREMENT_SUB_QUESTION_INDEX,
+  RESET_SUB_QUESTION_INDEX,
+  RESET_QUESTION_REDUCER_TO_ORIGINAL_STATE,
+
 } from './allActions';
 
 export const saveAllQuestions = (questions) => {
@@ -46,12 +48,6 @@ export const decrementSubQuestionIndex = () => {
   }
 };
 
-export const resetQuestionIndex = () => {
-  return {
-    type: RESET_QUESTION_INDEX
-  }
-};
-
 export const setSubQuestionActiveTrue = () => {
   return {
     type: SET_SUB_QUESTION_ACTIVE_TRUE,
@@ -63,5 +59,19 @@ export const setSubQuestionActiveFalse = () => {
     type: SET_SUB_QUESTION_ACTIVE_FALSE,
   };
 };
+
+export const resetSubQuestionIndex = () => {
+  return {
+    type: RESET_SUB_QUESTION_INDEX
+  }
+};
+
+export const resetQuestionReducerToOriginalState = () => {
+  return {
+    type: RESET_QUESTION_REDUCER_TO_ORIGINAL_STATE
+  }
+};
+
+
 
 

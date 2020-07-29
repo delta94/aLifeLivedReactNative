@@ -13,7 +13,7 @@ import {createResponse} from './../api/postRequests/response';
 import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
 
 // Actions
-import { saveAllQuestions, incrementQuestionIndex, resetQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
+import { saveAllQuestions, incrementQuestionIndex, resetQuestionReducerToOriginalState, resetSubQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
 
 // Helpers
 import {searchFile} from './../helpers/searchFile';
@@ -35,12 +35,13 @@ import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 const StoryRecordingScreen = ({
   navigation,
   questionReducer,
+  saveSubQuestions,
   incrementQuestionIndex,
   decrementQuestionIndex,
   incrementSubQuestionIndex,
   decrementSubQuestionIndex,
-  resetQuestionIndex,
-  saveSubQuestions,
+  resetSubQuestionIndex,
+  resetQuestionReducerToOriginalState,
 }) => {
   const events = [
     TrackPlayerEvents.PLAYBACK_STATE,
@@ -168,21 +169,30 @@ const StoryRecordingScreen = ({
     if (questionIndex === questions.length - 1) {
       console.log('END');
       return;
-    }
-
-    // If no recording then user can't skip
-    if (skipOption === false) {
-      try {
-        createResponse(recordedURL, questions[questionIndex].id);
-      } catch (error) {
-        setIsLoading(false);
-        console.log(error);
-      }
     };
+
+    // Below handles the 
+    // if (skipOption === true) {
+    //   try {
+    //     createResponse(recordedURL, questions[questionIndex].id);
+    //   } catch (error) {
+    //     setIsLoading(false);
+    //     console.log(error);
+    //   }
+    // } else if (!skipOption) {
+    //   return incrementQuestionIndex();
+    // };
 
     
     if (subQuestionIndex === subQuestions.length - 1) {
+      // Reset states to original 
+      setSubQuestionActive(false);
+      setTimerSeconds(0);
+      setSkipOption(true);
+      setPlayerState('IDLE');
       setIsLoading(false);
+      resetSubQuestionIndex();
+      return incrementQuestionIndex();
     } else if (subQuestions && subQuestionIndex <= subQuestions.length - 1) {
       // Handle if the user selects yes or no then filters the subQuestions accordingly.
       switch (userSelectedOption) {
@@ -193,9 +203,10 @@ const StoryRecordingScreen = ({
           if (filteredYesSubQuestions.length <= 0) {
             return incrementQuestionIndex();
           };
-          
+
           setSubQuestionActive(true);
           setSubQuestions(filteredYesSubQuestions);
+          break;
         case false:
           const filteredNoSubQuestions = handleNoDecision(subQuestions);
 
@@ -205,24 +216,16 @@ const StoryRecordingScreen = ({
 
           setSubQuestionActive(true);
           setSubQuestions(filteredNoSubQuestions);
+          break;
         default:
           break;
-      }
+      };
 
       // Below handles the onload, default set to null to handle the first question.
       setSubQuestionActive(true);
       setIsLoading(false);
-      incrementSubQuestionIndex();
-    } else {
-
-      // Reset states
-      setSubQuestionActive(false);
-      setTimerSeconds(0);
-      setSkipOption(true);
-      setPlayerState('IDLE');
-      setIsLoading(false);
-      return incrementQuestionIndex();
-    };
+      return incrementSubQuestionIndex();
+    }
   };
 
   // The below handles if there is a subQuestion linked to the master question
@@ -236,7 +239,7 @@ const StoryRecordingScreen = ({
   // When user presses the close button
   const onClose = () => {
     navigation.reset({routes: [{name: 'Home'}]});
-    return resetQuestionIndex();
+    return resetQuestionReducerToOriginalState();
   };
 
   // This controls the timer and loads the questions.
@@ -244,12 +247,12 @@ const StoryRecordingScreen = ({
     onLoad();
     handleIfSubQuestion();
 
-    if (playerState === 'RECORDING') {
-      setTimeout(() => {
-        setTimerSeconds(timerSeconds + 1);
-      }, 1000);
-    }
-  }, [timerSeconds, playerState, questionIndex, subQuestionIndex]);
+    // if (playerState === 'RECORDING') {
+    //   setTimeout(() => {
+    //     setTimerSeconds(timerSeconds + 1);
+    //   }, 1000);
+    // }
+  }, [timerSeconds, playerState, questionIndex]);
 
   return (
     <View style={styles.mainContainer}>
@@ -330,7 +333,8 @@ const mapDispatchToProps = (dispatch) => {
     decrementQuestionIndex: () => dispatch(decrementQuestionIndex()),
     incrementSubQuestionIndex: () => dispatch(incrementSubQuestionIndex()),
     decrementSubQuestionIndex: () => dispatch(decrementSubQuestionIndex()),
-    resetQuestionIndex: () => dispatch(resetQuestionIndex()),
+    resetSubQuestionIndex: () => dispatch(resetSubQuestionIndex()),
+    resetQuestionReducerToOriginalState: () => dispatch(resetQuestionReducerToOriginalState()),
   }
 };
 
