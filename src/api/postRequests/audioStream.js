@@ -5,7 +5,8 @@ let channelId, chunkNum, chunkResponses, uploadChunkPromise, packets;
 
 const PACKETS_TO_CHUNK = 100; // chunk RAM size == 2kB x PACKETS_TO_CHUNK
 
-// this should be called as soon as the screen is displayed to the user
+//  This should be called as soon as the screen is displayed to the user.
+//  It should be called once only.
 export const initialiseStream = async () => {
   try {
 
@@ -24,7 +25,8 @@ export const initialiseStream = async () => {
   }
 };
 
-// called by the audio recorder each time a new 2kB audio packet is available
+// This should be called by the audio recorder each time a new 2kB audio packet is available.
+// packet should be provided as a Buffer. It is expected that data is raw PCA data.
 export const audioStream = async (packet) => {
   try {
     packets.push(packet);
@@ -57,7 +59,12 @@ const uploadChunk = async () => {
 };
 
 
-// called when user pauses recording
+// Should be called when user pauses recording.
+// Waits for any uploading to complete, then sequences the chunks into a
+// down-streamable WAV on the audio server.
+// For multiple recording sessions, audio is appended to the
+// pre-existing WAV file.
+// Returns path to down-streamable audio
 export const sequenceStream = async () => {
   try {
     console.log('sequenceStream() with chunkNum', chunkNum);
@@ -82,12 +89,15 @@ export const sequenceStream = async () => {
     chunkNum = 1;
     chunkResponses = [];
 
+    return result.data.wavFilepath;
   } catch (error) {
       console.log(error);
   }
 };
 
-// called when user leaves a screen
+// Called when user leaves a screen.
+// Causes up-streamed audio to be uploaded to AWS.
+// All stream information is removed from the audio server.
 export const finaliseStream = async () => {
   try {
     console.log('finaliseStream');
