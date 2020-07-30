@@ -78,12 +78,9 @@ const StoryRecordingScreen = ({
 
   // Loads questions.
   const onLoad = async () => {
-    Platform.OS === 'android'
-      ? await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        ])
-      : null;
-
+    Platform.OS === 'android' ? await PermissionsAndroid.requestMultiple([
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+    ]): null;
 
     initialiseStream();
     await AudioRecord.init(options);
@@ -131,10 +128,21 @@ const StoryRecordingScreen = ({
     return setPlayerState("PAUSED");
   };
 
+  // Handles the back button out of subQuestions
+  const onBackButton = async () => {
+    // if index is less than or equal to 0 then turn subQuestion active off and reset index
+    if (subQuestionIndex <= 0) {
+      setSubQuestionActive(false);
+      return resetSubQuestionIndex();
+    } else if (subQuestionIndex > 0) {
+      return decrementSubQuestionIndex();
+    } else {
+      return decrementQuestionIndex();
+    }
+  };
+
   // When the user goes to the next question the below states are reset.
   const onNextButton = async (userSelectedOption) => {
-    setIsLoading(true);
-
     // When there are no more questions left
     if (questionIndex === questions.length - 1) {
       console.log('END');
@@ -144,10 +152,8 @@ const StoryRecordingScreen = ({
     if (subQuestionIndex === subQuestions.length - 1) {
       // Reset states to original 
       setSubQuestionActive(false);
-      setTimerSeconds(0);
       setSkipOption(true);
       setPlayerState('IDLE');
-      setIsLoading(false);
       resetSubQuestionIndex();
       return incrementQuestionIndex();
     } else if (subQuestions && subQuestionIndex <= subQuestions.length - 1) {
@@ -180,7 +186,6 @@ const StoryRecordingScreen = ({
 
       // Below handles the onload, default set to null to handle the first question.
       setSubQuestionActive(true);
-      setIsLoading(false);
       return incrementSubQuestionIndex();
     }
   };
@@ -190,7 +195,6 @@ const StoryRecordingScreen = ({
     if (subQuestionActive) {
       return;
     } else if (questions[questionIndex].subQuestions){
-      console.log("HELLO THERE");
       const responseData = await getSubQuestionFromQuestionID(questions[questionIndex].id);
       return setSubQuestions(responseData);
     }
@@ -215,7 +219,7 @@ const StoryRecordingScreen = ({
     //     setTimerSeconds(timerSeconds + 1);
     //   }, 1000);
     // }
-  }, [timerSeconds, playerState, questionIndex]);
+  }, [playerState, questionIndex, subQuestionIndex]);
 
 
   return (
@@ -274,7 +278,8 @@ const StoryRecordingScreen = ({
           isYesOrNo={questions[questionIndex].isYesOrNo}
           subQuestionActive={subQuestionActive}
           handleOnYesOrNoButtonPress={(userSelectedOption) => onNextButton(userSelectedOption)}
-          setQuestionIndex={() => incrementQuestionIndex()}
+          setQuestionIndex={() => decrementQuestionIndex()}
+          onBackButton={() => onBackButton()}
           onNextButton={() => onNextButton()}
           skipOption={skipOption}
         />

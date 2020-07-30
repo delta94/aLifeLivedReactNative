@@ -14,7 +14,7 @@ const StoryButtonsComponent = ({
   playerState,
   skipOption,
   onNextButton,
-  setQuestionIndex,
+  onBackButton, 
   handleOnYesOrNoButtonPress,
   isYesOrNo,
   subQuestionActive
@@ -50,18 +50,14 @@ const StoryButtonsComponent = ({
     } else if (isYesOrNo === false || subQuestionActive === true) {
       return (
         <View style={styles.footerButtonContainer}>
-          {questionIndex <= 0 ? (
+          {questionIndex <= 0 && !subQuestionActive ? (
             <View></View>
           ) : (
             <ButtonComponent
               title={'Back'}
               buttonSize="small"
-              onButtonPress={() => setQuestionIndex()}
-              disabled={
-                playerState === 'playing' || playerState === 'RECORDING'
-                  ? true
-                  : false
-              }
+              onButtonPress={() => onBackButton()}
+              disabled={playerState === 'playing' || playerState === 'RECORDING' ? true : false}
             />
           )}
           <ButtonComponent
