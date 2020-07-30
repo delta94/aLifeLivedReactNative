@@ -1,22 +1,20 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, PermissionsAndroid, Platform} from 'react-native';
-import {Buffer} from 'buffer';
 import {connect} from 'react-redux';
-import TrackPlayer, {useTrackPlayerEvents, useTrackPlayerProgress, TrackPlayerEvents} from 'react-native-track-player';
-import RNFS from 'react-native-fs'; 
+import TrackPlayer from 'react-native-track-player'; 
 
 import AudioRecord from 'react-native-audio-record';
 
 // API
-import {imageUpload} from './../api/postRequests/imageUpload'; // This will eventually be changed to a file upload or a file stream.
-import {createResponse} from './../api/postRequests/response';
+import {audioStream, initialiseStream, sequenceStream} from './../api/postRequests/audioStream';
 import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
 
 // Actions
-import { saveAllQuestions } from './../redux/actions/questionActions';
+import { saveAllQuestions, incrementQuestionIndex, resetQuestionReducerToOriginalState, resetSubQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
+import {setPlayerState, resetRecorderState} from './../redux/actions/recorderActions';
 
 // Helpers
-import {searchFile} from './../helpers/searchFile';
+import {handleYesDecision, handleNoDecision} from './../helpers/userSelectionHandlers';
 
 // Components
 import StoryTimerComponent from './../components/StoryTimerComponent';
@@ -31,21 +29,26 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import styles from './../styles/screens/StoryRecordingScreen';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
-const StoryRecordingScreen = ({navigation, questionReducer}) => {
-
-  const {position, bufferedPosition, duration} = useTrackPlayerProgress(); // Gets the position and duration of the recording.
-
-  const events = [
-    TrackPlayerEvents.PLAYBACK_STATE,
-    TrackPlayerEvents.PLAYBACK_ERROR,
-    TrackPlayerEvents.PLAYBACK_QUEUE_ENDED,
-  ];  
-
-  // Gets the state of the player and also get resets state when player ends
-  useTrackPlayerEvents(events, async (event) => {
-    event.type === 'playback-queue-ended' ? setPlayerState("IDLE") : null;
-  });
+const StoryRecordingScreen = ({
+  // Question Reducer
+  questionReducer,
+  saveSubQuestions,
+  incrementQuestionIndex,
+  decrementQuestionIndex,
+  incrementSubQuestionIndex,
+  decrementSubQuestionIndex,
+  resetSubQuestionIndex,
+  resetQuestionReducerToOriginalState,
   
+  // Recorder Reducer
+  recorderReducer,
+  setPlayerState,
+  resetRecorderState,
+
+  // Other
+  navigation,
+}) => {
+
   // This sets the recording options
   const options = {
     sampleRate: 16000, // default 44100
@@ -58,30 +61,30 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
   // Button states
   const [skipOption, setSkipOption] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [playerState, setPlayerState] = useState("IDLE");
+  const playerState = recorderReducer.playerState;
 
   // Recording States
   const [timerSeconds, setTimerSeconds] = useState(0);
-  const [recordedURL, setRecordedURL] = useState("");
+  const [recordedURL, setRecordedURL] = useState('');
 
   // Questions state
-  const [questions, setQuestions] = useState(questionReducer.questions);
-  const [questionIndex, setQuestionIndex] = useState(0);
+  const [questions] = useState(questionReducer.questions);
+  const questionIndex = questionReducer.questionIndex;
 
   // Sub Question state
   const [subQuestionActive, setSubQuestionActive] = useState(false);
-  const [subQuestions, setSubQuestions] = useState(null);
-  const [subQuestionIndex, setSubQuestionIndex] = useState(null);
+  const [subQuestions, setSubQuestions] = useState([]);
+  const subQuestionIndex = questionReducer.subQuestionIndex;
 
   // Loads questions.
   const onLoad = async () => {
-    Platform.OS === "android" ? (    
-      await PermissionsAndroid.requestMultiple([
-      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-    ])) : null;
+    Platform.OS === 'android'
+      ? await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        ])
+      : null;
 
     await AudioRecord.init(options);
-    await setQuestions(questionReducer.questions);
   };
 
   // Pause Audio
@@ -92,7 +95,6 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
 
   // Play audio
   const playAudio = async (track) => {
-
     await TrackPlayer.add([track]);
 
     if (recordedURL) {
@@ -105,132 +107,113 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
 
       // IF there is a recording it will play the recording after the question. As if it was the real thing
       await TrackPlayer.add([recordedTrack]);
-    };
- 
+    }
+
     await TrackPlayer.play();
-    return setPlayerState("PLAYING");
+    return setPlayerState('PLAYING');
   };
 
   // Start recording
   const onRecordStart = async () => {
+    initialiseStream();
     AudioRecord.start();
-    const audioData = AudioRecord.on('data', (data) => {
-
-    });
-
+    // This is needed or it sends warns
+    const audioData = AudioRecord.on('data', (data) => {});
     setSkipOption(false);
     return setPlayerState('RECORDING');
   };
- 
+
   // When user hits the pause.
   const onRecordPause = async () => {
-    const audioFile = await AudioRecord.stop();
-    
-    // TODO: Remove the below section when streaming file is complete and working. 
-    const file = await RNFS.readDir(RNFS.DocumentDirectoryPath).then(async (result) => {
-      // Search file looks through the file in the directory and finds the correct file to play.
-      return searchFile(result, audioFile);
-    });
-    
-    try {
-      let audioSuffix = file.path.split('.').pop();
-      const filePath = file.path;
-      const fileName = file.name;
-
-      const fileUpload = {
-        type: `audio/${audioSuffix}`,
-        name: fileName,
-        uri: filePath,
-      };
-
-      let formData = new FormData();
-      formData.append('file', fileUpload);
-      const response = await imageUpload(formData);
-      setRecordedURL(response.data);
-    } catch (error) {
-      console.log(error);
-    };
-  
-    return setPlayerState('PAUSED');
+    await AudioRecord.stop();
+    sequenceStream();
+    return setPlayerState("PAUSED");
   };
 
   // When the user goes to the next question the below states are reset.
-  const onNextButton = (userSelectedOption) => {
+  const onNextButton = async (userSelectedOption) => {
     setIsLoading(true);
-  
+
     // When there are no more questions left
     if (questionIndex === questions.length - 1) {
-      console.log("END")
+      console.log('END');
       return;
     };
-
-    // If no recording then user can skip 
-    if (skipOption === false) {
-      try {
-        createResponse(recordedURL, questions[questionIndex].id);
-      } catch (error) {
-        setIsLoading(false);
-        console.log(error) 
-      }
-    };
-
-    // Handle if the user selects yes or no then filters the subQuestions accordingly.
-    if (userSelectedOption === true) {
-      console.log("HELLO");
-      // Filters the array and sees if there are any yes decision types
-      const filteredSubQuestions = subQuestions.filter((subQuestion) => {
-        return subQuestion.decisionType == "YES";
-      });
-      filteredSubQuestions.length <= 0 ? setSubQuestions([]) : setSubQuestions(filteredSubQuestions);
-    } else if (userSelectedOption === false) {
-      // Filters the array and sees if there are any yes decision types
-      const filteredSubQuestions = subQuestions.filter((subQuestion) => {
-        return subQuestion.decisionType == "NO";
-      });
-      filteredSubQuestions.length <= 0 ? setSubQuestions([]) : setSubQuestions(filteredSubQuestions);
-    };
-
-    // TODO: Maybe make this into a function and put into a helper file and put the above yes or no handlers in.
-    // Handle if master question has sub question
+    
     if (subQuestionIndex === subQuestions.length - 1) {
+      // Reset states to original 
+      setSubQuestionActive(false);
+      setTimerSeconds(0);
+      setSkipOption(true);
+      setPlayerState('IDLE');
       setIsLoading(false);
-    } else if (subQuestions && subQuestionIndex <= subQuestions.length -1) {
-      // Below handles the onload, default set to null to handle the first question. 
-      subQuestionIndex === null ? setSubQuestionIndex(0) : setSubQuestionIndex(subQuestionIndex + 1);
+      resetSubQuestionIndex();
+      return incrementQuestionIndex();
+    } else if (subQuestions && subQuestionIndex <= subQuestions.length - 1) {
+      // Handle if the user selects yes or no then filters the subQuestions accordingly.
+      switch (userSelectedOption) {
+        case true:
+          // Filters the array and sees if there are any yes decision types
+          const filteredYesSubQuestions = handleYesDecision(subQuestions);
+
+          if (filteredYesSubQuestions.length <= 0) {
+            return incrementQuestionIndex();
+          };
+
+          setSubQuestionActive(true);
+          setSubQuestions(filteredYesSubQuestions);
+          break;
+        case false:
+          const filteredNoSubQuestions = handleNoDecision(subQuestions);
+
+          if (filteredNoSubQuestions.length <= 0) {
+            return incrementQuestionIndex();
+          };
+
+          setSubQuestionActive(true);
+          setSubQuestions(filteredNoSubQuestions);
+          break;
+        default:
+          break;
+      };
+
+      // Below handles the onload, default set to null to handle the first question.
       setSubQuestionActive(true);
       setIsLoading(false);
-      return;
-    };
-
-    // Reset states
-    setSubQuestionIndex(null);
-    setSubQuestionActive(false);
-    setTimerSeconds(0);
-    setSkipOption(true);
-    setPlayerState('IDLE');
-    setIsLoading(false);
-    return setQuestionIndex(questionIndex + 1);
+      return incrementSubQuestionIndex();
+    }
   };
 
   // The below handles if there is a subQuestion linked to the master question
   const handleIfSubQuestion = async () => {
-    if (questions[questionIndex].subQuestions) {
+    if (subQuestionActive) {
+      return;
+    } else if (questions[questionIndex].subQuestions){
+      console.log("HELLO THERE");
       const responseData = await getSubQuestionFromQuestionID(questions[questionIndex].id);
       return setSubQuestions(responseData);
     }
   };
 
+  // When user presses the close button
+  const onClose = () => {
+    navigation.reset({routes: [{name: 'Home'}]});
+    resetRecorderState();
+    return resetQuestionReducerToOriginalState();
+  };
+
   // This controls the timer and loads the questions.
   useEffect(() => {
-    handleIfSubQuestion();
     onLoad();
+    handleIfSubQuestion();
 
-    if (playerState === 'RECORDING') {
-      setTimeout(() => {
-        setTimerSeconds(timerSeconds + 1);
-      }, 1000);
-    }
-  }, [timerSeconds, playerState, questionIndex, subQuestionIndex]);
+    // Need to figure out a better timer
+    // if (playerState === 'RECORDING') {
+    //   setTimeout(() => {
+    //     setTimerSeconds(timerSeconds + 1);
+    //   }, 1000);
+    // }
+  }, [timerSeconds, playerState, questionIndex]);
 
   return (
     <View style={styles.mainContainer}>
@@ -241,7 +224,7 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
             size={ICON_SIZE.iconSizeMedium}
             color={COLOR.grey}
             style={styles.icon}
-            onPress={() => navigation.reset({routes: [{name: 'Home'}]})}
+            onPress={() => onClose()}
           />
         </View>
         <View style={styles.timerContainer}>
@@ -267,9 +250,11 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
       </View>
 
       <View style={styles.footer}>
-        { questions[questionIndex].isYesOrNo && subQuestionActive === false ? (
-          <Text style={styles.headerText}>Please select one of the below options...</Text>
-        ) : 
+        {questions[questionIndex].isYesOrNo && subQuestionActive === false ? (
+          <Text style={styles.headerText}>
+            Please select one of the below options...
+          </Text>
+        ) : (
           <StoryRecordSectionComponent
             playerState={playerState}
             recordedURL={recordedURL}
@@ -277,8 +262,8 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
             onRecordPause={() => onRecordPause()}
             onRecordStart={() => onRecordStart()}
           />
-        }
-        <StoryButtonsComponent  
+        )}
+        <StoryButtonsComponent
           questionIndex={questionIndex}
           playerState={playerState}
           isLoading={isLoading}
@@ -286,7 +271,8 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
           isYesOrNo={questions[questionIndex].isYesOrNo}
           subQuestionActive={subQuestionActive}
           handleOnYesOrNoButtonPress={(userSelectedOption) => onNextButton(userSelectedOption)}
-          setQuestionIndex={() => setQuestionIndex(questionIndex - 1)}
+          setQuestionIndex={() => incrementQuestionIndex()}
+          onNextButton={() => onNextButton()}
           skipOption={skipOption}
         />
       </View>
@@ -296,13 +282,26 @@ const StoryRecordingScreen = ({navigation, questionReducer}) => {
 
 function mapStateToProps(state) {
   return {
-    questionReducer: state.questionReducer
+    questionReducer: state.questionReducer,
+    recorderReducer: state.recorderReducer
   }
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions))
+    // Recorder reducer actions
+    setPlayerState: (playerState) => dispatch(setPlayerState(playerState)),
+    resetRecorderState: () => dispatch(resetRecorderState()),
+
+    // Question reducer actions
+    saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions)),
+    saveSubQuestions:  (subQuestions) => dispatch(saveSubQuestions(subQuestions)), 
+    incrementQuestionIndex: () => dispatch(incrementQuestionIndex()),
+    decrementQuestionIndex: () => dispatch(decrementQuestionIndex()),
+    incrementSubQuestionIndex: () => dispatch(incrementSubQuestionIndex()),
+    decrementSubQuestionIndex: () => dispatch(decrementSubQuestionIndex()),
+    resetSubQuestionIndex: () => dispatch(resetSubQuestionIndex()),
+    resetQuestionReducerToOriginalState: () => dispatch(resetQuestionReducerToOriginalState()),
   }
 };
 
