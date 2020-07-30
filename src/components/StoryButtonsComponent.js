@@ -47,7 +47,7 @@ const StoryButtonsComponent = ({
           />
         </View>
       )
-    } else if (isYesOrNo === false) {
+    } else if (isYesOrNo === false || subQuestionActive === true) {
       return (
         <View style={styles.footerButtonContainer}>
           {questionIndex <= 0 ? (
