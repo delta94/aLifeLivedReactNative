@@ -84,6 +84,8 @@ const StoryRecordingScreen = ({
         ])
       : null;
 
+
+    initialiseStream();
     await AudioRecord.init(options);
   };
 
@@ -115,7 +117,6 @@ const StoryRecordingScreen = ({
 
   // Start recording
   const onRecordStart = async () => {
-    initialiseStream();
     AudioRecord.start();
     // This is needed or it sends warns
     const audioData = AudioRecord.on('data', (data) => {});
@@ -208,12 +209,14 @@ const StoryRecordingScreen = ({
     handleIfSubQuestion();
 
     // Need to figure out a better timer
+
     // if (playerState === 'RECORDING') {
     //   setTimeout(() => {
     //     setTimerSeconds(timerSeconds + 1);
     //   }, 1000);
     // }
   }, [timerSeconds, playerState, questionIndex]);
+
 
   return (
     <View style={styles.mainContainer}>
