@@ -186,7 +186,10 @@ const StoryRecordingScreen = ({
 
   // The below handles if there is a subQuestion linked to the master question
   const handleIfSubQuestion = async () => {
-    if (questions[questionIndex].subQuestions) {
+    if (subQuestionActive) {
+      return;
+    } else if (questions[questionIndex].subQuestions){
+      console.log("HELLO THERE");
       const responseData = await getSubQuestionFromQuestionID(questions[questionIndex].id);
       return setSubQuestions(responseData);
     }
