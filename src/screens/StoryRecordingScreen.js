@@ -6,7 +6,7 @@ import TrackPlayer from 'react-native-track-player';
 import AudioRecord from 'react-native-audio-record';
 
 // API
-import {audioStream, initialiseStream, sequenceStream} from './../api/postRequests/audioStream';
+import {audioStream, initialiseStream, sequenceStream, finaliseStream} from './../api/postRequests/audioStream';
 import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
 
 // Actions
@@ -58,14 +58,14 @@ const StoryRecordingScreen = ({
     wavFile: 'audio.wav', // default 'audio.wav'
   };
 
-  // Button states
   const [skipOption, setSkipOption] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const playerState = recorderReducer.playerState;
+  const [isInitialiseLoaded, setIsInitialiseLoaded] = useState(false);
 
   // Recording States
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [recordedURL, setRecordedURL] = useState('');
+  const playerState = recorderReducer.playerState;
 
   // Questions state
   const [questions] = useState(questionReducer.questions);
@@ -78,12 +78,15 @@ const StoryRecordingScreen = ({
 
   // Loads questions.
   const onLoad = async () => {
+    setIsInitialiseLoaded(false);
     Platform.OS === 'android' ? await PermissionsAndroid.requestMultiple([
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
     ]): null;
 
+    console.log("MAXKKK");
     initialiseStream();
     await AudioRecord.init(options);
+    setIsInitialiseLoaded(true);
   };
 
   // Pause Audio
@@ -152,9 +155,11 @@ const StoryRecordingScreen = ({
     if (subQuestionIndex === subQuestions.length - 1) {
       // Reset states to original 
       setSubQuestionActive(false);
+      setIsInitialiseLoaded(false);
       setSkipOption(true);
       setPlayerState('IDLE');
       resetSubQuestionIndex();
+      await finaliseStream();
       return incrementQuestionIndex();
     } else if (subQuestions && subQuestionIndex <= subQuestions.length - 1) {
       // Handle if the user selects yes or no then filters the subQuestions accordingly.
@@ -185,8 +190,11 @@ const StoryRecordingScreen = ({
       };
 
       // Below handles the onload, default set to null to handle the first question.
+
+      setIsInitialiseLoaded(false);
       setSubQuestionActive(true);
-      return incrementSubQuestionIndex();
+      incrementSubQuestionIndex();
+      return await finaliseStream();
     }
   };
 
@@ -209,7 +217,10 @@ const StoryRecordingScreen = ({
 
   // This controls the timer and loads the questions.
   useEffect(() => {
-    onLoad();
+    if (isInitialiseLoaded === false) {
+      onLoad();
+    };
+
     handleIfSubQuestion();
 
     // Need to figure out a better timer
