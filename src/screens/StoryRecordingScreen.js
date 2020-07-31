@@ -307,7 +307,7 @@ const StoryRecordingScreen = ({
 function mapStateToProps(state) {
   return {
     questionReducer: state.questionReducer,
-    recorderReducer: state.recorderReducer
+    recorderReducer: state.recorderReducer,
   }
 };
 
