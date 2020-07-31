@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, PermissionsAndroid, Platform} from 'react-native';
 import {connect} from 'react-redux';
+import {Buffer} from 'buffer';
 import TrackPlayer from 'react-native-track-player'; 
 
 import AudioRecord from 'react-native-audio-record';
 
 // API
-import {audioStream, initialiseStream, sequenceStream} from './../api/postRequests/audioStream';
+import {audioStream, initialiseStream, sequenceStream, finaliseStream} from './../api/postRequests/audioStream';
 import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
 
 // Actions
@@ -58,14 +59,14 @@ const StoryRecordingScreen = ({
     wavFile: 'audio.wav', // default 'audio.wav'
   };
 
-  // Button states
   const [skipOption, setSkipOption] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const playerState = recorderReducer.playerState;
+  const [isInitialiseLoaded, setIsInitialiseLoaded] = useState(false);
 
   // Recording States
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [recordedURL, setRecordedURL] = useState('');
+  const playerState = recorderReducer.playerState;
 
   // Questions state
   const [questions] = useState(questionReducer.questions);
@@ -78,13 +79,14 @@ const StoryRecordingScreen = ({
 
   // Loads questions.
   const onLoad = async () => {
-    Platform.OS === 'android'
-      ? await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        ])
-      : null;
+    setIsInitialiseLoaded(false);
+    Platform.OS === 'android' ? await PermissionsAndroid.requestMultiple([
+      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+    ]): null;
 
+    initialiseStream();
     await AudioRecord.init(options);
+    setIsInitialiseLoaded(true);
   };
 
   // Pause Audio
@@ -115,10 +117,14 @@ const StoryRecordingScreen = ({
 
   // Start recording
   const onRecordStart = async () => {
-    initialiseStream();
     AudioRecord.start();
+    
     // This is needed or it sends warns
-    const audioData = AudioRecord.on('data', (data) => {});
+    const audioData = AudioRecord.on('data', (data) => {
+      const bufferChunk = Buffer.from(data, 'base64');
+      audioStream(bufferChunk);
+    });
+
     setSkipOption(false);
     return setPlayerState('RECORDING');
   };
@@ -130,10 +136,21 @@ const StoryRecordingScreen = ({
     return setPlayerState("PAUSED");
   };
 
+  // Handles the back button out of subQuestions
+  const onBackButton = async () => {
+    // if index is less than or equal to 0 then turn subQuestion active off and reset index
+    if (subQuestionIndex <= 0) {
+      setSubQuestionActive(false);
+      return resetSubQuestionIndex();
+    } else if (subQuestionIndex > 0) {
+      return decrementSubQuestionIndex();
+    } else {
+      return decrementQuestionIndex();
+    }
+  };
+
   // When the user goes to the next question the below states are reset.
   const onNextButton = async (userSelectedOption) => {
-    setIsLoading(true);
-
     // When there are no more questions left
     if (questionIndex === questions.length - 1) {
       console.log('END');
@@ -143,11 +160,11 @@ const StoryRecordingScreen = ({
     if (subQuestionIndex === subQuestions.length - 1) {
       // Reset states to original 
       setSubQuestionActive(false);
-      setTimerSeconds(0);
+      setIsInitialiseLoaded(false);
       setSkipOption(true);
       setPlayerState('IDLE');
-      setIsLoading(false);
       resetSubQuestionIndex();
+      await finaliseStream();
       return incrementQuestionIndex();
     } else if (subQuestions && subQuestionIndex <= subQuestions.length - 1) {
       // Handle if the user selects yes or no then filters the subQuestions accordingly.
@@ -178,9 +195,11 @@ const StoryRecordingScreen = ({
       };
 
       // Below handles the onload, default set to null to handle the first question.
+
+      setIsInitialiseLoaded(false);
       setSubQuestionActive(true);
-      setIsLoading(false);
-      return incrementSubQuestionIndex();
+      incrementSubQuestionIndex();
+      return await finaliseStream();
     }
   };
 
@@ -189,7 +208,6 @@ const StoryRecordingScreen = ({
     if (subQuestionActive) {
       return;
     } else if (questions[questionIndex].subQuestions){
-      console.log("HELLO THERE");
       const responseData = await getSubQuestionFromQuestionID(questions[questionIndex].id);
       return setSubQuestions(responseData);
     }
@@ -204,16 +222,21 @@ const StoryRecordingScreen = ({
 
   // This controls the timer and loads the questions.
   useEffect(() => {
-    onLoad();
+    if (isInitialiseLoaded === false) {
+      onLoad();
+    };
+
     handleIfSubQuestion();
 
     // Need to figure out a better timer
+
     // if (playerState === 'RECORDING') {
     //   setTimeout(() => {
     //     setTimerSeconds(timerSeconds + 1);
     //   }, 1000);
     // }
-  }, [timerSeconds, playerState, questionIndex]);
+  }, [playerState, questionIndex, subQuestionIndex]);
+
 
   return (
     <View style={styles.mainContainer}>
@@ -271,7 +294,8 @@ const StoryRecordingScreen = ({
           isYesOrNo={questions[questionIndex].isYesOrNo}
           subQuestionActive={subQuestionActive}
           handleOnYesOrNoButtonPress={(userSelectedOption) => onNextButton(userSelectedOption)}
-          setQuestionIndex={() => incrementQuestionIndex()}
+          setQuestionIndex={() => decrementQuestionIndex()}
+          onBackButton={() => onBackButton()}
           onNextButton={() => onNextButton()}
           skipOption={skipOption}
         />

@@ -1,10 +1,12 @@
 import {axiosAudioAPI} from './../axiosWithAuth';
 import {Buffer} from 'buffer';
+import {AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
 let channelId, chunkNum, chunkResponses, uploadChunkPromise, packets;
 
 const PACKETS_TO_CHUNK = 100; // chunk RAM size == 2kB x PACKETS_TO_CHUNK
 
-// this should be called as soon as the screen is displayed to the user
+//  This should be called as soon as the screen is displayed to the user.
+//  It should be called once only.
 export const initialiseStream = async () => {
   try {
 
@@ -23,7 +25,8 @@ export const initialiseStream = async () => {
   }
 };
 
-// called by the audio recorder each time a new 2kB audio packet is available
+// This should be called by the audio recorder each time a new 2kB audio packet is available.
+// packet should be provided as a Buffer. It is expected that data is raw PCA data.
 export const audioStream = async (packet) => {
   try {
     packets.push(packet);
@@ -43,18 +46,25 @@ const uploadChunk = async () => {
     const chunk = Buffer.concat(packets);
     packets = [];
     console.log(`chunk byte length ${Buffer.byteLength(chunk)}`);
+    const chunkResponse = { chunkNum };
+    chunkNum++;
     uploadChunkPromise = axiosAudioAPI.post('/uploadChunk', {channelId, chunk});
     const result = await uploadChunkPromise; // uploadChunkPromise is used to avoid a race condition in finaliseStream
     console.log('got chunkId ', result.data.chunkId);
-    chunkResponses.push({chunkNum, chunkId: result.data.chunkId});
-    chunkNum++;
+    chunkResponse.chunkId = result.data.chunkId;
+    chunkResponses.push(chunkResponse);
   } catch (error) {
     console.log(error);
   }
 };
 
 
-// called when user pauses recording
+// Should be called when user pauses recording.
+// Waits for any uploading to complete, then sequences the chunks into a
+// down-stream able WAV on the audio server.
+// For multiple recording sessions, audio is appended to the
+// pre-existing WAV file.
+// Returns path to down-stream able audio
 export const sequenceStream = async () => {
   try {
     console.log('sequenceStream() with chunkNum', chunkNum);
@@ -64,24 +74,34 @@ export const sequenceStream = async () => {
     // Now upload the final partial chunk
     await uploadChunk();
 
+    // sort chunkResponses by chunkNum
+    chunkResponses.sort((a, b) => a.chunkNum - b.chunkNum);
+
     console.log('sequenceChannel() with chunkResponses ', chunkResponses);
     const result = await axiosAudioAPI.post('/sequenceChannel',
     {
       channelId,
       chunkResponses
     });
-    console.log('got wavFilepath ', result.data.wavFilepath);
+    console.log(`streaming link: ${AUDIO_API_BASE_ROUTE}/${result.data.wavFilepath}`);
+
+    // reset these to allow multiple consecutive sequencing ops on the same channel
+    chunkNum = 1;
+    chunkResponses = [];
+
+    return result.data.wavFilepath;
   } catch (error) {
       console.log(error);
   }
 };
 
-// called when user leaves a screen
-export const terminateStream = async () => {
+// Called when user leaves a screen.
+// Causes up-streamed audio to be uploaded to AWS.
+// All stream information is removed from the audio server.
+export const finaliseStream = async () => {
   try {
-    console.log('terminateStream');
-    const result = await axiosAudioAPI.post('/terminateChannel',
-    {
+    console.log('finaliseStream');
+    const result = await axiosAudioAPI.post('/finaliseChannel', {
       channelId
     });
     console.log('got result ', result);
