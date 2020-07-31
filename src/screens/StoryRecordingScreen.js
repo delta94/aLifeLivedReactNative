@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, PermissionsAndroid, Platform} from 'react-native';
 import {connect} from 'react-redux';
+import {Buffer} from 'buffer';
 import TrackPlayer from 'react-native-track-player'; 
 
 import AudioRecord from 'react-native-audio-record';
@@ -83,7 +84,6 @@ const StoryRecordingScreen = ({
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
     ]): null;
 
-    console.log("MAXKKK");
     initialiseStream();
     await AudioRecord.init(options);
     setIsInitialiseLoaded(true);
@@ -118,8 +118,13 @@ const StoryRecordingScreen = ({
   // Start recording
   const onRecordStart = async () => {
     AudioRecord.start();
+    
     // This is needed or it sends warns
-    const audioData = AudioRecord.on('data', (data) => {});
+    const audioData = AudioRecord.on('data', (data) => {
+      const bufferChunk = Buffer.from(data, 'base64');
+      audioStream(bufferChunk);
+    });
+
     setSkipOption(false);
     return setPlayerState('RECORDING');
   };

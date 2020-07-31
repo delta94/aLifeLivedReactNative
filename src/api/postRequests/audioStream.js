@@ -101,7 +101,6 @@ export const sequenceStream = async () => {
 export const finaliseStream = async () => {
   try {
     console.log('finaliseStream');
-    console.log("MAX", channelId);
     const result = await axiosAudioAPI.post('/finaliseChannel', {
       channelId
     });
