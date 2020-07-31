@@ -61,10 +61,10 @@ const uploadChunk = async () => {
 
 // Should be called when user pauses recording.
 // Waits for any uploading to complete, then sequences the chunks into a
-// down-streamable WAV on the audio server.
+// down-stream able WAV on the audio server.
 // For multiple recording sessions, audio is appended to the
 // pre-existing WAV file.
-// Returns path to down-streamable audio
+// Returns path to down-stream able audio
 export const sequenceStream = async () => {
   try {
     console.log('sequenceStream() with chunkNum', chunkNum);
@@ -101,8 +101,7 @@ export const sequenceStream = async () => {
 export const finaliseStream = async () => {
   try {
     console.log('finaliseStream');
-    const result = await axiosAudioAPI.post('/finaliseChannel',
-    {
+    const result = await axiosAudioAPI.post('/finaliseChannel', {
       channelId
     });
     console.log('got result ', result);
