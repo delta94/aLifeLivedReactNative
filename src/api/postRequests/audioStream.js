@@ -7,15 +7,14 @@ const PACKETS_TO_CHUNK = 100; // chunk RAM size == 2kB x PACKETS_TO_CHUNK
 
 //  This should be called as soon as the screen is displayed to the user.
 //  It should be called once only.
-export const initialiseStream = async () => {
+export const initialiseStream = async (userId) => {
   try {
-
     console.log(`initialiseStream()`);
     packets = [];
     chunkNum = 1;
     chunkResponses = [];
 
-    const response = await axiosAudioAPI.post("/requestChannel", {userId: '123'}); // TODO: send the actual userId
+    const response = await axiosAudioAPI.post("/requestChannel", {userId: userId});
     channelId = response.data.channelId;
 
     console.log('received channelId ', channelId);

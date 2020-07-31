@@ -46,6 +46,9 @@ const StoryRecordingScreen = ({
   setPlayerState,
   resetRecorderState,
 
+  // User Reducer
+  userReducer,
+
   // Other
   navigation,
 }) => {
@@ -84,7 +87,7 @@ const StoryRecordingScreen = ({
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
     ]): null;
 
-    initialiseStream();
+    initialiseStream(userReducer.id);
     await AudioRecord.init(options);
     setIsInitialiseLoaded(true);
   };
@@ -307,7 +310,8 @@ const StoryRecordingScreen = ({
 function mapStateToProps(state) {
   return {
     questionReducer: state.questionReducer,
-    recorderReducer: state.recorderReducer
+    recorderReducer: state.recorderReducer,
+    userReducer: state.userReducer
   }
 };
 
