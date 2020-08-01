@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, PermissionsAndroid, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import {Buffer} from 'buffer';
-import TrackPlayer from 'react-native-track-player'; 
+import TrackPlayer, { useTrackPlayerProgress} from 'react-native-track-player'; 
 
 import AudioRecord from 'react-native-audio-record';
 
@@ -52,7 +52,6 @@ const StoryRecordingScreen = ({
   // Other
   navigation,
 }) => {
-
   // This sets the recording options
   const options = {
     sampleRate: 16000, // default 44100
@@ -80,6 +79,7 @@ const StoryRecordingScreen = ({
   const [subQuestions, setSubQuestions] = useState([]);
   const subQuestionIndex = questionReducer.subQuestionIndex;
 
+  
   // Loads questions.
   const onLoad = async () => {
     setIsInitialiseLoaded(false);
@@ -98,22 +98,10 @@ const StoryRecordingScreen = ({
     return setPlayerState('IDLE');
   };
 
+ 
   // Play audio
   const playAudio = async (track) => {
     await TrackPlayer.add([track]);
-
-    if (recordedURL) {
-      const recordedTrack = {
-        id: 'recording',
-        url: recordedURL,
-        title: 'TEST',
-        artist: 'TEST',
-      };
-
-      // IF there is a recording it will play the recording after the question. As if it was the real thing
-      await TrackPlayer.add([recordedTrack]);
-    }
-
     await TrackPlayer.play();
     return setPlayerState('PLAYING');
   };
@@ -135,8 +123,18 @@ const StoryRecordingScreen = ({
   // When user hits the pause.
   const onRecordPause = async () => {
     await AudioRecord.stop();
-    sequenceStream();
-    return setPlayerState("PAUSED");
+    setPlayerState("PAUSED");
+    const audioPathURL = await sequenceStream();
+
+    const track = {
+      id: "MAXTEST",
+      url: `https://a-life-lived-s3-bucket.s3-ap-southeast-2.amazonaws.com/wav/13dd6e702c2daa8e28069c68ba05c286463a84d4cb686ac6a8248722958ef63a29242d963808cbf809af34d995baeb8d39417e988d62018c5f8e94513fad8663f2af5ec4406cf6d90389602ce89b7a831e3803a8b09e791437efd92723c3091204cc006ef33e701382fdaa96f7c77189be047fd782c1a4e993fa61106df1aa29f57d03ee9da97c993fbcc26142d5b342d8d09260618e9e4cb83725c77dcc0aa9d59588ba4c65f949ad73e6df6e404f24a314b3357177114a0d62d212ecc692755cd3c4b6026259f1a65dc239c8bdce664bad7ba05246ac55bab1d35fc76c6e4af976e4df95efa75ef8b26fd1fa20a56f7e5d74bcf78f7cf40cb10f83db429fd5023d763294412f627ff1ee52/38b0a8b6-a63f-43d7-8366-2b357e45b3fa.wav`,
+      title: "MAXXX",
+      artist: "MAXXXXXX",
+    };
+
+    await TrackPlayer.add([track])
+    return setRecordedURL(audioPathURL);
   };
 
   // Handles the back button out of subQuestions
