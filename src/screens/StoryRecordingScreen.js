@@ -159,15 +159,19 @@ const StoryRecordingScreen = ({
       console.log('END');
       return;
     };
-    
+
+    if (!questions[questionIndex].isYesOrNo || subQuestionActive) {
+      console.log("Max");
+      await finaliseStream();
+    }
     if (subQuestionIndex === subQuestions.length - 1) {
-      // Reset states to original 
+      // Reset states to original
       setSubQuestionActive(false);
       setIsInitialiseLoaded(false);
       setSkipOption(true);
       setPlayerState('IDLE');
       resetSubQuestionIndex();
-      await finaliseStream();
+      
       return incrementQuestionIndex();
     } else if (subQuestions && subQuestionIndex <= subQuestions.length - 1) {
       // Handle if the user selects yes or no then filters the subQuestions accordingly.
@@ -178,7 +182,7 @@ const StoryRecordingScreen = ({
 
           if (filteredYesSubQuestions.length <= 0) {
             return incrementQuestionIndex();
-          };
+          }
 
           setSubQuestionActive(true);
           setSubQuestions(filteredYesSubQuestions);
@@ -188,21 +192,19 @@ const StoryRecordingScreen = ({
 
           if (filteredNoSubQuestions.length <= 0) {
             return incrementQuestionIndex();
-          };
+          }
 
           setSubQuestionActive(true);
           setSubQuestions(filteredNoSubQuestions);
           break;
         default:
           break;
-      };
+      }
 
       // Below handles the onload, default set to null to handle the first question.
-
       setIsInitialiseLoaded(false);
       setSubQuestionActive(true);
-      incrementSubQuestionIndex();
-      return await finaliseStream();
+      return incrementSubQuestionIndex();
     }
   };
 

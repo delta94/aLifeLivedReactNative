@@ -3,18 +3,18 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {
   BACKEND_BASE_ROUTE_TEST,
   LOCAL_ENV,
-  AUDIO_API_BASE_ROUTE,
+  LOCAL_AUDIO_API_BASE_ROUTE,
   AUDIO_SERVER_ROUTE_TEST,
 } from 'react-native-dotenv';
 
 let authToken;
 
 const axiosAPI = axios.create({
-  baseURL: LOCAL_ENV,
+  baseURL: BACKEND_BASE_ROUTE_TEST,
 });
 
 const axiosAudioAPI = axios.create({
-  baseURL: AUDIO_API_BASE_ROUTE,
+  baseURL: LOCAL_AUDIO_API_BASE_ROUTE,
 });
 
 const retrieveAuthToken = async () => {
