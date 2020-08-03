@@ -17,7 +17,8 @@ const StoryButtonsComponent = ({
   onBackButton, 
   handleOnYesOrNoButtonPress,
   isYesOrNo,
-  subQuestionActive
+  subQuestionActive,
+  handleEndOfQuestions
 }) => {
   // The below handles what text will display on the button
   const onNextButtonText = () => {
@@ -32,6 +33,37 @@ const StoryButtonsComponent = ({
 
   // The Below handles what buttons display.
   const handleYesOrNoQuestion = () => {
+
+    if (questionIndex === questions.length - 1) {
+      return (
+        <View style={styles.footerButtonContainer}>
+          {questionIndex <= 0 && !subQuestionActive ? (
+            <View></View>
+          ) : (
+            <ButtonComponent
+              title={'Back'}
+              buttonSize="small"
+              onButtonPress={() => onBackButton()}
+              disabled={
+                playerState === 'playing' || playerState === 'RECORDING'
+                  ? true
+                  : false
+              }
+            />
+          )}
+          <ButtonComponent
+            title={onNextButtonText()}
+            buttonSize="small"
+            onButtonPress={() => handleEndOfQuestions()}
+            disabled={
+              playerState === 'playing' || playerState === 'RECORDING'
+                ? true
+                : false
+            }
+          />
+        </View>
+      );
+    }
     if (isYesOrNo === true && subQuestionActive === false) {
       return (
         <View style={styles.footerButtonContainer}>
@@ -69,7 +101,6 @@ const StoryButtonsComponent = ({
                 ? true
                 : false
             }
-            isLoading={isLoading}
           />
         </View>
       );

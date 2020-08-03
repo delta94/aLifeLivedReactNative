@@ -57,7 +57,7 @@ const NotificationsStackScreen = () => (
 
 const StoryCreationStackScreen = () => (
   <StoryCreationStack.Navigator screenOptions={{ headerShown: false }}>
-    <StoryCreationStack.Screen name="Create Story" component={StoryCreationScreen} options={{cardStyle: {backgroundColor: COLOR.white}}} />
+    <StoryCreationStack.Screen name="Create Story" component={StoryCreationScreen} initialParams={{step: 0}} options={{cardStyle: {backgroundColor: COLOR.white}}} />
     <StoryCreationStack.Screen name="Record Story" component={StoryRecordingScreen} />
   </StoryCreationStack.Navigator>
 );

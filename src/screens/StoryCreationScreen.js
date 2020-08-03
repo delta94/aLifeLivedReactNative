@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {View, Text, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import {ScrollView } from "react-native-gesture-handler";
 import {connect} from 'react-redux';
@@ -19,27 +19,30 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import CreateStoryComponent from './../components/CreateStoryComponent';
 import CreateStoryPrivacyComponent from './../components/CreateStoryPrivacyComponent';
 import CreateStoryInterviewType from './../components/CreateStoryInterviewType';
+import CreateStoryTitleAndTags from './../components/CreateStoryTitleAndTags';
 import ButtonComponent from './../components/ButtonComponent';
 
 // Styles
 import styles from './../styles/screens/StoryCreationScreen';
 import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
-const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {  
+const StoryCreationScreen = ({ route, navigation, saveAllQuestions}) => {  
   const orientation = useOrientation();
-
+  
   // Below is all basic form things
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(route.params.step);
   const [isLoading, setIsLoading] = useState(false);
   
   // Below is input states
   const [storyAbout, setStoryAbout] = useState("");
   const [storyDescription, setStoryDescription] = useState("");
   const [intervieweeName, setIntervieweeName] = useState("");
+  const [storyTitle, setStoryTitle] = useState("");
 
   // Below are boolean states
   const [isStoryPrivate, setIsStoryPrivate] = useState(null);
   const [isSelfInterview, setIsSelfInterview] = useState(null);
+
 
   // Loads questions.
   const loadQuestions = async () => {
@@ -62,10 +65,14 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
 
   // Handles when the user hits next
   const handleOnNextButton = async () => {
-    if (step >= 2) {
+    if (step === 2) {
       await loadQuestions();
       navigation.navigate('Record Story');
+      // Increase step because user returns here to create story. 
+      setStep(step + 1);
       return setIsLoading(false);
+    } else if (step >= 3) {
+
     } else {
       return setStep(step + 1)
     }
@@ -92,17 +99,25 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
           </View>
         )
       case 2: 
-          return (
-            <View>
-              <Text style={styles.footerHeaderText}>Will you be interviewing yourself or someone else?</Text>
-              <CreateStoryInterviewType
-                isSelfInterview={isSelfInterview}
-                setIsSelfInterviewTrue={() => setIsSelfInterview(true)}
-                setIsSelfInterviewFalse={() => setIsSelfInterview(false)}
-                onIntervieweeNameChange={(event) => console.log(event)}
-              />
-            </View>
-          )
+        return (
+          <View>
+            <Text style={styles.footerHeaderText}>Will you be interviewing yourself or someone else?</Text>
+            <CreateStoryInterviewType
+              isSelfInterview={isSelfInterview}
+              setIsSelfInterviewTrue={() => setIsSelfInterview(true)}
+              setIsSelfInterviewFalse={() => setIsSelfInterview(false)}
+              onIntervieweeNameChange={(event) => console.log(event)}
+            />
+          </View>
+        )
+      case 3:
+        return (
+          <View>
+            <CreateStoryTitleAndTags 
+              onChangeStoryTitle={(event) => setStoryTitle(event)}
+            />
+          </View>
+        )
       default:
         break;
     }
@@ -118,7 +133,7 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
           style={styles.icon}
           onPress={() => navigation.reset({routes: [{name: 'Home'}]})}
         />
-        <Text style={styles.headerText}> Create Your Story</Text>
+        <Text style={styles.headerText}>Create Your Story</Text>
       </View>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? "padding" : "height"} style={styles.footer}>
         <View style={styles.footer}>
@@ -129,7 +144,7 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
       </KeyboardAvoidingView>
       <View style={styles.buttonFooter}>
         <View style={styles.buttonContainer}>
-          {step <= 0 ? (
+          {step <= 0 || step >= 3 ? (
             <View></View>
           ) : (
             <ButtonComponent
