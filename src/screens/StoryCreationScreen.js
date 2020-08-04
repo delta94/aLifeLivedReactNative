@@ -8,9 +8,11 @@ import { useOrientation } from './../helpers/orientation';
 
 // Actions
 import { saveAllQuestions } from './../redux/actions/questionActions';
+import { saveAllTags } from './../redux/actions/storyActions';
 
 // API
 import { getAllQuestions } from './../api/getRequests/getQuestions';
+import { getAllTags } from './../api/getRequests/getTags';
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -26,7 +28,7 @@ import ButtonComponent from './../components/ButtonComponent';
 import styles from './../styles/screens/StoryCreationScreen';
 import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
-const StoryCreationScreen = ({ route, navigation, saveAllQuestions}) => {  
+const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags, storyReducer}) => {  
   const orientation = useOrientation();
   
   // Below is all basic form things
@@ -43,16 +45,19 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions}) => {
   const [isStoryPrivate, setIsStoryPrivate] = useState(null);
   const [isSelfInterview, setIsSelfInterview] = useState(null);
 
+  // Below are array states
+  const [selectedTags, setSelectedTags] = useState([]);
 
   // Loads questions.
   const loadQuestions = async () => {
     setIsLoading(true);
     const response = await getAllQuestions();
+    const responseTag = await getAllTags();
 
     if (response.status === 200) {
       try {
         saveAllQuestions(response.data);
-        return setIsLoading(true);
+        setIsLoading(true);
       } catch (error) {
         setIsLoading(false);
         console.log(error)
@@ -60,7 +65,23 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions}) => {
     } else {
       setIsLoading(false);
       console.log(response.errorMessage);
-    }
+    };
+
+    // Gets all the tags to display on the last page.
+    if (responseTag.status === 200) {
+      try {
+        saveAllTags(responseTag.data);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error)
+      }
+    } else {
+      setIsLoading(false);
+      console.log(responseTag.errorMessage);
+    };
+
+    return setIsLoading(false);
   };
 
   // Handles when the user hits next
@@ -68,11 +89,11 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions}) => {
     if (step === 2) {
       await loadQuestions();
       navigation.navigate('Record Story');
-      // Increase step because user returns here to create story. 
+      // Increase step because user returns here to create story at the end of recording questions. 
       setStep(step + 1);
       return setIsLoading(false);
     } else if (step >= 3) {
-
+      // Todo: POST question.
     } else {
       return setStep(step + 1)
     }
@@ -115,6 +136,9 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions}) => {
           <View>
             <CreateStoryTitleAndTags 
               onChangeStoryTitle={(event) => setStoryTitle(event)}
+              onSelectedTags={(id) => setSelectedTags(selectedTags.concat(id))}
+              allTags={storyReducer.allTags}
+              selectedTags={selectedTags}
             />
           </View>
         )
@@ -156,7 +180,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions}) => {
           )}
 
           <ButtonComponent
-            title="Next"
+            title={step >= 3 ? "Finish" : "Next"}
             buttonSize="small"
             buttonType="solid"
             isLoading={isLoading}
@@ -168,10 +192,18 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions}) => {
   );
 };
 
+
 const mapDispatchToProps = (dispatch) => {
   return {
-    saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions))
+    saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions)),
+    saveAllTags: (data) => dispatch(saveAllTags(data))
   }
 };
 
-export default connect(null, mapDispatchToProps) (StoryCreationScreen);
+function mapStateToProps (state) {
+  return {
+    storyReducer: state.storyReducer
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps) (StoryCreationScreen);

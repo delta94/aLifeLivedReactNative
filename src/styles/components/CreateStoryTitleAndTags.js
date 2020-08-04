@@ -8,12 +8,30 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap"
   },
+
   touchableOpacityButton: {
     borderWidth: 1,
     padding: 10,
     marginLeft: 10,
     marginBottom: 15,
     borderRadius: 10,
+  },
+
+  touchableOpacityButtonActive: {
+    borderWidth: 1,
+    padding: 10,
+    marginLeft: 10,
+    marginBottom: 15,
+    borderRadius: 10,
+    backgroundColor: COLOR.limeGreen,
+  },
+
+  buttonHeaderActive: {
+    fontWeight: "bold",
+    alignSelf: 'center',
+    flexWrap: "wrap",
+    color: COLOR.white,
+    fontSize: FONT_SIZE.mediumSize
   },
 
   touchableOpacityText: {
@@ -25,28 +43,6 @@ const styles = StyleSheet.create({
     color: COLOR.grey,
     margin: 15,
     fontWeight: 'bold',
-    fontSize: FONT_SIZE.mediumSize,
-  },
-
-  buttonHeader: {
-    fontWeight: 'bold',
-    color: COLOR.grey,
-    fontSize: FONT_SIZE.mediumSize,
-  },
-
-  buttonHeaderActive: {
-    fontWeight: 'bold',
-    color: COLOR.white,
-    fontSize: FONT_SIZE.mediumSize,
-  },
-
-  buttonSubText: {
-    color: COLOR.grey,
-    fontSize: FONT_SIZE.mediumSize,
-  },
-
-  buttonSubTextActive: {
-    color: COLOR.white,
     fontSize: FONT_SIZE.mediumSize,
   },
 });

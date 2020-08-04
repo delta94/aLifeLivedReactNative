@@ -7,7 +7,28 @@ import LargeTextInput from './LargeTextInputComponent';
 // Styles
 import styles from './../styles/components/CreateStoryTitleAndTags';
 
-const CreateStoryTitleAndTags = ({onChangeStoryTitle}) => {
+const CreateStoryTitleAndTags = ({onChangeStoryTitle, allTags, onSelectedTags, selectedTags}) => {
+  // Displays the tags in a touchable opacity button
+  const displayTags = () => {
+    const tag = allTags.map((tag) => {
+
+      const selectedTag = selectedTags.some((selectedTag) => {
+        return selectedTag === tag.id;
+      });
+
+      console.log(selectedTag);
+      return (
+        <>
+          <TouchableOpacity style={selectedTag ? styles.touchableOpacityButtonActive : styles.touchableOpacityButton} key={tag.id} onPress={() => onSelectedTags(tag.id)}>
+            <Text style={selectedTag ? styles.buttonHeaderActive : styles.touchableOpacityText}>{tag.title}</Text>
+          </TouchableOpacity>
+        </>
+      )
+    });
+
+    return tag;
+  };
+
   return (
     <View>
       <LargeTextInput
@@ -21,17 +42,8 @@ const CreateStoryTitleAndTags = ({onChangeStoryTitle}) => {
 
       <Text style={styles.footerHeaderText}>Select some tags that best describe this story</Text>
       <View style={styles.tagContainer}>
-        <TouchableOpacity style={styles.touchableOpacityButton}>
-          <Text style={styles.touchableOpacityText}>Warrrrrrrrrrr</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.touchableOpacityButton}>
-          <Text style={styles.touchableOpacityText}>Warrrrrrrrrrrrrrrrrrrr</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.touchableOpacityButton}>
-          <Text style={styles.touchableOpacityText}>Warrrrrrrrrrrrrrrrrrrr</Text>
-        </TouchableOpacity>
+        {displayTags()}
       </View>
-
     </View>
   );
 };
