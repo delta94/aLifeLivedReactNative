@@ -16,10 +16,10 @@ const CreateStoryTitleAndTags = ({onChangeStoryTitle, allTags, onSelectedTags, s
         return selectedTag === tag.id;
       });
 
-      console.log(selectedTag);
+
       return (
         <>
-          <TouchableOpacity style={selectedTag ? styles.touchableOpacityButtonActive : styles.touchableOpacityButton} key={tag.id} onPress={() => onSelectedTags(tag.id)}>
+          <TouchableOpacity style={selectedTag ? styles.touchableOpacityButtonActive : styles.touchableOpacityButton} key={tag.id} onPress={() => selectedTag ? console.log("MAX") : onSelectedTags(tag.id)}>
             <Text style={selectedTag ? styles.buttonHeaderActive : styles.touchableOpacityText}>{tag.title}</Text>
           </TouchableOpacity>
         </>
