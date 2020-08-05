@@ -7,7 +7,7 @@ import LargeTextInput from './LargeTextInputComponent';
 // Styles
 import styles from './../styles/components/CreateStoryTitleAndTags';
 
-const CreateStoryTitleAndTags = ({onChangeStoryTitle, allTags, onSelectedTags, selectedTags}) => {
+const CreateStoryTitleAndTags = ({onChangeStoryTitle, allTags, onSelectedTags, selectedTags, onRemoveSelectedTag}) => {
   // Displays the tags in a touchable opacity button
   const displayTags = () => {
     const tag = allTags.map((tag) => {
@@ -18,11 +18,11 @@ const CreateStoryTitleAndTags = ({onChangeStoryTitle, allTags, onSelectedTags, s
 
 
       return (
-        <>
-          <TouchableOpacity style={selectedTag ? styles.touchableOpacityButtonActive : styles.touchableOpacityButton} key={tag.id} onPress={() => selectedTag ? console.log("MAX") : onSelectedTags(tag.id)}>
+        <View key={tag.id}>
+          <TouchableOpacity style={selectedTag ? styles.touchableOpacityButtonActive : styles.touchableOpacityButton} onPress={() => selectedTag ? onRemoveSelectedTag(tag.id) : onSelectedTags(tag.id)}>
             <Text style={selectedTag ? styles.buttonHeaderActive : styles.touchableOpacityText}>{tag.title}</Text>
           </TouchableOpacity>
-        </>
+        </View>
       )
     });
 

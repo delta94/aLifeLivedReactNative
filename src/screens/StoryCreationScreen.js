@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import {ScrollView } from "react-native-gesture-handler";
 import {connect} from 'react-redux';
@@ -137,6 +137,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
             <CreateStoryTitleAndTags 
               onChangeStoryTitle={(event) => setStoryTitle(event)}
               onSelectedTags={(id) => setSelectedTags(selectedTags.concat(id))}
+              onRemoveSelectedTag={(id) => setSelectedTags(selectedTags.filter(tag => tag != id))}
               allTags={storyReducer.allTags}
               selectedTags={selectedTags}
             />
