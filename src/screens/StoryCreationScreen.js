@@ -158,7 +158,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
           style={styles.icon}
           onPress={() => navigation.reset({routes: [{name: 'Home'}]})}
         />
-        <Text style={styles.headerText}>Create Your Story</Text>
+        <Text style={styles.headerText}>{step >= 3 ? "You're nearly done..." : "Create Your Story"}</Text>
       </View>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? "padding" : "height"} style={styles.footer}>
         <View style={styles.footer}>
