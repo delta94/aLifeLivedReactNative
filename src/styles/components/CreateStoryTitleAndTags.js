@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
   tagContainer: {
     display: "flex",
     flexDirection: "row",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
   },
 
   touchableOpacityButton: {
@@ -26,17 +26,20 @@ const styles = StyleSheet.create({
     backgroundColor: COLOR.limeGreen,
   },
 
-  buttonHeaderActive: {
+  touchableOpacityText: {
+    alignSelf: 'center',
+    flexWrap: "wrap",
+    color: COLOR.grey,
     fontWeight: "bold",
+    fontSize: FONT_SIZE.mediumSize,
+  },
+
+  touchableOpacityTextActive: {
     alignSelf: 'center',
     flexWrap: "wrap",
     color: COLOR.white,
+    fontWeight: "bold",
     fontSize: FONT_SIZE.mediumSize
-  },
-
-  touchableOpacityText: {
-    alignSelf: 'center',
-    flexWrap: "wrap"
   },
 
   footerHeaderText: {

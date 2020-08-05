@@ -20,7 +20,7 @@ const CreateStoryTitleAndTags = ({onChangeStoryTitle, allTags, onSelectedTags, s
       return (
         <View key={tag.id}>
           <TouchableOpacity style={selectedTag ? styles.touchableOpacityButtonActive : styles.touchableOpacityButton} onPress={() => selectedTag ? onRemoveSelectedTag(tag.id) : onSelectedTags(tag.id)}>
-            <Text style={selectedTag ? styles.buttonHeaderActive : styles.touchableOpacityText}>{tag.title}</Text>
+            <Text style={selectedTag ? styles.touchableOpacityTextActive : styles.touchableOpacityText}>{tag.title}</Text>
           </TouchableOpacity>
         </View>
       )
