@@ -8,9 +8,11 @@ import { useOrientation } from './../helpers/orientation';
 
 // Actions
 import { saveAllQuestions } from './../redux/actions/questionActions';
+import { saveAllTags } from './../redux/actions/storyActions';
 
 // API
 import { getAllQuestions } from './../api/getRequests/getQuestions';
+import { getAllTags } from './../api/getRequests/getTags';
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -19,37 +21,43 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import CreateStoryComponent from './../components/CreateStoryComponent';
 import CreateStoryPrivacyComponent from './../components/CreateStoryPrivacyComponent';
 import CreateStoryInterviewType from './../components/CreateStoryInterviewType';
+import CreateStoryTitleAndTags from './../components/CreateStoryTitleAndTags';
 import ButtonComponent from './../components/ButtonComponent';
 
 // Styles
 import styles from './../styles/screens/StoryCreationScreen';
 import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
-const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {  
+const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags, storyReducer}) => {  
   const orientation = useOrientation();
-
+  
   // Below is all basic form things
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(route.params.step);
   const [isLoading, setIsLoading] = useState(false);
   
   // Below is input states
   const [storyAbout, setStoryAbout] = useState("");
   const [storyDescription, setStoryDescription] = useState("");
   const [intervieweeName, setIntervieweeName] = useState("");
+  const [storyTitle, setStoryTitle] = useState("");
 
   // Below are boolean states
   const [isStoryPrivate, setIsStoryPrivate] = useState(null);
   const [isSelfInterview, setIsSelfInterview] = useState(null);
 
+  // Below are array states
+  const [selectedTags, setSelectedTags] = useState([]);
+
   // Loads questions.
   const loadQuestions = async () => {
     setIsLoading(true);
     const response = await getAllQuestions();
+    const responseTag = await getAllTags();
 
     if (response.status === 200) {
       try {
         saveAllQuestions(response.data);
-        return setIsLoading(true);
+        setIsLoading(true);
       } catch (error) {
         setIsLoading(false);
         console.log(error)
@@ -57,15 +65,35 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
     } else {
       setIsLoading(false);
       console.log(response.errorMessage);
-    }
+    };
+
+    // Gets all the tags to display on the last page.
+    if (responseTag.status === 200) {
+      try {
+        saveAllTags(responseTag.data);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error)
+      }
+    } else {
+      setIsLoading(false);
+      console.log(responseTag.errorMessage);
+    };
+
+    return setIsLoading(false);
   };
 
   // Handles when the user hits next
   const handleOnNextButton = async () => {
-    if (step >= 2) {
+    if (step === 2) {
       await loadQuestions();
       navigation.navigate('Record Story');
+      // Increase step because user returns here to create story at the end of recording questions. 
+      setStep(step + 1);
       return setIsLoading(false);
+    } else if (step >= 3) {
+      // Todo: POST question.
     } else {
       return setStep(step + 1)
     }
@@ -92,17 +120,29 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
           </View>
         )
       case 2: 
-          return (
-            <View>
-              <Text style={styles.footerHeaderText}>Will you be interviewing yourself or someone else?</Text>
-              <CreateStoryInterviewType
-                isSelfInterview={isSelfInterview}
-                setIsSelfInterviewTrue={() => setIsSelfInterview(true)}
-                setIsSelfInterviewFalse={() => setIsSelfInterview(false)}
-                onIntervieweeNameChange={(event) => console.log(event)}
-              />
-            </View>
-          )
+        return (
+          <View>
+            <Text style={styles.footerHeaderText}>Will you be interviewing yourself or someone else?</Text>
+            <CreateStoryInterviewType
+              isSelfInterview={isSelfInterview}
+              setIsSelfInterviewTrue={() => setIsSelfInterview(true)}
+              setIsSelfInterviewFalse={() => setIsSelfInterview(false)}
+              onIntervieweeNameChange={(event) => console.log(event)}
+            />
+          </View>
+        )
+      case 3:
+        return (
+          <View>
+            <CreateStoryTitleAndTags 
+              onChangeStoryTitle={(event) => setStoryTitle(event)}
+              onSelectedTags={(id) => setSelectedTags(selectedTags.concat(id))}
+              onRemoveSelectedTag={(id) => setSelectedTags(selectedTags.filter(tag => tag != id))}
+              allTags={storyReducer.allTags}
+              selectedTags={selectedTags}
+            />
+          </View>
+        )
       default:
         break;
     }
@@ -118,7 +158,7 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
           style={styles.icon}
           onPress={() => navigation.reset({routes: [{name: 'Home'}]})}
         />
-        <Text style={styles.headerText}> Create Your Story</Text>
+        <Text style={styles.headerText}>{step >= 3 ? "You're nearly done..." : "Create Your Story"}</Text>
       </View>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? "padding" : "height"} style={styles.footer}>
         <View style={styles.footer}>
@@ -129,7 +169,7 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
       </KeyboardAvoidingView>
       <View style={styles.buttonFooter}>
         <View style={styles.buttonContainer}>
-          {step <= 0 ? (
+          {step <= 0 || step >= 3 ? (
             <View></View>
           ) : (
             <ButtonComponent
@@ -141,7 +181,7 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
           )}
 
           <ButtonComponent
-            title="Next"
+            title={step >= 3 ? "Finish" : "Next"}
             buttonSize="small"
             buttonType="solid"
             isLoading={isLoading}
@@ -153,10 +193,18 @@ const StoryCreationScreen = ({ navigation, saveAllQuestions}) => {
   );
 };
 
+
 const mapDispatchToProps = (dispatch) => {
   return {
-    saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions))
+    saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions)),
+    saveAllTags: (data) => dispatch(saveAllTags(data))
   }
 };
 
-export default connect(null, mapDispatchToProps) (StoryCreationScreen);
+function mapStateToProps (state) {
+  return {
+    storyReducer: state.storyReducer
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps) (StoryCreationScreen);

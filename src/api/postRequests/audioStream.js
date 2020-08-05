@@ -1,21 +1,20 @@
 import {axiosAudioAPI} from './../axiosWithAuth';
 import {Buffer} from 'buffer';
-import {AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
+import {LOCAL_AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
 let channelId, chunkNum, chunkResponses, uploadChunkPromise, packets;
 
 const PACKETS_TO_CHUNK = 100; // chunk RAM size == 2kB x PACKETS_TO_CHUNK
 
 //  This should be called as soon as the screen is displayed to the user.
 //  It should be called once only.
-export const initialiseStream = async () => {
+export const initialiseStream = async (userId) => {
   try {
-
     console.log(`initialiseStream()`);
     packets = [];
     chunkNum = 1;
     chunkResponses = [];
 
-    const response = await axiosAudioAPI.post("/requestChannel", {userId: '123'}); // TODO: send the actual userId
+    const response = await axiosAudioAPI.post("/requestChannel", {userId: userId});
     channelId = response.data.channelId;
 
     console.log('received channelId ', channelId);
@@ -83,7 +82,7 @@ export const sequenceStream = async () => {
       channelId,
       chunkResponses
     });
-    console.log(`streaming link: ${AUDIO_API_BASE_ROUTE}/${result.data.wavFilepath}`);
+    console.log(`streaming link: ${LOCAL_AUDIO_API_BASE_ROUTE}/${result.data.wavFilepath}`);
 
     // reset these to allow multiple consecutive sequencing ops on the same channel
     chunkNum = 1;

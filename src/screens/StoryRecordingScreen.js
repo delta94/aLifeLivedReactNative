@@ -46,6 +46,9 @@ const StoryRecordingScreen = ({
   setPlayerState,
   resetRecorderState,
 
+  // User Reducer
+  userReducer,
+
   // Other
   navigation,
 }) => {
@@ -84,7 +87,7 @@ const StoryRecordingScreen = ({
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
     ]): null;
 
-    initialiseStream();
+    initialiseStream(userReducer.id);
     await AudioRecord.init(options);
     setIsInitialiseLoaded(true);
   };
@@ -151,12 +154,6 @@ const StoryRecordingScreen = ({
 
   // When the user goes to the next question the below states are reset.
   const onNextButton = async (userSelectedOption) => {
-    // When there are no more questions left
-    if (questionIndex === questions.length - 1) {
-      console.log('END');
-      return;
-    };
-    
     if (subQuestionIndex === subQuestions.length - 1) {
       // Reset states to original 
       setSubQuestionActive(false);
@@ -201,6 +198,12 @@ const StoryRecordingScreen = ({
       incrementSubQuestionIndex();
       return await finaliseStream();
     }
+  };
+
+  const handleEndOfQuestions = () => {
+    resetRecorderState();
+    resetQuestionReducerToOriginalState();
+    return navigation.navigate('Create Story', {step: 3});
   };
 
   // The below handles if there is a subQuestion linked to the master question
@@ -297,6 +300,7 @@ const StoryRecordingScreen = ({
           setQuestionIndex={() => decrementQuestionIndex()}
           onBackButton={() => onBackButton()}
           onNextButton={() => onNextButton()}
+          handleEndOfQuestions={() => handleEndOfQuestions()}
           skipOption={skipOption}
         />
       </View>
@@ -307,7 +311,8 @@ const StoryRecordingScreen = ({
 function mapStateToProps(state) {
   return {
     questionReducer: state.questionReducer,
-    recorderReducer: state.recorderReducer
+    recorderReducer: state.recorderReducer,
+    userReducer: state.userReducer
   }
 };
 

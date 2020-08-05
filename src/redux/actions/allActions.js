@@ -5,6 +5,7 @@ export const REMOVE_USER_TOKEN = "REMOVE_USER_TOKEN";
 
 // Story actions
 export const SAVE_STORY_DETAILS = "SAVE_STORY_DETAILS";
+export const SAVE_ALL_TAGS = "SAVE_ALL_TAGS";
 
 // Question actions
 export const SAVE_ALL_QUESTION = "SAVE_ALL_QUESTIONS";
@@ -20,8 +21,6 @@ export const RESET_QUESTION_INDEX = 'RESET_QUESTION_INDEX';
 export const RESET_ALL_BUT_QUESTIONS = 'RESET_ALL_BUT_QUESTIONS';
 export const RESET_QUESTION_REDUCER_TO_ORIGINAL_STATE = "RESET_QUESTION_INDEX";
 
-// Recorder Reducer
+// Recorder actions
 export const PLAYER_STATE = "PLAYER_STATE";
 export const RESET_RECORDER_STATE = "RESET_RECORDER_STATE";
-
-
