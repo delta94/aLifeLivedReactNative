@@ -6,6 +6,7 @@ export const createResponse = async (audioFileURL, questionID) => {
       audioFileURL,
       questionID
     });
+    return data;
   } catch (error) {
     console.log(error)
   }

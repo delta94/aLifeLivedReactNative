@@ -9,6 +9,7 @@ import AudioRecord from 'react-native-audio-record';
 // API
 import {audioStream, initialiseStream, sequenceStream, finaliseStream} from './../api/postRequests/audioStream';
 import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
+import {createResponse} from './../api/postRequests/response';
 
 // Actions
 import { saveAllQuestions, incrementQuestionIndex, resetQuestionReducerToOriginalState, resetSubQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
@@ -75,7 +76,6 @@ const StoryRecordingScreen = ({
   const [questions] = useState(questionReducer.questions);
   const questionIndex = questionReducer.questionIndex;
 
-  console.log(questionIndex);
   // Sub Question state
   const [subQuestionActive, setSubQuestionActive] = useState(false);
   const [subQuestions, setSubQuestions] = useState([]);
@@ -188,7 +188,6 @@ const StoryRecordingScreen = ({
   };
 
   // handles the standard master question
-  // TODO: FIRE RESPONSE CALL HERE
   const onNextButton = async () => {
     // if subQ is the last one
     if (subQuestionIndex === subQuestions.length - 1) {
@@ -199,19 +198,20 @@ const StoryRecordingScreen = ({
       setSkipOption(true);
       setPlayerState('IDLE');
       resetSubQuestionIndex();
-      return incrementQuestionIndex();
+      incrementQuestionIndex();
       // If sub question is not the last one
     } else if (subQuestionActive && subQuestionIndex !== subQuestions.length - 1) {
       setPlayerState('IDLE');
       setSkipOption(true);
-      console.log("MAX2");
-      return incrementSubQuestionIndex();
-    }
+      incrementSubQuestionIndex();
+    };
+
+    // Create response fires response call with the question or sub question ID and the link
+    createResponse();
   };
 
   // The below handles the on skip
   const handleOnSkip = async () => {
-    console.log("MAXXX");
     // If subQuestion active and isn't last sub Q
     if (subQuestionActive && subQuestionIndex !== subQuestions.length - 1) {
       return incrementSubQuestionIndex();
@@ -220,7 +220,6 @@ const StoryRecordingScreen = ({
       return incrementQuestionIndex();
       // Everything else
     } else if (subQuestionIndex === subQuestions.length - 1) {
-      console.log("MAX3");
       onNextButton();
     }
   }
@@ -228,7 +227,6 @@ const StoryRecordingScreen = ({
   // When the user is at the last question
   // TODO: FIRE RESPONSE HERE
   const handleEndOfQuestions = () => {
-    console.log("MAX");
     resetRecorderState();
     resetQuestionReducerToOriginalState();
     return navigation.navigate('Create Story', {step: 3});
@@ -236,12 +234,16 @@ const StoryRecordingScreen = ({
 
   // The below handles if there is a subQuestion linked to the master question
   const handleIfSubQuestion = async () => {
+    if (await questions[questionIndex].subQuestions.length <= 0) {
+      return setSubQuestions([]);
+    };
+    
     if (subQuestionActive) {
       return;
     } else if (questions[questionIndex].subQuestions){
       const responseData = await getSubQuestionFromQuestionID(questions[questionIndex].id);
       return setSubQuestions(responseData);
-    }
+    } 
   };
 
   // When user presses the close button
