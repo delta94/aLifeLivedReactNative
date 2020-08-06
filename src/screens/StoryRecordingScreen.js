@@ -75,6 +75,7 @@ const StoryRecordingScreen = ({
   const [questions] = useState(questionReducer.questions);
   const questionIndex = questionReducer.questionIndex;
 
+  console.log(questionIndex);
   // Sub Question state
   const [subQuestionActive, setSubQuestionActive] = useState(false);
   const [subQuestions, setSubQuestions] = useState([]);
@@ -152,55 +153,82 @@ const StoryRecordingScreen = ({
     }
   };
 
-  // When the user goes to the next question the below states are reset.
-  const onNextButton = async (userSelectedOption) => {
+  const handleOnYes = async () => {
+    // Filters the array and sees if there are any yes decision types
+    const filteredYesSubQuestions = handleYesDecision(subQuestions);
+
+    if (filteredYesSubQuestions.length <= 0) {
+      return incrementQuestionIndex();
+    };
+
+    setSubQuestionActive(true);
+    setSubQuestions(filteredYesSubQuestions);
+
+    // Below handles the onload, default set to null to handle the first question.
+    setIsInitialiseLoaded(false);
+    setSubQuestionActive(true);
+    incrementSubQuestionIndex();
+    return await finaliseStream();
+  };
+
+  const handleOnNo = async () => {
+    const filteredNoSubQuestions = handleNoDecision(subQuestions);
+
+    if (filteredNoSubQuestions.length <= 0) {
+      return incrementQuestionIndex();
+    };
+
+    setSubQuestionActive(true);
+    setSubQuestions(filteredNoSubQuestions);
+
+    setIsInitialiseLoaded(false);
+    setSubQuestionActive(true);
+    incrementSubQuestionIndex();
+    return await finaliseStream();
+  };
+
+  // handles the standard master question
+  // TODO: FIRE RESPONSE CALL HERE
+  const onNextButton = async () => {
+    // if subQ is the last one
     if (subQuestionIndex === subQuestions.length - 1) {
       // Reset states to original 
+      await finaliseStream();
       setSubQuestionActive(false);
       setIsInitialiseLoaded(false);
       setSkipOption(true);
       setPlayerState('IDLE');
       resetSubQuestionIndex();
-      await finaliseStream();
       return incrementQuestionIndex();
-    } else if (subQuestions && subQuestionIndex <= subQuestions.length - 1) {
-      // Handle if the user selects yes or no then filters the subQuestions accordingly.
-      switch (userSelectedOption) {
-        case true:
-          // Filters the array and sees if there are any yes decision types
-          const filteredYesSubQuestions = handleYesDecision(subQuestions);
-
-          if (filteredYesSubQuestions.length <= 0) {
-            return incrementQuestionIndex();
-          };
-
-          setSubQuestionActive(true);
-          setSubQuestions(filteredYesSubQuestions);
-          break;
-        case false:
-          const filteredNoSubQuestions = handleNoDecision(subQuestions);
-
-          if (filteredNoSubQuestions.length <= 0) {
-            return incrementQuestionIndex();
-          };
-
-          setSubQuestionActive(true);
-          setSubQuestions(filteredNoSubQuestions);
-          break;
-        default:
-          break;
-      };
-
-      // Below handles the onload, default set to null to handle the first question.
-
-      setIsInitialiseLoaded(false);
-      setSubQuestionActive(true);
-      incrementSubQuestionIndex();
-      return await finaliseStream();
+      // If sub question is not the last one
+    } else if (subQuestionActive && subQuestionIndex !== subQuestions.length - 1) {
+      setPlayerState('IDLE');
+      setSkipOption(true);
+      console.log("MAX2");
+      return incrementSubQuestionIndex();
     }
   };
 
+  // The below handles the on skip
+  const handleOnSkip = async () => {
+    console.log("MAXXX");
+    // If subQuestion active and isn't last sub Q
+    if (subQuestionActive && subQuestionIndex !== subQuestions.length - 1) {
+      return incrementSubQuestionIndex();
+      // If on master question
+    } else if (!subQuestionActive) {
+      return incrementQuestionIndex();
+      // Everything else
+    } else if (subQuestionIndex === subQuestions.length - 1) {
+      console.log("MAX3");
+      onNextButton();
+    }
+  }
+
+  // When the user is at the last question
+  // TODO: FIRE RESPONSE HERE
   const handleEndOfQuestions = () => {
+    console.log("MAX");
     resetRecorderState();
     resetQuestionReducerToOriginalState();
     return navigation.navigate('Create Story', {step: 3});
@@ -296,12 +324,14 @@ const StoryRecordingScreen = ({
           questions={questions}
           isYesOrNo={questions[questionIndex].isYesOrNo}
           subQuestionActive={subQuestionActive}
-          handleOnYesOrNoButtonPress={(userSelectedOption) => onNextButton(userSelectedOption)}
+          handleOnYes={() => handleOnYes()}
+          handleOnNo={() => handleOnNo()}
           setQuestionIndex={() => decrementQuestionIndex()}
           onBackButton={() => onBackButton()}
           onNextButton={() => onNextButton()}
           handleEndOfQuestions={() => handleEndOfQuestions()}
           skipOption={skipOption}
+          handleOnSkip={() => handleOnSkip()}
         />
       </View>
     </View>

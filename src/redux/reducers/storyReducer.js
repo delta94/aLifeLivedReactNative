@@ -10,6 +10,7 @@ const storyDefaultState = {
   isSelfInterview: false,
   profileImageURL: "",
   selectedTags: [],
+  responses: [],
   allTags: []
 };
 
