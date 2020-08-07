@@ -158,6 +158,7 @@ const StoryRecordingScreen = ({
     const filteredYesSubQuestions = handleYesDecision(subQuestions);
 
     if (filteredYesSubQuestions.length <= 0) {
+      setIsInitialiseLoaded(false);
       return incrementQuestionIndex();
     };
 
@@ -165,36 +166,41 @@ const StoryRecordingScreen = ({
     setSubQuestions(filteredYesSubQuestions);
 
     // Below handles the onload, default set to null to handle the first question.
-    setIsInitialiseLoaded(false);
     setSubQuestionActive(true);
-    incrementSubQuestionIndex();
-    return await finaliseStream();
+    setIsInitialiseLoaded(false);
+    return incrementSubQuestionIndex();
   };
 
   const handleOnNo = async () => {
     const filteredNoSubQuestions = handleNoDecision(subQuestions);
 
     if (filteredNoSubQuestions.length <= 0) {
+      setIsInitialiseLoaded(false);
       return incrementQuestionIndex();
     };
 
     setSubQuestionActive(true);
     setSubQuestions(filteredNoSubQuestions);
-
-    setIsInitialiseLoaded(false);
     setSubQuestionActive(true);
-    incrementSubQuestionIndex();
-    return await finaliseStream();
+    setIsInitialiseLoaded(false);
+    return incrementSubQuestionIndex();
   };
 
-  // handles the standard master question
+  // handles the on next button
   const onNextButton = async () => {
+    const questionId = subQuestionActive ? subQuestions[subQuestionIndex].subQuestionID : questions[questionIndex].id;
+    let audioFileURL;    
+    // Finalise stream stops the channel and uploads it to AWS
+    const streamData = await finaliseStream();
+    audioFileURL = streamData.Location;
+
+    // Create response creates the response with questionID and audio File
+    await createResponse(audioFileURL, questionId);
+
     // if subQ is the last one
     if (subQuestionIndex === subQuestions.length - 1) {
       // Reset states to original 
-      await finaliseStream();
       setSubQuestionActive(false);
-      setIsInitialiseLoaded(false);
       setSkipOption(true);
       setPlayerState('IDLE');
       resetSubQuestionIndex();
@@ -206,23 +212,29 @@ const StoryRecordingScreen = ({
       incrementSubQuestionIndex();
     };
 
-    // Create response fires response call with the question or sub question ID and the link
-    createResponse();
+    return setIsInitialiseLoaded(false);
   };
 
   // The below handles the on skip
   const handleOnSkip = async () => {
     // If subQuestion active and isn't last sub Q
     if (subQuestionActive && subQuestionIndex !== subQuestions.length - 1) {
-      return incrementSubQuestionIndex();
+      incrementSubQuestionIndex();
       // If on master question
     } else if (!subQuestionActive) {
-      return incrementQuestionIndex();
+      incrementQuestionIndex();
       // Everything else
     } else if (subQuestionIndex === subQuestions.length - 1) {
-      onNextButton();
-    }
-  }
+      // Reset states to original 
+      setSubQuestionActive(false);
+      setSkipOption(true);
+      setPlayerState('IDLE');
+      resetSubQuestionIndex();
+      incrementQuestionIndex();
+    };
+
+    return setIsInitialiseLoaded(false);
+  };
 
   // When the user is at the last question
   // TODO: FIRE RESPONSE HERE

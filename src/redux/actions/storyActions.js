@@ -1,4 +1,4 @@
-import { SAVE_STORY_DETAILS, SAVE_ALL_TAGS } from './allActions';
+import { SAVE_STORY_DETAILS, SAVE_ALL_TAGS, SAVE_RESPONSE } from './allActions';
 
 export const saveStoryDetails = (data) => {
   return {
@@ -13,6 +13,13 @@ export const saveAllTags = (data) => {
     payload: {data}
   }
 };
+
+export const saveResponse = (response) => {
+  return {
+    type: SAVE_RESPONSE,
+    payload: {response}
+  }
+}
 
 
 

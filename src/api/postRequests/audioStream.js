@@ -103,7 +103,8 @@ export const finaliseStream = async () => {
     const result = await axiosAudioAPI.post('/finaliseChannel', {
       channelId
     });
-    console.log('got result ', result);
+    
+    return result.data;
   } catch (error) {
       console.log(error);
   }

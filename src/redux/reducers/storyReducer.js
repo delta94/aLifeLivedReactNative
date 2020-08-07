@@ -1,4 +1,4 @@
-import { SAVE_STORY_DETAILS, SAVE_ALL_TAGS } from './../actions/allActions';
+import { SAVE_STORY_DETAILS, SAVE_ALL_TAGS, SAVE_RESPONSE } from './../actions/allActions';
 
 
 const storyDefaultState = {
@@ -20,6 +20,11 @@ const storyReducer = (state = storyDefaultState, action) => {
       return {
         ...state,
         allTags: action.payload.data
+      }
+    case SAVE_RESPONSE:
+      return {
+        ...state,
+        responses: [...state.responses, action.payload.response.id]
       }
     default:
       return state;

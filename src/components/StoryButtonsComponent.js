@@ -21,6 +21,7 @@ const StoryButtonsComponent = ({
   handleOnNo,
   handleOnSkip
 }) => {
+
   // The below handles what text will display on the button
   const onNextButtonText = () => {
     if (questionIndex === questions.length - 1) {
@@ -99,7 +100,7 @@ const StoryButtonsComponent = ({
           <ButtonComponent
             title={onNextButtonText()}
             buttonSize="small"
-            onButtonPress={() => skipOption ? handleOnSkip () : onNextButton()}
+            onButtonPress={() => skipOption ? handleOnSkip() : onNextButton()}
             disabled={
               playerState === 'playing' || playerState === 'RECORDING'
                 ? true
