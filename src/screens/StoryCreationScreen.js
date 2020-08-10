@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {View, Text, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import {ScrollView } from "react-native-gesture-handler";
 import {connect} from 'react-redux';
@@ -8,7 +8,7 @@ import { useOrientation } from './../helpers/orientation';
 
 // Actions
 import { saveAllQuestions } from './../redux/actions/questionActions';
-import { saveAllTags } from './../redux/actions/storyActions';
+import { saveAllTags, resetStoryReducer, saveStoryDetails } from './../redux/actions/storyActions';
 
 // API
 import { getAllQuestions } from './../api/getRequests/getQuestions';
@@ -28,7 +28,7 @@ import ButtonComponent from './../components/ButtonComponent';
 import styles from './../styles/screens/StoryCreationScreen';
 import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
-const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags, storyReducer}) => {  
+const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags, storyReducer, userReducer, resetStoryReducer, saveStoryDetails}) => {  
   const orientation = useOrientation();
   
   // Below is all basic form things
@@ -38,8 +38,10 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
   // Below is input states
   const [storyAbout, setStoryAbout] = useState("");
   const [storyDescription, setStoryDescription] = useState("");
-  const [intervieweeName, setIntervieweeName] = useState("");
+  const [interviewee, setIntervieweeName] = useState("");
   const [storyTitle, setStoryTitle] = useState("");
+
+  
 
   // Below are boolean states
   const [isStoryPrivate, setIsStoryPrivate] = useState(null);
@@ -93,10 +95,16 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       setStep(step + 1);
       return setIsLoading(false);
     } else if (step >= 3) {
-      // Todo: POST question.
+      const userID = userReducer.id;
+      saveStoryDetails({ storyAbout, storyDescription, interviewee, storyTitle, isStoryPrivate, isSelfInterview, selectedTags, userID})
     } else {
       return setStep(step + 1)
     }
+  };
+
+  const handleOnClose = () => {
+    resetStoryReducer();
+    return navigation.reset({ routes: [{ name: 'Home' }] });
   };
 
   const handleFormStage = () => {
@@ -156,7 +164,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
           size={ICON_SIZE.iconSizeMedium}
           color={COLOR.grey}
           style={styles.icon}
-          onPress={() => navigation.reset({routes: [{name: 'Home'}]})}
+          onPress={() => handleOnClose()}
         />
         <Text style={styles.headerText}>{step >= 3 ? "You're nearly done..." : "Create Your Story"}</Text>
       </View>
@@ -197,13 +205,16 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
 const mapDispatchToProps = (dispatch) => {
   return {
     saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions)),
-    saveAllTags: (data) => dispatch(saveAllTags(data))
+    saveAllTags: (data) => dispatch(saveAllTags(data)),
+    resetStoryReducer: () => dispatch(resetStoryReducer()),
+    saveStoryDetails: (storyData) => dispatch(saveStoryDetails(storyData))
   }
 };
 
 function mapStateToProps (state) {
   return {
-    storyReducer: state.storyReducer
+    storyReducer: state.storyReducer,
+    userReducer: state.userReducer
   }
 };
 

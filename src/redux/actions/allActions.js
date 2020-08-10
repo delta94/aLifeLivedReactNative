@@ -7,6 +7,7 @@ export const REMOVE_USER_TOKEN = "REMOVE_USER_TOKEN";
 export const SAVE_STORY_DETAILS = "SAVE_STORY_DETAILS";
 export const SAVE_ALL_TAGS = "SAVE_ALL_TAGS";
 export const SAVE_RESPONSE = "SAVE_RESPONSE";
+export const RESET_STORY_REDUCER = "RESET_STORY_REDUCER";
 
 // Question actions
 export const SAVE_ALL_QUESTION = "SAVE_ALL_QUESTIONS";
