@@ -13,6 +13,7 @@ import { saveAllTags, resetStoryReducer, saveStoryDetails } from './../redux/act
 // API
 import { getAllQuestions } from './../api/getRequests/getQuestions';
 import { getAllTags } from './../api/getRequests/getTags';
+import {createStory} from './../api/postRequests/createStory';
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -96,7 +97,22 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       return setIsLoading(false);
     } else if (step >= 3) {
       const userID = userReducer.id;
-      saveStoryDetails({ storyAbout, storyDescription, interviewee, storyTitle, isStoryPrivate, isSelfInterview, selectedTags, userID})
+      const responses = storyReducer.responses;
+      const storyData = {
+        about: storyAbout,
+        description: storyDescription, 
+        interviewee: interviewee,
+        title: storyTitle,
+        isPublic: isStoryPrivate,
+        isSelfInterview: isSelfInterview,
+        selectedTags: selectedTags,
+        interviewer: userID,
+        responses: responses
+      };
+
+      //TODO: Change the below object to just be storyData.
+      saveStoryDetails({ storyAbout, storyDescription, interviewee, storyTitle, isStoryPrivate, isSelfInterview, selectedTags, userID});
+      await createStory(storyData);
     } else {
       return setStep(step + 1)
     }
@@ -135,7 +151,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
               isSelfInterview={isSelfInterview}
               setIsSelfInterviewTrue={() => setIsSelfInterview(true)}
               setIsSelfInterviewFalse={() => setIsSelfInterview(false)}
-              onIntervieweeNameChange={(event) => console.log(event)}
+              onIntervieweeNameChange={(event) => setIntervieweeName(event)}
             />
           </View>
         )

@@ -9,5 +9,8 @@ export const createResponse = async (audioFileURL, questionID) => {
     return data;
   } catch (error) {
     console.log(error)
+    return {
+      error: error
+    }
   }
 };
