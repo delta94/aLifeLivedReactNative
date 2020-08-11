@@ -1,12 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
-import {connect} from 'react-redux';
 
 // API
 import {getStoryByID} from './../api/getRequests/getStory';
 
 // Component
 import AvatarComponent from './../components/AvatarComponent';
+
+// Styles
+import styles from './../styles/screens/StoryViewScreen';
+import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
+
+// Icon
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const StoryViewScreen = ({route, navigation}) => {
 
@@ -25,22 +31,32 @@ const StoryViewScreen = ({route, navigation}) => {
   }, []);
 
   return (
-    <View>
+    <View style={styles.mainContainer}>
       {isLoading ? (
         <View>
           <Text>Loading...</Text>
         </View>
       ) : (
         <View>
-          <View>
+          <AntDesign
+            name="close"
+            size={ICON_SIZE.iconSizeMedium}
+            color={COLOR.grey}
+            style={styles.icon}
+            onPress={() => handleOnClose()}
+          />
+          <View style={styles.headerContainer}>
             <AvatarComponent
               isRounded={true}
               size="large"
               iconName="user"
               source={story === null ? "" : story.interviewer.avatar}
             />
-            <Text>{story === null ? "" : story.title}</Text>
-            <Text>{story === null ? "" : story.description}</Text>
+          
+          <View style={styles.headerTextContainer}>
+            <Text style={styles.headerText}>{story === null ? "" : story.title}</Text>
+            <Text style={styles.headerText}>{story === null ? "" : story.description}</Text>
+          </View>
           </View>
         </View>
       )}
