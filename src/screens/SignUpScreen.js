@@ -79,7 +79,7 @@ const SignUpScreen = (props) => {
     if (data.status === 200) {
       try {
         const userData = data.data;
-        storeToken(userData.encryptedToken);
+        storeToken(userData.token);
         props.userLoginSuccessful(userData);
         setIsLoading(false);
         // return navigation.navigate('Home');

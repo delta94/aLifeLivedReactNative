@@ -87,6 +87,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
     return setIsLoading(false);
   };
 
+  console.log(storyReducer);
   // Handles when the user hits next
   const handleOnNextButton = async () => {
     if (step === 2) {
@@ -110,8 +111,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
         responses: responses
       };
 
-      //TODO: Change the below object to just be storyData.
-      saveStoryDetails({ storyAbout, storyDescription, interviewee, storyTitle, isStoryPrivate, isSelfInterview, selectedTags, userID});
+      saveStoryDetails(storyData);
       await createStory(storyData);
     } else {
       return setStep(step + 1)
