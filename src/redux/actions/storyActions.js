@@ -1,9 +1,10 @@
-import { SAVE_STORY_DETAILS, SAVE_ALL_TAGS } from './allActions';
+import { SAVE_STORY_DETAILS, SAVE_ALL_TAGS, SAVE_RESPONSE, RESET_STORY_REDUCER } from './allActions';
 
-export const saveStoryDetails = (data) => {
+export const saveStoryDetails = (storyData) => {
+  console.log(storyData);
   return {
     type: SAVE_STORY_DETAILS,
-    payload: {data}
+    payload: { storyData }
   }
 };
 
@@ -13,6 +14,19 @@ export const saveAllTags = (data) => {
     payload: {data}
   }
 };
+
+export const saveResponse = (responseID) => {
+  return {
+    type: SAVE_RESPONSE,
+    payload: { responseID }
+  }
+};
+
+export const resetStoryReducer = () => {
+  return {
+    type: RESET_STORY_REDUCER,
+  }
+}
 
 
 

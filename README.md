@@ -16,3 +16,12 @@
       tool or in PATHCommand failed: xcrun instruments -s
       xcrun: error: unable to find utility "instruments", not a developer 
       tool or in PATH` - If you encounter this issue on the build process try - https://medium.com/@randerson112358/setup-react-native-environment-for-ios-97bf7faadf77
+
+
+# Recording Screen Functionality
+
+- Currently the recording screen has two 'paths' of questions. 
+  1. Master Questions - This can be either a yes or no question or a recording. 
+  2. Sub Questions - Currently at for MVP this can only be a recording question.
+- Some key notes to keep in mind when building out recording screen
+  1. Ensure that `initialiseStream` is only called once per question.
