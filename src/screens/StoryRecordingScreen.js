@@ -7,15 +7,17 @@ import TrackPlayer from 'react-native-track-player';
 import AudioRecord from 'react-native-audio-record';
 
 // API
-import {audioStream, initialiseStream, sequenceStream, finaliseStream} from './../api/postRequests/audioStream';
+import {audioStream, initialiseStream, sequenceStream} from './../api/postRequests/audioStream';
 import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
 
 // Actions
 import { saveAllQuestions, incrementQuestionIndex, resetQuestionReducerToOriginalState, resetSubQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
 import {setPlayerState, resetRecorderState} from './../redux/actions/recorderActions';
+import {saveResponse} from './../redux/actions/storyActions';
 
 // Helpers
 import {handleYesDecision, handleNoDecision} from './../helpers/userSelectionHandlers';
+import { finaliseStreamAndCreateResponse } from './../helpers/finaliseAndCreateResponse';
 
 // Components
 import StoryTimerComponent from './../components/StoryTimerComponent';
@@ -48,6 +50,9 @@ const StoryRecordingScreen = ({
 
   // User Reducer
   userReducer,
+
+  // Story Reducer
+  saveResponse,
 
   // Other
   navigation,
@@ -152,68 +157,129 @@ const StoryRecordingScreen = ({
     }
   };
 
-  // When the user goes to the next question the below states are reset.
-  const onNextButton = async (userSelectedOption) => {
+  const handleOnYes = async () => {
+    // Gets the subQuestions 
+    const allQuestions = await handleIfSubQuestion()
+
+    // Filters the array and sees if there are any yes decision types
+    const filteredYesSubQuestions = await handleYesDecision(allQuestions);
+
+    if (filteredYesSubQuestions.length === 0) {
+      setIsInitialiseLoaded(false);
+      setSubQuestionActive(false);
+      return incrementQuestionIndex();
+    };
+
+    setSubQuestionActive(true);
+    setSubQuestions(filteredYesSubQuestions);
+
+    // Below handles the onload, default set to null to handle the first question.
+    setSubQuestionActive(true);
+    setIsInitialiseLoaded(false);
+    return incrementSubQuestionIndex();
+  };
+
+  const handleOnNo = async () => {
+    // Gets the subQuestions 
+    const allQuestions = await handleIfSubQuestion();
+
+    // Filters the array and sees if there are any no decision types
+    const filteredNoSubQuestions = handleNoDecision(allQuestions);
+
+    if (filteredNoSubQuestions.length <= 0) {
+      setIsInitialiseLoaded(false);
+      return incrementQuestionIndex();
+    };
+
+    setSubQuestionActive(true);
+    setSubQuestions(filteredNoSubQuestions);
+    setSubQuestionActive(true);
+    setIsInitialiseLoaded(false);
+    return incrementSubQuestionIndex();
+  };
+
+  // handles the on next button
+  const onNextButton = async () => {
+    const questionId = subQuestionActive ? subQuestions[subQuestionIndex].subQuestionID : questions[questionIndex].id;
+
+    // Finalise stream and creates response with questionID and audio File
+    const responseID = await finaliseStreamAndCreateResponse(questionId);
+
+    // Save response to redux 
+    saveResponse(responseID)
+
+    // if subQ is the last one
     if (subQuestionIndex === subQuestions.length - 1) {
       // Reset states to original 
       setSubQuestionActive(false);
-      setIsInitialiseLoaded(false);
       setSkipOption(true);
       setPlayerState('IDLE');
       resetSubQuestionIndex();
-      await finaliseStream();
-      return incrementQuestionIndex();
-    } else if (subQuestions && subQuestionIndex <= subQuestions.length - 1) {
-      // Handle if the user selects yes or no then filters the subQuestions accordingly.
-      switch (userSelectedOption) {
-        case true:
-          // Filters the array and sees if there are any yes decision types
-          const filteredYesSubQuestions = handleYesDecision(subQuestions);
+      incrementQuestionIndex();
 
-          if (filteredYesSubQuestions.length <= 0) {
-            return incrementQuestionIndex();
-          };
-
-          setSubQuestionActive(true);
-          setSubQuestions(filteredYesSubQuestions);
-          break;
-        case false:
-          const filteredNoSubQuestions = handleNoDecision(subQuestions);
-
-          if (filteredNoSubQuestions.length <= 0) {
-            return incrementQuestionIndex();
-          };
-
-          setSubQuestionActive(true);
-          setSubQuestions(filteredNoSubQuestions);
-          break;
-        default:
-          break;
-      };
-
-      // Below handles the onload, default set to null to handle the first question.
-
-      setIsInitialiseLoaded(false);
-      setSubQuestionActive(true);
+      // If sub question is not the last one
+    } else if (subQuestionActive && subQuestionIndex !== subQuestions.length - 1) {
+      setPlayerState('IDLE');
+      setSkipOption(true);
       incrementSubQuestionIndex();
-      return await finaliseStream();
-    }
+    };
+
+    return setIsInitialiseLoaded(false);
   };
 
-  const handleEndOfQuestions = () => {
+  // The below handles the on skip
+  const handleOnSkip = async () => {
+    // If subQuestion active and isn't last sub Q
+    if (subQuestionActive && subQuestionIndex !== subQuestions.length - 1) {
+      incrementSubQuestionIndex();
+      // If on master question
+    } else if (!subQuestionActive) {
+      incrementQuestionIndex();
+      // Everything else
+    } else if (subQuestionIndex === subQuestions.length - 1) {
+      // Reset states to original 
+      setSubQuestionActive(false);
+      setSkipOption(true);
+      setPlayerState('IDLE');
+      resetSubQuestionIndex();
+      incrementQuestionIndex();
+    };
+
+    return setIsInitialiseLoaded(false);
+  };
+
+  // When the user is at the last question
+  // TODO: FIRE RESPONSE HERE
+  const handleEndOfQuestions = async () => {
+    // Finalise stream and creates response with questionID and audio File
+    const questionId = subQuestionActive ? subQuestions[subQuestionIndex].subQuestionID : questions[questionIndex].id;
+    const responseID = await finaliseStreamAndCreateResponse(questionId)
+
+    // Save response to redux 
+    saveResponse(responseID)
+
+    // Resets states
     resetRecorderState();
     resetQuestionReducerToOriginalState();
+
+    // Navigates to final create story page
     return navigation.navigate('Create Story', {step: 3});
   };
 
   // The below handles if there is a subQuestion linked to the master question
   const handleIfSubQuestion = async () => {
+    if (await questions[questionIndex].subQuestions.length <= 0) {
+      setSubQuestions([]);
+      return [];
+    };
+    
     if (subQuestionActive) {
       return;
     } else if (questions[questionIndex].subQuestions){
       const responseData = await getSubQuestionFromQuestionID(questions[questionIndex].id);
-      return setSubQuestions(responseData);
-    }
+      setSubQuestions(responseData);
+      return responseData;
+    } 
   };
 
   // When user presses the close button
@@ -229,10 +295,7 @@ const StoryRecordingScreen = ({
       onLoad();
     };
 
-    handleIfSubQuestion();
-
     // Need to figure out a better timer
-
     // if (playerState === 'RECORDING') {
     //   setTimeout(() => {
     //     setTimerSeconds(timerSeconds + 1);
@@ -296,12 +359,14 @@ const StoryRecordingScreen = ({
           questions={questions}
           isYesOrNo={questions[questionIndex].isYesOrNo}
           subQuestionActive={subQuestionActive}
-          handleOnYesOrNoButtonPress={(userSelectedOption) => onNextButton(userSelectedOption)}
+          handleOnYes={() => handleOnYes()}
+          handleOnNo={() => handleOnNo()}
           setQuestionIndex={() => decrementQuestionIndex()}
           onBackButton={() => onBackButton()}
           onNextButton={() => onNextButton()}
           handleEndOfQuestions={() => handleEndOfQuestions()}
           skipOption={skipOption}
+          handleOnSkip={() => handleOnSkip()}
         />
       </View>
     </View>
@@ -331,6 +396,9 @@ const mapDispatchToProps = (dispatch) => {
     decrementSubQuestionIndex: () => dispatch(decrementSubQuestionIndex()),
     resetSubQuestionIndex: () => dispatch(resetSubQuestionIndex()),
     resetQuestionReducerToOriginalState: () => dispatch(resetQuestionReducerToOriginalState()),
+
+    // Story Reducer actions
+    saveResponse: (responseID) => dispatch(saveResponse(responseID)),
   }
 };
 

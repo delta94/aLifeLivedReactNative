@@ -10,16 +10,18 @@ import styles from '../styles/components/YesOrNoQuestionComponent';
 const StoryButtonsComponent = ({
   questionIndex,
   questions,
-  isLoading,
   playerState,
   skipOption,
   onNextButton,
   onBackButton, 
-  handleOnYesOrNoButtonPress,
   isYesOrNo,
   subQuestionActive,
-  handleEndOfQuestions
+  handleEndOfQuestions,
+  handleOnYes,
+  handleOnNo,
+  handleOnSkip
 }) => {
+
   // The below handles what text will display on the button
   const onNextButtonText = () => {
     if (questionIndex === questions.length - 1) {
@@ -34,6 +36,7 @@ const StoryButtonsComponent = ({
   // The Below handles what buttons display.
   const handleYesOrNoQuestion = () => {
 
+    // If its the last question
     if (questionIndex === questions.length - 1) {
       return (
         <View style={styles.footerButtonContainer}>
@@ -63,19 +66,21 @@ const StoryButtonsComponent = ({
           />
         </View>
       );
-    }
+    };
+
+    //  If the question is a yes or no
     if (isYesOrNo === true && subQuestionActive === false) {
       return (
         <View style={styles.footerButtonContainer}>
           <ButtonComponent
             title="No"
             buttonSize="small"
-            onButtonPress={() => handleOnYesOrNoButtonPress(false)}
+            onButtonPress={() => handleOnNo()}
           />
           <ButtonComponent
             title="Yes"
             buttonSize="small"
-            onButtonPress={() => handleOnYesOrNoButtonPress(true)}
+            onButtonPress={() => handleOnYes()}
           />
         </View>
       )
@@ -95,7 +100,7 @@ const StoryButtonsComponent = ({
           <ButtonComponent
             title={onNextButtonText()}
             buttonSize="small"
-            onButtonPress={() => onNextButton()}
+            onButtonPress={() => skipOption ? handleOnSkip() : onNextButton()}
             disabled={
               playerState === 'playing' || playerState === 'RECORDING'
                 ? true

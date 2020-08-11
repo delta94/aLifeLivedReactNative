@@ -9,3 +9,13 @@ export const storeToken = async (data) => {
     return error;
   }
 };
+
+export const getToken = async () => {
+  try {
+    const encryptedToken = await AsyncStorage.getItem("A_LIFE_LIVED_TOKEN");
+    return encryptedToken;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};

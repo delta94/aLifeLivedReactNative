@@ -3,7 +3,6 @@ import React, {useState, useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'; 
-import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
 import TrackPlayer from 'react-native-track-player';
 
@@ -14,6 +13,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 // Services
 import trackPlayerServices from '../services/services';
+
+// Helpers
+import {getToken} from './../helpers/asyncStorage';
 
 // Redux Actions
 import { setUserToken } from './../redux/actions/userActions';
@@ -100,9 +102,9 @@ const AppNavigation = (props) => {
     return setIsLoading(false);
   };
 
-  const getToken = async () => {
+  const getEncryptedToken = async () => {
     try {
-      const encryptedToken = await AsyncStorage.getItem("A_LIFE_LIVED_TOKEN");
+      const encryptedToken = await getToken();
       return props.setUserToken(encryptedToken);
     } catch (error) {
       console.log(error);
@@ -117,7 +119,7 @@ const AppNavigation = (props) => {
 
   useEffect(() => {
     trackPlayerOnLoad();
-    getToken();
+    getEncryptedToken();
     setTimeout(() => {
       setIsLoading(false)
     }, 1000);
