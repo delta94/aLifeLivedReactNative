@@ -10,7 +10,7 @@ const AvatarComponent = ({isRounded, size, iconName, source, showEditButton, onP
 
   const handleOnPress = () => {
     return onPress();
-  }
+  };
 
   return (
     <View>

@@ -87,7 +87,6 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
     return setIsLoading(false);
   };
 
-  console.log(storyReducer);
   // Handles when the user hits next
   const handleOnNextButton = async () => {
     if (step === 2) {
@@ -97,6 +96,8 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       setStep(step + 1);
       return setIsLoading(false);
     } else if (step >= 3) {
+      setIsLoading(true);
+      // Gets data to send to server
       const userID = userReducer.id;
       const responses = storyReducer.responses;
       const storyData = {
@@ -111,8 +112,13 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
         responses: responses
       };
 
+      // Saves story data to redux 
       saveStoryDetails(storyData);
-      await createStory(storyData);
+      const storyID = await createStory(storyData);
+
+      // Navigates to the story
+      navigation.navigate("View Story", {storyID});
+      return setIsLoading(false);
     } else {
       return setStep(step + 1)
     }

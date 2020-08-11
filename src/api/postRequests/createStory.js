@@ -2,11 +2,12 @@ import {axiosPostWithAuth} from './../axiosWithAuth';
 
 export const createStory = async (storyData) => {
   try {
-    const data = await axiosPostWithAuth('/story', {
+    const response = await axiosPostWithAuth('/story', {
       storyData
     });
     
-    return data;
+    console.log(response.data.storyID);
+    return response.data.storyID;
   } catch (error) {
     console.log(error);
     return {

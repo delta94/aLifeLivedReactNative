@@ -30,6 +30,7 @@ import NotificationsScreen from './../screens/NotificationsScreen';
 import StoryCreationScreen from './../screens/StoryCreationScreen';
 import SearchScreen from './../screens/SearchScreen';
 import StoryRecordingScreen from './../screens/StoryRecordingScreen';
+import StoryViewScreen from './../screens/StoryViewScreen';
 
 // Styles
 import {COLOR, ICON_SIZE} from './../styles/styleHelpers';
@@ -61,6 +62,7 @@ const StoryCreationStackScreen = () => (
   <StoryCreationStack.Navigator screenOptions={{ headerShown: false }}>
     <StoryCreationStack.Screen name="Create Story" component={StoryCreationScreen} initialParams={{step: 0}} options={{cardStyle: {backgroundColor: COLOR.white}}} />
     <StoryCreationStack.Screen name="Record Story" component={StoryRecordingScreen} />
+    <StoryCreationStack.Screen name="View Story" component={StoryViewScreen} />
   </StoryCreationStack.Navigator>
 );
 
