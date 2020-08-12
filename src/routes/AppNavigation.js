@@ -6,6 +6,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {connect} from 'react-redux';
 import TrackPlayer from 'react-native-track-player';
 
+// API 
+import {getUserByID} from './../api/getRequests/getUser';
+
 // Icon imports
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
@@ -19,6 +22,7 @@ import {getToken} from './../helpers/asyncStorage';
 
 // Redux Actions
 import { setUserToken } from './../redux/actions/userActions';
+import {userLoginSuccessful} from './../redux/actions/userActions';
 
 // Screens
 import LoginScreen from './../screens/LoginScreen';
@@ -62,7 +66,7 @@ const StoryCreationStackScreen = () => (
   <StoryCreationStack.Navigator screenOptions={{ headerShown: false }}>
     <StoryCreationStack.Screen name="Create Story" component={StoryCreationScreen} initialParams={{step: 0}} options={{cardStyle: {backgroundColor: COLOR.white}}} />
     <StoryCreationStack.Screen name="Record Story" component={StoryRecordingScreen} />
-    <StoryCreationStack.Screen name="View Story" component={StoryViewScreen} />
+    <StoryCreationStack.Screen name="View Story" component={StoryViewScreen} options={{cardStyle: {backgroundColor: COLOR.grey}}}/>
   </StoryCreationStack.Navigator>
 );
 
@@ -88,6 +92,7 @@ const LoginAndSignUpStackScreen = () => (
 const AppNavigation = (props) => {
   // The below is used for authentication
   const userToken = props.userReducer.id
+  console.log(userToken);
   const [isLoading, setIsLoading] = useState(false);
 
 
@@ -105,9 +110,11 @@ const AppNavigation = (props) => {
   };
 
   const getEncryptedToken = async () => {
+    // Function firing twice on load, need to only fire once.
     try {
       const encryptedToken = await getToken();
-      return props.setUserToken(encryptedToken);
+      const userData = await getUserByID(encryptedToken);
+      return props.userLoginSuccessful(userData.data)
     } catch (error) {
       console.log(error);
     }
@@ -218,6 +225,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
   return {
     setUserToken: (encryptedToken) => dispatch(setUserToken(encryptedToken)),
+    userLoginSuccessful: (userData) => dispatch(userLoginSuccessful(userData))
   };
 };
 

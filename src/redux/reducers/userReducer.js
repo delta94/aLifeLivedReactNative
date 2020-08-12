@@ -13,14 +13,12 @@ const userDefaultState = {
 const userReducer = (state = userDefaultState, action) => {
   switch (action.type) {
     case USER_LOGIN_SUCCESSFUL:
-
       const userData = action.payload.userData;
-      const encryptedToken = userData.token;
-      const emailAddress = userData.userData.emailAddress;
-      const firstName = userData.userData.firstName;
-      const lastName = userData.userData.lastName;
-      const avatarURL = userData.userData.avatarURL;
-
+      const encryptedToken = userData.id;
+      const emailAddress = userData.emailAddress;
+      const firstName = userData.firstName;
+      const lastName = userData.lastName;
+      const avatarURL = userData.avatarURL;
       return {
         ...state,
         id: encryptedToken,
