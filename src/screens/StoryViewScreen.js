@@ -23,8 +23,8 @@ const StoryViewScreen = ({route, navigation}) => {
 
   const onLoad = async () => {
     const storyData = await getStoryByID(route.params.storyID)
-    setResponses(storyData.responses);
-    return setStory(storyData);
+    setResponses(storyData.data.responses);
+    return setStory(storyData.data);
   };
 
   console.log("MAX", responses);
