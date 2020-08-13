@@ -93,8 +93,8 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       await loadQuestions();
       navigation.navigate('Record Story');
       // Increase step because user returns here to create story at the end of recording questions. 
-      setStep(step + 1);
-      return setIsLoading(false);
+      setIsLoading(false);
+      return setStep(step + 1);
     } else if (step >= 3) {
       setIsLoading(true);
       // Gets data to send to server
@@ -118,6 +118,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
 
       // Navigates to the story
       navigation.navigate("View Story", {storyID});
+      resetStoryReducer();
       return setIsLoading(false);
     } else {
       return setStep(step + 1)

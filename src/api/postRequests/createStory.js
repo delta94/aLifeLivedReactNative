@@ -6,7 +6,6 @@ export const createStory = async (storyData) => {
       storyData
     });
     
-    console.log(response.data.storyID);
     return response.data.storyID;
   } catch (error) {
     console.log(error);

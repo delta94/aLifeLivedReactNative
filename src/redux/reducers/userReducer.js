@@ -7,7 +7,8 @@ const userDefaultState = {
   isAdmin: false,
   firstName: "",
   lastName: "",
-  avatarURL: ""
+  avatarURL: "",
+  bookMarks: []
 };
 
 const userReducer = (state = userDefaultState, action) => {
@@ -19,6 +20,7 @@ const userReducer = (state = userDefaultState, action) => {
       const firstName = userData.firstName;
       const lastName = userData.lastName;
       const avatarURL = userData.avatarURL;
+      const bookMarks = userData.bookMarks;
       return {
         ...state,
         id: encryptedToken,
@@ -27,7 +29,8 @@ const userReducer = (state = userDefaultState, action) => {
         isAdmin: false,
         firstName: firstName,
         lastName: lastName,
-        avatarURL: avatarURL
+        avatarURL: avatarURL,
+        bookMarks: bookMarks
       };
     case SET_USER_TOKEN:      
       return {

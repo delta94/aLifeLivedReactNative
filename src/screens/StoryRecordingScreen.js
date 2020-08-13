@@ -255,8 +255,11 @@ const StoryRecordingScreen = ({
     const questionId = subQuestionActive ? subQuestions[subQuestionIndex].subQuestionID : questions[questionIndex].id;
     const responseID = await finaliseStreamAndCreateResponse(questionId)
 
-    // Save response to redux 
-    saveResponse(responseID)
+    // IF the question doesn't have any recording then it won't fire a response call.
+    if (responseID) {
+      // Save response to redux 
+      saveResponse(responseID)
+    };
 
     // Resets states
     resetRecorderState();

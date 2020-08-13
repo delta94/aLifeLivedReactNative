@@ -19,11 +19,15 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 const StoryViewScreen = ({route, navigation}) => {
 
   const [story, setStory] = useState(null);
+  const [responses, setResponses] = useState([]);
 
   const onLoad = async () => {
     const storyData = await getStoryByID(route.params.storyID)
+    setResponses(storyData.responses);
     return setStory(storyData);
   };
+
+  console.log("MAX", responses);
 
   useEffect(() => {
     onLoad();
@@ -60,7 +64,7 @@ const StoryViewScreen = ({route, navigation}) => {
 
       {/* TO DO - ADD THE QUESTIONS HERE */}
       <View style={styles.middleContainer}>
-        <Text style={styles.middleText}>What is your life story?</Text>
+        <Text style={styles.middleText}>Loading...</Text>
       </View>
 
       <View style={styles.bottomContainer}>

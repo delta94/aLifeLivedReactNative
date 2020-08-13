@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
 
   headerTextContainer: {
     marginLeft: 10,
-    display: 'flex',
-    flexWrap: 'nowrap',
+    marginRight: 10,
+    flex: 1,
   },
 
   headerTitleText: {
@@ -48,16 +48,16 @@ const styles = StyleSheet.create({
 
   middleContainer: {
     flex: 2,
-    display: "flex",
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
   },
 
   middleText: {
     color: COLOR.limeGreen,
     fontSize: FONT_SIZE.largeSize,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 
   bottomContainer: {

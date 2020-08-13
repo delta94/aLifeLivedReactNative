@@ -90,11 +90,10 @@ const LoginAndSignUpStackScreen = () => (
 );
 
 const AppNavigation = (props) => {
+
   // The below is used for authentication
   const userToken = props.userReducer.id
-  console.log(userToken);
   const [isLoading, setIsLoading] = useState(false);
-
 
   // sets up track player
   const trackPlayerOnLoad = async () => {

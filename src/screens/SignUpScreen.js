@@ -74,12 +74,12 @@ const SignUpScreen = (props) => {
       avatarURL: avatarURL
     };
 
-    const data = await signUp(userData);
+    const response = await signUp(userData);
     
-    if (data.status === 200) {
+    if (response.status === 200) {
       try {
-        const userData = data.data;
-        storeToken(userData.token);
+        const userData = response.data;
+        storeToken(userData.id);
         props.userLoginSuccessful(userData);
         setIsLoading(false);
         // return navigation.navigate('Home');
@@ -89,8 +89,8 @@ const SignUpScreen = (props) => {
       }
     } else {
       setIsLoading(false);
-      console.log(data.errorMessage)
-      setErrorMessage(data.errorMessage);
+      console.log(response.errorMessage)
+      setErrorMessage(response.errorMessage);
     }
   };
 
