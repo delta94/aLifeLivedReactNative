@@ -45,9 +45,10 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
   
 
   // Below are boolean states
-  const [isStoryPrivate, setIsStoryPrivate] = useState(null);
+  const [isStoryPublic, setIsStoryPublic] = useState(null);
   const [isSelfInterview, setIsSelfInterview] = useState(null);
 
+  console.log(isStoryPublic);
   // Below are array states
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -102,16 +103,15 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       const responses = storyReducer.responses;
       const storyData = {
         about: storyAbout,
-        description: storyDescription, 
+        description: storyDescription,
         interviewee: interviewee,
         title: storyTitle,
-        isPublic: isStoryPrivate,
+        isPublic: isStoryPublic,
         isSelfInterview: isSelfInterview,
         selectedTags: selectedTags,
         interviewer: userID,
-        responses: responses
+        responses: responses,
       };
-
       // Saves story data to redux 
       saveStoryDetails(storyData);
       const storyID = await createStory(storyData);
@@ -144,9 +144,9 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
           <View>
             <Text style={styles.footerHeaderText}>Do you wish to make your story private or public?</Text>
             <CreateStoryPrivacyComponent
-              isStoryPrivate={isStoryPrivate}
-              setStoryPrivate={() => setIsStoryPrivate(true)}
-              setStoryPublic={() => setIsStoryPrivate(false)}
+              isStoryPrivate={isStoryPublic}
+              setStoryPrivate={() => setIsStoryPublic(false)}
+              setStoryPublic={() => setIsStoryPublic(true)}
             />
           </View>
         )
