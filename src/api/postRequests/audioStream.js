@@ -13,13 +13,12 @@ export const initialiseStream = async (userId) => {
     packets = [];
     chunkNum = 1;
     chunkResponses = [];
-
+    console.log(userId);
     const response = await axiosAudioAPI.post("/requestChannel", {userId: userId});
     channelId = response.data.channelId;
 
     console.log('received channelId ', channelId);
-  }
-  catch(err) {
+  } catch(err) {
     console.error('initialise Stream ', err);
   }
 };

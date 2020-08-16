@@ -42,7 +42,7 @@ const LoginScreen = (props) => {
     if (data.status === 200) {
       try {
         const userData = data.data;
-        storeToken(userData.token);
+        storeToken(userData.id);
         props.userLoginSuccessful(userData);
         setIsLoading(false);
         return navigation.navigate('Home');
