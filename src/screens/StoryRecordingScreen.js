@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {Buffer} from 'buffer';
 import TrackPlayer from 'react-native-track-player'; 
 
-import AudioRecord from 'react-native-audio-record';
+import AudioRecord from '@alifelived/react-native-audio-record';
 
 // API
 import {audioStream, initialiseStream, sequenceStream} from './../api/postRequests/audioStream';
@@ -76,6 +76,17 @@ const StoryRecordingScreen = ({
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [recordedURL, setRecordedURL] = useState('');
   const playerState = recorderReducer.playerState;
+
+  // timer use effect
+  useEffect(() => {
+    if (playerState === 'RECORDING') {
+      const interval = setInterval(() => {
+        setTimerSeconds(timerSeconds + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+    }, [timerSeconds, playerState]);
+
   const recordedFilePath = recorderReducer.filePath;
   
   // Questions state
@@ -293,18 +304,12 @@ const StoryRecordingScreen = ({
     return resetQuestionReducerToOriginalState();
   };
 
-  // This controls the timer and loads the questions.
+  // This controls loads the questions.
   useEffect(() => {
     if (isInitialiseLoaded === false) {
       onLoad();
     };
 
-    // Need to figure out a better timer
-    // if (playerState === 'RECORDING') {
-    //   setTimeout(() => {
-    //     setTimerSeconds(timerSeconds + 1);
-    //   }, 1000);
-    // }
   }, [playerState, questionIndex, subQuestionIndex]);
 
 
