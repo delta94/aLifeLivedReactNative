@@ -1,4 +1,4 @@
-import { PLAYER_STATE, RESET_RECORDER_STATE} from './allActions';
+import { PLAYER_STATE, RESET_RECORDER_STATE, SET_RECORDED_AUDIO_FILEPATH } from './allActions';
 
 export const setPlayerState = (playerState) => {
   return {
@@ -13,3 +13,10 @@ export const resetRecorderState = () => {
   }
 };
 
+
+export const setRecordedAudioFilepath = (filePath) => {
+  return {
+    type: SET_RECORDED_AUDIO_FILEPATH,
+    payload: {filePath}
+  }
+};

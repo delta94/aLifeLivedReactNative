@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {Buffer} from 'buffer';
 import TrackPlayer from 'react-native-track-player'; 
 
-import AudioRecord from 'react-native-audio-record';
+import AudioRecord from '@alifelived/react-native-audio-record';
 
 // API
 import {audioStream, initialiseStream, sequenceStream} from './../api/postRequests/audioStream';
@@ -12,7 +12,7 @@ import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions
 
 // Actions
 import { saveAllQuestions, incrementQuestionIndex, resetQuestionReducerToOriginalState, resetSubQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
-import {setPlayerState, resetRecorderState} from './../redux/actions/recorderActions';
+import {setPlayerState, resetRecorderState, setRecordedAudioFilepath} from './../redux/actions/recorderActions';
 import {saveResponse} from './../redux/actions/storyActions';
 
 // Helpers
@@ -46,6 +46,7 @@ const StoryRecordingScreen = ({
   // Recorder Reducer
   recorderReducer,
   setPlayerState,
+  setRecordedAudioFilepath,
   resetRecorderState,
 
   // User Reducer
@@ -76,6 +77,18 @@ const StoryRecordingScreen = ({
   const [recordedURL, setRecordedURL] = useState('');
   const playerState = recorderReducer.playerState;
 
+  // timer use effect
+  useEffect(() => {
+    if (playerState === 'RECORDING') {
+      const interval = setInterval(() => {
+        setTimerSeconds(timerSeconds + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+    }, [timerSeconds, playerState]);
+
+  const recordedFilePath = recorderReducer.filePath;
+  
   // Questions state
   const [questions] = useState(questionReducer.questions);
   const questionIndex = questionReducer.questionIndex;
@@ -102,27 +115,19 @@ const StoryRecordingScreen = ({
     await TrackPlayer.stop();
     return setPlayerState('IDLE');
   };
-
+  
   // Play audio
   const playAudio = async (track) => {
-    await TrackPlayer.add([track]);
-
-    if (recordedURL) {
-      const recordedTrack = {
-        id: 'recording',
-        url: recordedURL,
-        title: 'TEST',
-        artist: 'TEST',
-      };
-
+    const playTheseTracks = [track];
+    if (recordedFilePath) {
       // IF there is a recording it will play the recording after the question. As if it was the real thing
-      await TrackPlayer.add([recordedTrack]);
+      playTheseTracks.push(filePathToTrack(recordedFilePath));
     }
+    await TrackPlayer.add(playTheseTracks);
 
-    await TrackPlayer.play();
-    return setPlayerState('PLAYING');
+     await TrackPlayer.play();
+     return setPlayerState('PLAYING');
   };
-
   // Start recording
   const onRecordStart = async () => {
     AudioRecord.start();
@@ -140,9 +145,19 @@ const StoryRecordingScreen = ({
   // When user hits the pause.
   const onRecordPause = async () => {
     await AudioRecord.stop();
-    sequenceStream();
+    const filePath = await sequenceStream();
+    setRecordedAudioFilepath(filePath);
     return setPlayerState("PAUSED");
   };
+
+  const filePathToTrack = (filePath) => {
+    return {
+      id: 'recording',
+      url: filePath,
+      title: 'TEST',
+      artist: 'TEST',
+    };
+  }
 
   // Handles the back button out of subQuestions
   const onBackButton = async () => {
@@ -292,18 +307,12 @@ const StoryRecordingScreen = ({
     return resetQuestionReducerToOriginalState();
   };
 
-  // This controls the timer and loads the questions.
+  // This controls loads the questions.
   useEffect(() => {
     if (isInitialiseLoaded === false) {
       onLoad();
     };
 
-    // Need to figure out a better timer
-    // if (playerState === 'RECORDING') {
-    //   setTimeout(() => {
-    //     setTimerSeconds(timerSeconds + 1);
-    //   }, 1000);
-    // }
   }, [playerState, questionIndex, subQuestionIndex]);
 
 
@@ -339,6 +348,7 @@ const StoryRecordingScreen = ({
           pauseAudio={() => pauseAudio()}
           questionAudioPlaying={(isAudioPlaying) => setPlayerState(isAudioPlaying)}
         />
+
       </View>
 
       <View style={styles.footer}>
@@ -388,6 +398,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     // Recorder reducer actions
     setPlayerState: (playerState) => dispatch(setPlayerState(playerState)),
+    setRecordedAudioFilepath: (filePath) =>dispatch(setRecordedAudioFilepath(filePath)),
     resetRecorderState: () => dispatch(resetRecorderState()),
 
     // Question reducer actions
