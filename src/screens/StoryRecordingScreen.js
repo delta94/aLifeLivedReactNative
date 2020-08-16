@@ -149,7 +149,8 @@ const StoryRecordingScreen = ({
     // if index is less than or equal to 0 then turn subQuestion active off and reset index
     if (subQuestionIndex <= 0) {
       setSubQuestionActive(false);
-      return resetSubQuestionIndex();
+      resetSubQuestionIndex();
+      return decrementQuestionIndex();
     } else if (subQuestionIndex > 0) {
       return decrementSubQuestionIndex();
     } else {
@@ -249,7 +250,6 @@ const StoryRecordingScreen = ({
   };
 
   // When the user is at the last question
-  // TODO: FIRE RESPONSE HERE
   const handleEndOfQuestions = async () => {
     // Finalise stream and creates response with questionID and audio File
     const questionId = subQuestionActive ? subQuestions[subQuestionIndex].subQuestionID : questions[questionIndex].id;

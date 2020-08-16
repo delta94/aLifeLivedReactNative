@@ -42,13 +42,10 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
   const [interviewee, setIntervieweeName] = useState("");
   const [storyTitle, setStoryTitle] = useState("");
 
-  
-
   // Below are boolean states
   const [isStoryPublic, setIsStoryPublic] = useState(null);
   const [isSelfInterview, setIsSelfInterview] = useState(null);
 
-  console.log(isStoryPublic);
   // Below are array states
   const [selectedTags, setSelectedTags] = useState([]);
 

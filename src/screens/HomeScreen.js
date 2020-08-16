@@ -12,7 +12,6 @@ const HomeScreen = (props) => {
 
   const [stories, setStories] = useState([]);
 
-  console.log(stories);
   const onLoad = async () => {
     const allStories = await getAllPublicStories();
     return setStories(allStories.data)
