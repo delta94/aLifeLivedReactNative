@@ -5,11 +5,22 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLOR.white,
     borderWidth: 1,
-    borderColor: COLOR.grey
+    borderColor: COLOR.grey,
+  },
+
+  squareContainer: {
+    backgroundColor: COLOR.white,
+    borderWidth: 1,
+    borderColor: COLOR.grey,
+    borderRadius: 10
+  },
+
+  squareImage: {
+    borderRadius: 10,
   },
 
   iconColor: {
-    color: COLOR.grey
+    color: COLOR.grey,
   }
 });
 

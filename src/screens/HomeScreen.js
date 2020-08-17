@@ -8,6 +8,9 @@ import {getAllPublicStories} from './../api/getRequests/getStory';
 // Components
 import StoryCardComponent from './../components/StoryCardComponent';
 
+// Styles
+import styles from './../styles/screens/HomeScreen';
+
 const HomeScreen = (props) => {
 
   const [stories, setStories] = useState([]);
@@ -22,6 +25,8 @@ const HomeScreen = (props) => {
       title={item.title}
       description={item.description}
       tags={item.tags}
+      avatarURL={item.interviewer.avatarURL}
+      likes={item.likes}
     />
   );
 
@@ -31,13 +36,15 @@ const HomeScreen = (props) => {
 
 
   return (
-    <View>
-      <Text> {props.userReducer.firstName ? props.userReducer.firstName : "YO"} </Text>
-      <FlatList 
-        data={stories}
-        renderItem={renderStories}
-        keyExtractor={item => item.id}
-      />
+    <View style={styles.container}>
+      <View style={styles.contentContainer}>
+        <Text style={styles.headerText}>Popular</Text>
+        <FlatList
+          data={stories}
+          renderItem={renderStories}
+          keyExtractor={item => item.id}
+        />
+      </View>
     </View>
   );
 };

@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useState, useEffect} from 'react';
+import {Text, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'; 
@@ -37,7 +38,7 @@ import StoryRecordingScreen from './../screens/StoryRecordingScreen';
 import StoryViewScreen from './../screens/StoryViewScreen';
 
 // Styles
-import {COLOR, ICON_SIZE} from './../styles/styleHelpers';
+import {COLOR, ICON_SIZE, BORDER_RADIUS, FONT_SIZE} from './../styles/styleHelpers';
 
 const Tabs = createBottomTabNavigator();
 
@@ -49,10 +50,30 @@ const NotificationsStack = createStackNavigator();
 const StoryCreationStack = createStackNavigator();
 const SearchStack = createStackNavigator();
 
+
 // The below are stacks they can hold a number of screens. We're using this because of the tab.
 const HomeStackScreen = () => (
   <HomeStack.Navigator>
-    <HomeStack.Screen name="Home" component={HomeScreen} />
+    <HomeStack.Screen 
+      name="Home" 
+      component={HomeScreen} 
+      options={{
+        title: "A Life Lived",
+        headerTitleAlign: 'left',
+        headerStyle: {
+          backgroundColor: COLOR.grey,
+          shadowOffset: {
+            height: 0,
+          },
+        },
+        headerTitleStyle: {
+          color: COLOR.limeGreen,
+          fontSize: FONT_SIZE.largeSize
+        },
+        headerStatusBarHeight: 60,
+        cardStyle: {backgroundColor: COLOR.grey}
+      }}
+    />
   </HomeStack.Navigator>
 );
 

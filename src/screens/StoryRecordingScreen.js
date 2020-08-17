@@ -119,14 +119,18 @@ const StoryRecordingScreen = ({
   // Play audio
   const playAudio = async (track) => {
     const playTheseTracks = [track];
+    
     if (recordedFilePath) {
       // IF there is a recording it will play the recording after the question. As if it was the real thing
       playTheseTracks.push(filePathToTrack(recordedFilePath));
     }
     await TrackPlayer.add(playTheseTracks);
+    
+    console.log(await TrackPlayer.getQueue());
+    await TrackPlayer.play();
+    console.log(await TrackPlayer.getState());
 
-     await TrackPlayer.play();
-     return setPlayerState('PLAYING');
+    return setPlayerState('PLAYING');
   };
   // Start recording
   const onRecordStart = async () => {
@@ -157,7 +161,7 @@ const StoryRecordingScreen = ({
       title: 'TEST',
       artist: 'TEST',
     };
-  }
+  };
 
   // Handles the back button out of subQuestions
   const onBackButton = async () => {
