@@ -13,7 +13,8 @@ export const COLOR = {
 export const ICON_SIZE = {
   iconSizeXLarge: 40,
   iconSizeLarge: 30,
-  iconSizeMedium: 25
+  iconSizeMedium: 25,
+  iconSizeSmall: 20
 };
 
 export const FONT_SIZE = {

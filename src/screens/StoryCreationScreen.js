@@ -124,6 +124,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
 
   const handleOnClose = () => {
     resetStoryReducer();
+    // Resets the stack screen location so you don't appear in that screen when you return to stack
     return navigation.reset({ routes: [{ name: 'Home' }] });
   };
 

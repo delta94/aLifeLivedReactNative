@@ -9,10 +9,9 @@ import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 import styles from '../styles/components/StoryCardComponent';
 
 // Icons
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import IonIcons from 'react-native-vector-icons/Ionicons';
+import { Icon } from 'react-native-elements'
 
-const StoryCardComponent = ({title, description, tags, avatarURL, likes}) => {
+const StoryCardComponent = ({title, description, tags, avatarURL, likes, hasUserLikedStory}) => {
   return (
     <View style={styles.container}>
       <View style={styles.imageAndTextContainer}>
@@ -26,9 +25,13 @@ const StoryCardComponent = ({title, description, tags, avatarURL, likes}) => {
         <View style={styles.contentContainer}>
           <Text style={styles.header}>{title}</Text>
           <View style={styles.likesContainer}>
-            <IonIcons
-              name="ios-heart-empty"
-              size={ICON_SIZE.iconSizeMedium}
+            <Icon
+              name="heart"
+              disabled={hasUserLikedStory}
+              solid={hasUserLikedStory}
+              type='font-awesome-5'
+              size={ICON_SIZE.iconSizeSmall}
+              disabledStyle={{ backgroundColor: null }}
               color={COLOR.grey}
             />
             <Text style={styles.likes}>{likes}</Text>
@@ -36,9 +39,10 @@ const StoryCardComponent = ({title, description, tags, avatarURL, likes}) => {
         </View>
       </View>
       <View style={styles.bookMarkContainer}>
-        <MaterialCommunityIcons
-          name="bookmark-outline"
-          size={ICON_SIZE.iconSizeMedium}
+        <Icon
+          name="bookmark"
+          type='font-awesome-5'
+          size={ICON_SIZE.iconSizeSmall}
           color={COLOR.grey}
         />
       </View>

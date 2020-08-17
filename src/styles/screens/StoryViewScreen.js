@@ -10,7 +10,8 @@ const styles = StyleSheet.create({
   },
 
   headerContainer: {
-    flex: 0.5,
+    flex: 0.8,
+    justifyContent: "space-evenly",
     backgroundColor: COLOR.white,
     paddingTop: 50,
     paddingLeft: 10,
@@ -23,7 +24,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignContent: 'flex-start',
-    justifyContent: 'flex-start',
     alignItems: 'flex-start',
     marginTop: 20,
   },
@@ -31,19 +31,49 @@ const styles = StyleSheet.create({
   headerTextContainer: {
     marginLeft: 10,
     marginRight: 10,
-    flex: 1,
+    justifyContent: "space-evenly",
+  },
+
+  headerSubContentContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
+
+  headerSubText: {
+    color: COLOR.grey,
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 10,
+  },
+
+  tagContainer: {
+    borderWidth: 0.5, 
+    alignSelf: 'flex-start',
+    padding: 5,
+    borderRadius: 5,
+    marginTop: 10,
+    backgroundColor: COLOR.limeGreen,
+  },
+
+  tagText: {
+    color: COLOR.white,
+    fontWeight: 'bold'
   },
 
   headerTitleText: {
     color: COLOR.limeGreen,
     fontWeight: 'bold',
     fontSize: FONT_SIZE.largeSize,
+    marginBottom: 5
   },
 
   headerDescriptionText: {
-    color: COLOR.grey,
+    color: COLOR.white,
     fontSize: FONT_SIZE.largeSize,
-    marginTop: 10,
   },
 
   middleContainer: {

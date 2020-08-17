@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 10,
     display: "flex",
     flexDirection: 'column',
     justifyContent: 'center',

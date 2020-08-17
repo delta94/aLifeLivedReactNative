@@ -47,8 +47,9 @@ const HomeStack = createStackNavigator();
 const LoginAndSignUpStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const NotificationsStack = createStackNavigator();
-const StoryCreationStack = createStackNavigator();
+const StoryStack = createStackNavigator();
 const SearchStack = createStackNavigator();
+const StoryViewStack = createStackNavigator();
 
 
 // The below are stacks they can hold a number of screens. We're using this because of the tab.
@@ -83,12 +84,12 @@ const NotificationsStackScreen = () => (
   </NotificationsStack.Navigator>
 );
 
-const StoryCreationStackScreen = () => (
-  <StoryCreationStack.Navigator screenOptions={{ headerShown: false }}>
-    <StoryCreationStack.Screen name="Create Story" component={StoryCreationScreen} initialParams={{step: 0}} options={{cardStyle: {backgroundColor: COLOR.white}}} />
-    <StoryCreationStack.Screen name="Record Story" component={StoryRecordingScreen} />
-    <StoryCreationStack.Screen name="View Story" component={StoryViewScreen} options={{cardStyle: {backgroundColor: COLOR.grey}}}/>
-  </StoryCreationStack.Navigator>
+const StoryStackScreen = () => (
+  <StoryStack.Navigator screenOptions={{ headerShown: false }}>
+    <StoryStack.Screen name="Create Story" component={StoryCreationScreen} initialParams={{step: 0}} options={{cardStyle: {backgroundColor: COLOR.white}}} />
+    <StoryStack.Screen name="Record Story" component={StoryRecordingScreen} />
+    <StoryStack.Screen name="View Story" component={StoryViewScreen} options={{cardStyle: {backgroundColor: COLOR.grey}}}/>
+  </StoryStack.Navigator>
 );
 
 const SearchStackScreen = () => (
@@ -228,7 +229,7 @@ const AppNavigation = (props) => {
         <Tabs.Navigator tabBarOptions={tabDefaultOptions} screenOptions={({route}) => screenOptions(route)}>
           <Tabs.Screen name="Home" component={HomeStackScreen} />
           <Tabs.Screen name="Notifications" component={userToken ? NotificationsStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} />
-          <Tabs.Screen name="Create Story" component={userToken ? StoryCreationStackScreen : LoginAndSignUpStackScreen} options={{tabBarVisible: false}} /> 
+          <Tabs.Screen name="Create Story" component={userToken ? StoryStackScreen : LoginAndSignUpStackScreen} options={{tabBarVisible: false}} /> 
           <Tabs.Screen name="Search" component={SearchStackScreen} />
           <Tabs.Screen name="Profile" component={userToken ? ProfileStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} />
         </Tabs.Navigator>

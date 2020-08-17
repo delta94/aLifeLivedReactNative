@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
+import {connect} from 'react-redux';
 
 // API
 import {getStoryByID} from './../api/getRequests/getStory';
+import {likeStory} from './../api/postRequests/story';
 
 // Component
 import AvatarComponent from './../components/AvatarComponent';
@@ -12,37 +14,87 @@ import styles from './../styles/screens/StoryViewScreen';
 import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
 // Icon
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import IonIcons from 'react-native-vector-icons/Ionicons';
+import { Icon } from 'react-native-elements'
 
-const StoryViewScreen = ({route, navigation}) => {
-
+const StoryViewScreen = ({route, navigation, userReducer}) => {
   const [story, setStory] = useState(null);
   const [responses, setResponses] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [storyLikes, setStoryLikes] = useState(0);
+  const [didLike, setDidLike] = useState(false);
 
   const onLoad = async () => {
-    const storyData = await getStoryByID(route.params.storyID)
-    setResponses(storyData.data.responses);
-    return setStory(storyData.data);
-  };
+    const storyData = await getStoryByID(route.params.storyID);
 
-  console.log("MAX", responses);
+    if (storyData.status === 200) {
+      const hasUserLikedStory = userReducer.likedStories.includes(route.params.storyID);
+      setDidLike(hasUserLikedStory);
+      setStory(storyData.data);
+      setStoryLikes(storyData.data.likes)
+      return setTags(storyData.data.tags)
+    } else {
+      console.log(storyData)
+    }
+  };
 
   useEffect(() => {
     onLoad();
   }, []);
 
+  // When the user presses the cross button
+  const handleOnClose = () => {
+    return navigation.reset({ routes: [{ name: 'Home' }] });
+  };
+
+  // Displays the tags of story
+  const displayTags = () => {
+    const tag = tags.map((tag) => {
+      return (
+        <View style={styles.tagContainer} key={tag.id}>
+          <Text style={styles.tagText}>{story === null ? '' : tag.title}</Text>
+        </View>
+      )
+    })
+
+    return tag
+  };
+
+  // Handle when user presses on heart button
+  const onHeartPress = async () => {
+    const response = await likeStory(route.params.storyID, route.params.userID);
+
+    if (response.status === 200) {
+      setStoryLikes(storyLikes +1);
+      return setDidLike(true);
+    }
+  };
+
+  // Handle when user clicks on bookmark button
+
+
+  // Handle when user clicks play
+
+
+  // Handle when user clicks pause
+
+
+  // Handle when user clicks fast forward 
+
+
+  // Handle when user clicks rewind
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
-        <AntDesign
-          name="close"
+        <Icon
+          name="times"
+          type='font-awesome-5'
           size={ICON_SIZE.iconSizeMedium}
+          style={{alignSelf: 'flex-start'}}
           color={COLOR.grey}
-          style={styles.icon}
           onPress={() => handleOnClose()}
         />
+
         <View style={styles.header}>
           <AvatarComponent
             isRounded={true}
@@ -52,51 +104,65 @@ const StoryViewScreen = ({route, navigation}) => {
           />
 
           <View style={styles.headerTextContainer}>
-            <Text style={styles.headerTitleText}>
-              {story === null ? '' : story.title}
-            </Text>
-            <Text style={styles.headerDescriptionText}>
-              {story === null ? '' : story.description}
-            </Text>
+            <Text style={styles.headerTitleText}>{story === null ? '' : story.title}</Text>
+            <View style={styles.headerSubContentContainer}>
+              <Icon name="user" type="font-awesome-5" solid={true} size={ICON_SIZE.iconSizeSmall} color={COLOR.grey} />
+              <Text style={styles.headerSubText}>{story === null ? '' : story.interviewer.userName}</Text>
+                
+              <Icon name="heart" type="font-awesome-5" solid={true} size={ICON_SIZE.iconSizeSmall} color={COLOR.grey} />
+              <Text style={styles.headerSubText}>{story === null ? '' : storyLikes}</Text>
+            </View>
+
+            {displayTags()}
           </View>
         </View>
       </View>
 
-      {/* TO DO - ADD THE QUESTIONS HERE */}
       <View style={styles.middleContainer}>
-        <Text style={styles.middleText}>Loading...</Text>
+        <Text style={styles.headerDescriptionText}>
+          {story === null ? '' : story.description}
+        </Text>
       </View>
 
       <View style={styles.bottomContainer}>
         <View style={styles.audioControllerContainer}>
-          <IonIcons
-            name="ios-skip-backward"
+          <Icon
+            name="backward"
+            type='font-awesome-5'
             size={ICON_SIZE.iconSizeXLarge}
             color={COLOR.grey}
           />
 
-          <MaterialCommunityIcons
-            name="play-circle"
+          <Icon
+            name="play"
+            type='font-awesome-5'
             size={ICON_SIZE.iconSizeXLarge}
             color={COLOR.grey}
           />
 
-          <IonIcons
-            name="ios-skip-forward"
+          <Icon
+            name="forward"
+            type='font-awesome-5'
             size={ICON_SIZE.iconSizeXLarge}
             color={COLOR.grey}
           />
         </View>
 
         <View style={styles.bookMarkContainer}>
-          <IonIcons
-            name="ios-heart-empty"
+          <Icon
+            name="heart"
+            disabled={didLike}
+            solid={didLike}
+            type='font-awesome-5'
             size={ICON_SIZE.iconSizeLarge}
+            disabledStyle={{backgroundColor: null}}
             color={COLOR.grey}
+            onPress={() => onHeartPress()}
           />
 
-          <MaterialCommunityIcons
-            name="bookmark-outline"
+          <Icon
+            name="bookmark"
+            type='font-awesome-5'
             size={ICON_SIZE.iconSizeLarge}
             color={COLOR.grey}
           />
@@ -106,4 +172,10 @@ const StoryViewScreen = ({route, navigation}) => {
   );
 };
 
-export default StoryViewScreen;
+function mapStateToProps(state) {
+  return {
+    userReducer: state.userReducer
+  };
+};
+
+export default connect(mapStateToProps)(StoryViewScreen);

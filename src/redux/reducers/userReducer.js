@@ -8,7 +8,8 @@ const userDefaultState = {
   firstName: "",
   lastName: "",
   avatarURL: "",
-  bookMarks: []
+  bookMarks: [],
+  likedStories: [],
 };
 
 const userReducer = (state = userDefaultState, action) => {
@@ -21,6 +22,8 @@ const userReducer = (state = userDefaultState, action) => {
       const lastName = userData.lastName;
       const avatarURL = userData.avatarURL;
       const bookMarks = userData.bookMarks;
+      const likedStories = userData.likedStories;
+
       return {
         ...state,
         id: encryptedToken,
@@ -30,7 +33,8 @@ const userReducer = (state = userDefaultState, action) => {
         firstName: firstName,
         lastName: lastName,
         avatarURL: avatarURL,
-        bookMarks: bookMarks
+        bookMarks: bookMarks,
+        likedStories: likedStories
       };
     case SET_USER_TOKEN:      
       return {
