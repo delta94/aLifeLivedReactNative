@@ -27,15 +27,13 @@ const HomeScreen = ({route, navigation, userReducer}) => {
   const onStoryPress = (storyID) => {
     const userID = userReducer.id
     // Navigates to the StoryStack then to view Story
-    navigation.navigate("Create Story", {
-      screen: 'View Story',
-      params: { storyID, userID },
-    });
+    navigation.navigate("View Story", {storyID, userID });
   }
 
   const renderStories = ({ item }) => {
-    const hasUserLikedStory = userReducer.likedStories.includes(item.id);
-    console.log(hasUserLikedStory);
+    const hasUserLikedStory = userReducer.likedStories ? userReducer.likedStories.includes(item.id) : false;
+    const hasUserBookMarkedStory = userReducer.bookMarks ? userReducer.bookMarks.includes(item.id) : false;
+
     return (
       <TouchableOpacity onPress={() => onStoryPress(item.id)}>
         <Text style={styles.headerText}>Popular</Text>
@@ -46,6 +44,7 @@ const HomeScreen = ({route, navigation, userReducer}) => {
           avatarURL={item.interviewer.avatarURL}
           likes={item.likes}
           hasUserLikedStory={hasUserLikedStory}
+          hasUserBookMarkedStory={hasUserBookMarkedStory}
         />
       </TouchableOpacity>
     )

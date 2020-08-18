@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {
   BACKEND_BASE_ROUTE, AUDIO_API_BASE_ROUTE
 } from 'react-native-dotenv';
+import {TOKEN_IDENTIFIER} from './../appConstants';
 
 let authToken;
 
@@ -16,7 +17,7 @@ const axiosAudioAPI = axios.create({
 
 const retrieveAuthToken = async () => {
   try {
-    return await AsyncStorage.getItem('A_LIFE_LIVED_TOKEN');
+    return await AsyncStorage.getItem(TOKEN_IDENTIFIER);
   } catch (err) {
     console.log('Unable to retrieve auth token from Async Storage ', err);
   }
@@ -38,6 +39,22 @@ const axiosPostWithAuth = async (api, params) => {
   }
 };
 
+const axiosPutWithAuth = async (api, params) => {
+  try {
+    if (!authToken) {
+      authToken = await retrieveAuthToken();
+    }
+    if (!authToken) throw 'unable to retrieve auth token';
+    const options = {
+      headers: { Authorization: authToken },
+    };
+
+    return axiosAPI.put(api, params, options);
+  } catch (error) {
+    console.log(`axiosPostWithAuth err ${err}`);
+  }
+};
+
 const axiosGetWithAuth = async (api) => {
   try {
     if (!authToken) {
@@ -53,4 +70,4 @@ const axiosGetWithAuth = async (api) => {
   }
 };
 
-module.exports = {axiosAPI, axiosAudioAPI, axiosGetWithAuth, axiosPostWithAuth}
+module.exports = { axiosAPI, axiosAudioAPI, axiosGetWithAuth, axiosPostWithAuth, axiosPutWithAuth}

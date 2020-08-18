@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React, {useState, useEffect} from 'react';
 import {Text, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'; 
 import {connect} from 'react-redux';
 import TrackPlayer from 'react-native-track-player';
@@ -75,6 +75,7 @@ const HomeStackScreen = () => (
         cardStyle: {backgroundColor: COLOR.grey}
       }}
     />
+    <StoryStack.Screen name="View Story" component={StoryViewScreen} options={{cardStyle: { backgroundColor: COLOR.grey }, headerShown: false}} />
   </HomeStack.Navigator>
 );
 
@@ -88,7 +89,6 @@ const StoryStackScreen = () => (
   <StoryStack.Navigator screenOptions={{ headerShown: false }}>
     <StoryStack.Screen name="Create Story" component={StoryCreationScreen} initialParams={{step: 0}} options={{cardStyle: {backgroundColor: COLOR.white}}} />
     <StoryStack.Screen name="Record Story" component={StoryRecordingScreen} />
-    <StoryStack.Screen name="View Story" component={StoryViewScreen} options={{cardStyle: {backgroundColor: COLOR.grey}}}/>
   </StoryStack.Navigator>
 );
 

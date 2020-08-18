@@ -1,4 +1,4 @@
-import { axiosPostWithAuth } from './../axiosWithAuth';
+import { axiosPostWithAuth, axiosPutWithAuth } from './../axiosWithAuth';
 
 export const likeStory = async (storyID, userID) => {
   try {
@@ -11,4 +11,4 @@ export const likeStory = async (storyID, userID) => {
     console.log(error);
     return error;
   }
-}
+};

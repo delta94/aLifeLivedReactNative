@@ -7,7 +7,8 @@ export const COLOR = {
   lightGrey: "#E5E5E5",
   limeGreen: '#0FCFA6',
   white: 'white', 
-  green: "#009387"
+  green: "#009387",
+  red: "red"
 };
 
 export const ICON_SIZE = {

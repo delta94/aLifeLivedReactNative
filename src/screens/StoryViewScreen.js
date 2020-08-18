@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 
 // API
 import {getStoryByID} from './../api/getRequests/getStory';
-import {likeStory} from './../api/postRequests/story';
+import { likeStory } from './../api/postRequests/story';
+import { bookMarkStory } from './../api/putRequests/user';
 
 // Component
 import AvatarComponent from './../components/AvatarComponent';
@@ -22,18 +23,28 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
   const [tags, setTags] = useState([]);
   const [storyLikes, setStoryLikes] = useState(0);
   const [didLike, setDidLike] = useState(false);
+  const [didBookmark, setDidBookmark] = useState(false);
 
   const onLoad = async () => {
     const storyData = await getStoryByID(route.params.storyID);
 
     if (storyData.status === 200) {
-      const hasUserLikedStory = userReducer.likedStories.includes(route.params.storyID);
-      setDidLike(hasUserLikedStory);
       setStory(storyData.data);
       setStoryLikes(storyData.data.likes)
-      return setTags(storyData.data.tags)
+      setTags(storyData.data.tags)
     } else {
       console.log(storyData)
+    }
+
+    // If user is not logged
+    if (route.params.userID) {
+      // Below checks if the user has already liked or bookmarked the story, if so it disables button
+      const hasUserLikedStory = userReducer.likedStories.includes(route.params.storyID);
+      const hasUserBookmarkedStory = userReducer.bookMarks.includes(route.params.storyID);
+
+      // Updates local states
+      setDidLike(hasUserLikedStory);
+      return setDidBookmark(hasUserBookmarkedStory);
     }
   };
 
@@ -60,17 +71,39 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
   };
 
   // Handle when user presses on heart button
+  // TODO: Handle unlike 
   const onHeartPress = async () => {
+    // If user is not logged in
+    if (!route.params.userID) {
+      return navigation.navigate("Login");
+    };
+
     const response = await likeStory(route.params.storyID, route.params.userID);
 
     if (response.status === 200) {
       setStoryLikes(storyLikes +1);
       return setDidLike(true);
+    } else {
+      console.log("Error")
     }
   };
 
   // Handle when user clicks on bookmark button
+  // TODO: Handle unBookMark
+  const onBookmarkPress = async () => {
+    // If user is not logged in
+    if (!route.params.userID) {
+      return navigation.navigate("Login");
+    };
 
+    const response = await bookMarkStory(route.params.storyID, route.params.userID);
+
+    if (response.status === 200) {
+      return setDidBookmark(true);
+    } else {
+      console.log("error");
+    }
+  };
 
   // Handle when user clicks play
 
@@ -109,7 +142,7 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
               <Icon name="user" type="font-awesome-5" solid={true} size={ICON_SIZE.iconSizeSmall} color={COLOR.grey} />
               <Text style={styles.headerSubText}>{story === null ? '' : story.interviewer.userName}</Text>
                 
-              <Icon name="heart" type="font-awesome-5" solid={true} size={ICON_SIZE.iconSizeSmall} color={COLOR.grey} />
+              <Icon name="heart" type="font-awesome-5" solid={true} size={ICON_SIZE.iconSizeSmall} color={COLOR.red} />
               <Text style={styles.headerSubText}>{story === null ? '' : storyLikes}</Text>
             </View>
 
@@ -156,7 +189,7 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
             type='font-awesome-5'
             size={ICON_SIZE.iconSizeLarge}
             disabledStyle={{backgroundColor: null}}
-            color={COLOR.grey}
+            color={COLOR.red}
             onPress={() => onHeartPress()}
           />
 
@@ -164,7 +197,11 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
             name="bookmark"
             type='font-awesome-5'
             size={ICON_SIZE.iconSizeLarge}
+            disabledStyle={{ backgroundColor: null }}
+            disabled={didBookmark}
+            solid={didBookmark}
             color={COLOR.grey}
+            onPress={() => onBookmarkPress()}
           />
         </View>
       </View>
