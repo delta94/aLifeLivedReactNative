@@ -17,19 +17,31 @@ import styles from './../styles/screens/HomeScreen';
 
 const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, saveAllStories}) => {
 
+  const [refreshing, setRefreshing] = useState(false);
+  const [page, setPage] = useState(1);
+  const [seed, setSeed] = useState(1);
+
   const onLoad = async () => {
     const allStories = await getAllPublicStories();
-    return saveAllStories(allStories.data);
+    saveAllStories(allStories.data);
+    setRefreshing(false);
   };
 
   useEffect(() => {
     onLoad();
   }, []);
 
+  const handleRefresh = () => {
+    setPage(1);
+    setRefreshing(true);
+    setSeed(seed +1);
+    onLoad();
+  };
+
   const onStoryPress = (storyID) => {
     const userID = userReducer.id
     // Navigates to the StoryStack then to view Story
-    navigation.navigate("View Story", {storyID, userID });
+    navigation.navigate("View Story", {storyID, userID});
   };
 
   // Handle when user clicks on bookmark button
@@ -70,6 +82,8 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
           data={allCollectionsReducer.stories}
           renderItem={renderStories}
           keyExtractor={item => item.id}
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
         />
       </View>
     </View>

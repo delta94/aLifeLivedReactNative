@@ -20,7 +20,7 @@ import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 // Icon
 import { Icon } from 'react-native-elements'
 
-const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory}) => {
+const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
   const [story, setStory] = useState(null);
   const [tags, setTags] = useState([]);
   const [storyLikes, setStoryLikes] = useState(0);
@@ -28,15 +28,25 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
   const [didBookmark, setDidBookmark] = useState(false);
 
   const onLoad = async () => {
-    const storyData = await getStoryByID(route.params.storyID);
+    // If for some reason reducer is undefined resort to api call
+    if (!allCollectionsReducer.stories) {
+      const response = await getStoryByID(route.params.storyID);
+      if (response.status === 200) {
+        setStory(response.data);
+        setStoryLikes(response.data.likes)
+        setTags(response.data.tags)
+      } else {
+        console.log('error')
+      }
+    };
 
-    if (storyData.status === 200) {
-      setStory(storyData.data);
-      setStoryLikes(storyData.data.likes)
-      setTags(storyData.data.tags)
-    } else {
-      console.log('error')
-    }
+    // ELSE grab item from the reducer
+    const storyData = allCollectionsReducer.stories.find(({ id }) => id === route.params.storyID);
+
+    // Sets local state
+    setStory(storyData);
+    setStoryLikes(storyData.likes)
+    setTags(storyData.tags)
 
     // If user is not logged
     if (route.params.userID) {
@@ -47,7 +57,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
       // Updates local states
       setDidLike(hasUserLikedStory);
       return setDidBookmark(hasUserBookmarkedStory);
-    }
+    };
   };
 
   useEffect(() => {
