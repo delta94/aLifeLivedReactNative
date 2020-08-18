@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 // API
 import {getStoryByID} from './../api/getRequests/getStory';
-import { likeStory } from './../api/postRequests/story';
+import { likeStory, unLikeStory } from './../api/putRequests/story';
 import { bookMarkStory } from './../api/putRequests/user';
 
 // Component
@@ -71,20 +71,32 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
   };
 
   // Handle when user presses on heart button
-  // TODO: Handle unlike 
   const onHeartPress = async () => {
     // If user is not logged in
     if (!route.params.userID) {
       return navigation.navigate("Login");
     };
 
-    const response = await likeStory(route.params.storyID, route.params.userID);
+    // Handles if the user has liked before if so user can dislike
+    if (didLike) {
+      const response = await unLikeStory(route.params.storyID, route.params.userID);
 
-    if (response.status === 200) {
-      setStoryLikes(storyLikes +1);
-      return setDidLike(true);
+      if (response.status === 200) {
+        setStoryLikes(storyLikes - 1);
+        return setDidLike(false);
+      } else { 
+        console.log("ERROR")
+      }
+    // If user has not liked or recently unliked
     } else {
-      console.log("Error")
+      const response = await likeStory(route.params.storyID, route.params.userID);
+
+      if (response.status === 200) {
+        setStoryLikes(storyLikes + 1);
+        return setDidLike(true);
+      } else {
+        console.log("Error")
+      }
     }
   };
 
@@ -184,7 +196,6 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
         <View style={styles.bookMarkContainer}>
           <Icon
             name="heart"
-            disabled={didLike}
             solid={didLike}
             type='font-awesome-5'
             size={ICON_SIZE.iconSizeLarge}
@@ -198,7 +209,6 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
             type='font-awesome-5'
             size={ICON_SIZE.iconSizeLarge}
             disabledStyle={{ backgroundColor: null }}
-            disabled={didBookmark}
             solid={didBookmark}
             color={COLOR.grey}
             onPress={() => onBookmarkPress()}

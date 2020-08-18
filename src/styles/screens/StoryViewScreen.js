@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   },
 
   bottomContainer: {
-    flex: 1,
+    flex: 0.9,
     display: 'flex',
     flexDirection: 'column',
     alignContent: 'center',
