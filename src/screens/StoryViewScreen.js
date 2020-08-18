@@ -7,6 +7,9 @@ import {getStoryByID} from './../api/getRequests/getStory';
 import { likeStory, unLikeStory } from './../api/putRequests/story';
 import { bookMarkStory, unBookMarkStory } from './../api/putRequests/user';
 
+// Actions
+import { removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory } from './../redux/actions/userActions';
+
 // Component
 import AvatarComponent from './../components/AvatarComponent';
 
@@ -17,9 +20,8 @@ import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 // Icon
 import { Icon } from 'react-native-elements'
 
-const StoryViewScreen = ({route, navigation, userReducer}) => {
+const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory}) => {
   const [story, setStory] = useState(null);
-  const [responses, setResponses] = useState([]);
   const [tags, setTags] = useState([]);
   const [storyLikes, setStoryLikes] = useState(0);
   const [didLike, setDidLike] = useState(false);
@@ -33,7 +35,7 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
       setStoryLikes(storyData.data.likes)
       setTags(storyData.data.tags)
     } else {
-      console.log(storyData)
+      console.log('error')
     }
 
     // If user is not logged
@@ -65,13 +67,14 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
           <Text style={styles.tagText}>{story === null ? '' : tag.title}</Text>
         </View>
       )
-    })
+    });
 
     return tag
   };
 
   // Handle when user presses on heart button
   const onHeartPress = async () => {
+    
     // If user is not logged in
     if (!route.params.userID) {
       return navigation.navigate("Login");
@@ -82,6 +85,8 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
       const response = await unLikeStory(route.params.storyID, route.params.userID);
 
       if (response.status === 200) {
+        // Removes from reducer
+        removeLikedStory(route.params.storyID);
         setStoryLikes(storyLikes - 1);
         return setDidLike(false);
       } else { 
@@ -93,6 +98,8 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
 
       if (response.status === 200) {
         setStoryLikes(storyLikes + 1);
+        // Add to reducer
+        addLikedStory(route.params.storyID)
         return setDidLike(true);
       } else {
         console.log("Error")
@@ -100,8 +107,8 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
     }
   };
 
+
   // Handle when user clicks on bookmark button
-  // TODO: Handle unBookMark
   const onBookmarkPress = async () => {
     // If user is not logged in
     if (!route.params.userID) {
@@ -112,6 +119,8 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
       const response = await unBookMarkStory(route.params.storyID, route.params.userID);
 
       if (response.status === 200) {
+        // Remove from reducer
+        removeBookMarkedStory(route.params.storyID)
         return setDidBookmark(false);
       } else {
         console.log('error');
@@ -120,6 +129,8 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
       const response = await bookMarkStory(route.params.storyID, route.params.userID);
 
       if (response.status === 200) {
+        // Add to reducer
+        addBookMarkedStory(route.params.storyID);
         return setDidBookmark(true);
       } else {
         console.log("error");
@@ -231,8 +242,18 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
 
 function mapStateToProps(state) {
   return {
-    userReducer: state.userReducer
+    userReducer: state.userReducer,
+    allCollectionsReducer: state.allCollectionsReducer
   };
 };
 
-export default connect(mapStateToProps)(StoryViewScreen);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeLikedStory: (storyID) => dispatch(removeLikedStory(storyID)),
+    addLikedStory: (storyID) => dispatch(addLikedStory(storyID)),
+    addBookMarkedStory: (storyID) => dispatch(addBookMarkedStory(storyID)),
+    removeBookMarkedStory: (storyID) => dispatch(removeBookMarkedStory(storyID))
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(StoryViewScreen);

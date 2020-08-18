@@ -42,7 +42,6 @@ const StoryCardComponent = ({title, description, tags, avatarURL, likes, hasUser
         <Icon
           name="bookmark"
           type='font-awesome-5'
-          disabled={hasUserBookMarkedStory}
           solid={hasUserBookMarkedStory}
           size={ICON_SIZE.iconSizeSmall}
           color={COLOR.grey}
