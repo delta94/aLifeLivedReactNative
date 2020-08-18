@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 // API
 import {getStoryByID} from './../api/getRequests/getStory';
 import { likeStory, unLikeStory } from './../api/putRequests/story';
-import { bookMarkStory } from './../api/putRequests/user';
+import { bookMarkStory, unBookMarkStory } from './../api/putRequests/user';
 
 // Component
 import AvatarComponent from './../components/AvatarComponent';
@@ -87,7 +87,7 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
       } else { 
         console.log("ERROR")
       }
-    // If user has not liked or recently unliked
+    // If user has not liked or recently un liked
     } else {
       const response = await likeStory(route.params.storyID, route.params.userID);
 
@@ -108,13 +108,23 @@ const StoryViewScreen = ({route, navigation, userReducer}) => {
       return navigation.navigate("Login");
     };
 
-    const response = await bookMarkStory(route.params.storyID, route.params.userID);
+    if (didBookmark) {
+      const response = await unBookMarkStory(route.params.storyID, route.params.userID);
 
-    if (response.status === 200) {
-      return setDidBookmark(true);
+      if (response.status === 200) {
+        return setDidBookmark(false);
+      } else {
+        console.log('error');
+      };
     } else {
-      console.log("error");
-    }
+      const response = await bookMarkStory(route.params.storyID, route.params.userID);
+
+      if (response.status === 200) {
+        return setDidBookmark(true);
+      } else {
+        console.log("error");
+      };
+    };
   };
 
   // Handle when user clicks play
