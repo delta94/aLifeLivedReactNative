@@ -18,13 +18,17 @@ import styles from './../styles/screens/HomeScreen';
 const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, saveAllStories}) => {
 
   const [refreshing, setRefreshing] = useState(false);
-  const [page, setPage] = useState(1);
-  const [seed, setSeed] = useState(1);
 
   const onLoad = async () => {
     const allStories = await getAllPublicStories();
-    saveAllStories(allStories.data);
-    setRefreshing(false);
+
+    if (allStories.status === 200) {
+      saveAllStories(allStories.data);
+      return setRefreshing(false);
+    } else {
+      console.log("ERROR");
+      return setRefreshing(false);
+    }
   };
 
   useEffect(() => {
@@ -32,10 +36,8 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
   }, []);
 
   const handleRefresh = () => {
-    setPage(1);
     setRefreshing(true);
-    setSeed(seed +1);
-    onLoad();
+    return onLoad();
   };
 
   const onStoryPress = (storyID) => {
