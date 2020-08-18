@@ -1,6 +1,9 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
+import {audioFileIdToUrl} from './../api/postRequests/audioStream';
+
+
 // Animation
 import * as Animatable from 'react-native-animatable';
 
@@ -11,11 +14,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 import styles from './../styles/components/StoryQuestionSectionComponent';
 
-const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, questionID, playerState, playAudio, pauseAudio, subQuestionActive, subQuestion}) => {
+const StoryQuestionSectionComponent = ({questionTitle, questionAudioFileId, questionID, playerState, playAudio, pauseAudio, subQuestionActive, subQuestion}) => {
 
   const track = {
     id: questionID,
-    url: questionAudioURL,
+    url: audioFileIdToUrl(questionAudioFileId),
     title: questionTitle,
     artist: questionTitle,
   };

@@ -15,6 +15,9 @@ import { getAllQuestions } from './../api/getRequests/getQuestions';
 import { getAllTags } from './../api/getRequests/getTags';
 import {createStory} from './../api/postRequests/createStory';
 
+import {finaliseStoryStreams} from './../api/postRequests/audioStream';
+
+
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -29,7 +32,7 @@ import ButtonComponent from './../components/ButtonComponent';
 import styles from './../styles/screens/StoryCreationScreen';
 import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
-const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags, storyReducer, userReducer, resetStoryReducer, saveStoryDetails}) => {  
+const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags, storyReducer, userReducer, questionReducer, resetStoryReducer, saveStoryDetails}) => {  
   const orientation = useOrientation();
   
   // Below is all basic form things
@@ -97,7 +100,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       setIsLoading(true);
       // Gets data to send to server
       const userID = userReducer.id;
-      const responses = storyReducer.responses;
+      //const responses = storyReducer.responses;
       const storyData = {
         about: storyAbout,
         description: storyDescription,
@@ -113,6 +116,9 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       saveStoryDetails(storyData);
       const storyID = await createStory(storyData);
 
+      // unpack audio response and call finaliseStoryStreams
+      finaliseStoryStreams(collocateStorySegments(), storyID);
+
       // Navigates to the story
       navigation.navigate("View Story", {storyID});
       resetStoryReducer();
@@ -121,6 +127,35 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       return setStep(step + 1)
     }
   };
+
+  // steps through the questions objects
+  // create a reference object identifying
+  // the sequence of audio that needs to be
+  // compiled (by the audio server) for the
+  // finalised story post
+  const collocateStorySegments = () => {
+    const audioSegments = [];
+    let question, subquestion;
+    for (question of questionReducer.questions) {
+      if (question.response === 'AUDIO') {
+        audioSegments.push(questionToAudioSegment());
+      }
+      for (subquestion of question.SubQuestions) {
+        if (question.response === 'AUDIO') {
+          audioSegments.push(questionToAudioSegment());
+        }
+      }
+    }
+
+    return audioSegments;
+  }
+
+  const questionToAudioSegment = ( quest ) => {
+    return {
+      questionAudioFile: quest.audioFile,
+      answerAudioChannel: quest.channelId
+    }
+  }
 
   const handleOnClose = () => {
     resetStoryReducer();
@@ -234,7 +269,8 @@ const mapDispatchToProps = (dispatch) => {
 function mapStateToProps (state) {
   return {
     storyReducer: state.storyReducer,
-    userReducer: state.userReducer
+    userReducer: state.userReducer,
+    questionReducer: state.questionReducer
   }
 };
 

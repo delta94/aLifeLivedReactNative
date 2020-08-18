@@ -7,7 +7,7 @@ import TrackPlayer from 'react-native-track-player';
 import AudioRecord from '@alifelived/react-native-audio-record';
 
 // API
-import {audioStream, initialiseStream, sequenceStream} from './../api/postRequests/audioStream';
+import {audioStream, initialiseStream, sequenceStream, audioFileIdToUrl, channelIdToUrl} from './../api/postRequests/audioStream';
 import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
 
 // Actions
@@ -72,11 +72,6 @@ const StoryRecordingScreen = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialiseLoaded, setIsInitialiseLoaded] = useState(false);
 
-  // Recording States
-  const [timerSeconds, setTimerSeconds] = useState(0);
-  const [recordedURL, setRecordedURL] = useState('');
-  const playerState = recorderReducer.playerState;
-
   // timer use effect
   useEffect(() => {
     if (playerState === 'RECORDING') {
@@ -98,6 +93,33 @@ const StoryRecordingScreen = ({
   const [subQuestions, setSubQuestions] = useState([]);
   const subQuestionIndex = questionReducer.subQuestionIndex;
 
+  // Recording States
+  const [timerSeconds, setTimerSeconds] = useState(currentQuestion().audioDuration ? currentQuestion().audioDuration : 0);
+  const [recordedURL, setRecordedURL] = useState('');
+  const playerState = recorderReducer.playerState;
+
+
+
+  const currentQuestion = () => {
+    if (subQuestionActive)
+      return questions[questionIndex].SubQuestions[subQuestionIndex];
+    else
+      return questions[questionIndex];
+  }
+
+  const setQuestionResponse = (response) => {
+    currentQuestion().response = response;
+  }
+
+  const setQuestionChannel = (chanId) => {
+    currentQuestion().channelId = chanId;
+  }
+
+  const setQuestionAudioDuration = () => {
+    currentQuestion().audioDuration = timerSeconds;
+  }
+
+
   // Loads questions.
   const onLoad = async () => {
     setIsInitialiseLoaded(false);
@@ -105,7 +127,6 @@ const StoryRecordingScreen = ({
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
     ]): null;
 
-    initialiseStream(userReducer.id);
     await AudioRecord.init(options);
     setIsInitialiseLoaded(true);
   };
@@ -119,9 +140,9 @@ const StoryRecordingScreen = ({
   // Play audio
   const playAudio = async (track) => {
     const playTheseTracks = [track];
-    if (recordedFilePath) {
+    if (currentQuestion().response === 'AUDIO') {
       // IF there is a recording it will play the recording after the question. As if it was the real thing
-      playTheseTracks.push(filePathToTrack(recordedFilePath));
+      playTheseTracks.push(channelIdToTrack(currentQuestion().channelId));
     }
     await TrackPlayer.add(playTheseTracks);
 
@@ -130,6 +151,9 @@ const StoryRecordingScreen = ({
   };
   // Start recording
   const onRecordStart = async () => {
+    if (!currentQuestion().channelId)
+      setQuestionChannel(await initialiseStream());
+
     AudioRecord.start();
     
     // This is needed or it sends warns
@@ -144,16 +168,18 @@ const StoryRecordingScreen = ({
 
   // When user hits the pause.
   const onRecordPause = async () => {
+    setPlayerState("PAUSED");
     await AudioRecord.stop();
+    setQuestionResponse('AUDIO');
+    setQuestionAudioDuration();
     const filePath = await sequenceStream();
-    setRecordedAudioFilepath(filePath);
-    return setPlayerState("PAUSED");
+    return; //setRecordedAudioFilepath(filePath);
   };
 
-  const filePathToTrack = (filePath) => {
+  const channelIdToTrack = (channelId) => {
     return {
       id: 'recording',
-      url: filePath,
+      url: channelIdToUrl(channelId),
       title: 'TEST',
       artist: 'TEST',
     };
@@ -174,11 +200,13 @@ const StoryRecordingScreen = ({
   };
 
   const handleOnYes = async () => {
+    setQuestionResponse('YES');
+    
     // Gets the subQuestions 
-    const allQuestions = await handleIfSubQuestion()
+    const allSubQuestions = handleIfSubQuestion()
 
     // Filters the array and sees if there are any yes decision types
-    const filteredYesSubQuestions = await handleYesDecision(allQuestions);
+    const filteredYesSubQuestions = await handleYesDecision(allSubQuestions);
 
     if (filteredYesSubQuestions.length === 0) {
       setIsInitialiseLoaded(false);
@@ -196,6 +224,7 @@ const StoryRecordingScreen = ({
   };
 
   const handleOnNo = async () => {
+    setQuestionResponse('NO');
     // Gets the subQuestions 
     const allQuestions = await handleIfSubQuestion();
 
@@ -219,10 +248,10 @@ const StoryRecordingScreen = ({
     const questionId = subQuestionActive ? subQuestions[subQuestionIndex].subQuestionID : questions[questionIndex].id;
 
     // Finalise stream and creates response with questionID and audio File
-    const responseID = await finaliseStreamAndCreateResponse(questionId);
+    //const responseID = await finaliseStreamAndCreateResponse(questionId);
 
     // Save response to redux 
-    saveResponse(responseID)
+    //saveResponse(responseID)
 
     // if subQ is the last one
     if (subQuestionIndex === subQuestions.length - 1) {
@@ -245,6 +274,7 @@ const StoryRecordingScreen = ({
 
   // The below handles the on skip
   const handleOnSkip = async () => {
+    setQuestionResponse('SKIP');
     // If subQuestion active and isn't last sub Q
     if (subQuestionActive && subQuestionIndex !== subQuestions.length - 1) {
       incrementSubQuestionIndex();
@@ -285,18 +315,17 @@ const StoryRecordingScreen = ({
   };
 
   // The below handles if there is a subQuestion linked to the master question
-  const handleIfSubQuestion = async () => {
-    if (await questions[questionIndex].subQuestions.length <= 0) {
+  const handleIfSubQuestion = () => {
+    if (questions[questionIndex].SubQuestions.length <= 0) {
       setSubQuestions([]);
       return [];
     };
     
     if (subQuestionActive) {
       return;
-    } else if (questions[questionIndex].subQuestions){
-      const responseData = await getSubQuestionFromQuestionID(questions[questionIndex].id);
-      setSubQuestions(responseData);
-      return responseData;
+    } else if (questions[questionIndex].SubQuestions){
+      setSubQuestions(questions[questionIndex].SubQuestions);
+      return questions[questionIndex].SubQuestions;
     } 
   };
 
@@ -339,7 +368,7 @@ const StoryRecordingScreen = ({
       <View style={styles.questionContainer}>
         <StoryQuestionSectionComponent
           questionTitle={questions[questionIndex].title}
-          questionAudioURL={questions[questionIndex].isYesOrNo && subQuestionActive === false ? null : questions[questionIndex].audioFileURL}
+          questionAudioFileId={questions[questionIndex].isYesOrNo && subQuestionActive === false ? null : questions[questionIndex].audioFileId}
           subQuestion={subQuestionActive ? subQuestions[subQuestionIndex] : null}
           subQuestionActive={subQuestionActive}
           questionID={questions[questionIndex].id}
