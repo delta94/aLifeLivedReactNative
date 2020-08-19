@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { View, Text, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
+import TrackPlayer, { useTrackPlayerEvents, TrackPlayerEvents, STATE_PLAYING } from 'react-native-track-player';
 
 // API
 import {getStoryByID} from './../api/getRequests/getStory';
@@ -20,12 +21,22 @@ import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 // Icon
 import { Icon } from 'react-native-elements'
 
+const events = [
+  TrackPlayerEvents.PLAYBACK_STATE
+];
+
+
 const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
   const [story, setStory] = useState(null);
   const [tags, setTags] = useState([]);
   const [storyLikes, setStoryLikes] = useState(0);
   const [didLike, setDidLike] = useState(false);
   const [didBookmark, setDidBookmark] = useState(false);
+  const [audioState, setAudioState] = useState("NONE");
+
+  useTrackPlayerEvents(events, (event) => {
+    console.log("MAXXXX");
+  })
 
   const onLoad = async () => {
     // If for some reason reducer is undefined resort to api call
@@ -41,12 +52,24 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
     };
 
     // ELSE grab item from the reducer
-    const storyData = allCollectionsReducer.stories.find(({ id }) => id === route.params.storyID);
+    const storyData = allCollectionsReducer.stories.find(({ _id }) => _id === route.params.storyID);
 
     // Sets local state
     setStory(storyData);
-    setStoryLikes(storyData.likes)
-    setTags(storyData.tags)
+    setStoryLikes(storyData.likes);
+    setTags(storyData.tags);
+
+    // Audio player track
+    const track = {
+      id: storyData._id,
+      url: "https://a-life-lived-s3-bucket.s3-ap-southeast-2.amazonaws.com/questionAudioFiles/A+life+lived+dummy+questions.WAV",
+      title: storyData.title,
+      artist: storyData.interviewer.username
+    };
+
+
+    // Loads track 
+    await TrackPlayer.add(track);
 
     // If user is not logged
     if (route.params.userID) {
@@ -59,6 +82,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
       return setDidBookmark(hasUserBookmarkedStory);
     };
   };
+
 
   useEffect(() => {
     onLoad();
@@ -73,7 +97,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
   const displayTags = () => {
     const tag = tags.map((tag) => {
       return (
-        <View style={styles.tagContainer} key={tag.id}>
+        <View style={styles.tagContainer} key={tag._id}>
           <Text style={styles.tagText}>{story === null ? '' : tag.title}</Text>
         </View>
       )
@@ -147,10 +171,15 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
   };
 
   // Handle when user clicks play
-
+  const onPlay = async () => {
+    console.log(await TrackPlayer.getState())
+    await TrackPlayer.play();
+  };
 
   // Handle when user clicks pause
+  const onPause = () => {
 
+  };
 
   // Handle when user clicks fast forward 
 
@@ -183,7 +212,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
             <Text style={styles.headerTitleText}>{story === null ? '' : story.title}</Text>
             <View style={styles.headerSubContentContainer}>
               <Icon name="user" type="font-awesome-5" solid={true} size={ICON_SIZE.iconSizeSmall} color={COLOR.grey} />
-              <Text style={styles.headerSubText}>{story === null ? '' : story.interviewer.userName}</Text>
+              <Text style={styles.headerSubText}>{story === null ? '' : story.interviewer.username}</Text>
                 
               <Icon name="heart" type="font-awesome-5" solid={true} size={ICON_SIZE.iconSizeSmall} color={COLOR.red} />
               <Text style={styles.headerSubText}>{story === null ? '' : storyLikes}</Text>
@@ -209,12 +238,14 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
             color={COLOR.grey}
           />
 
-          <Icon
-            name="play"
-            type='font-awesome-5'
-            size={ICON_SIZE.iconSizeXLarge}
-            color={COLOR.grey}
-          />
+          <TouchableOpacity onPress={() => onPlay()}>
+            <Icon
+              name="play"
+              type='font-awesome-5'
+              size={ICON_SIZE.iconSizeXLarge}
+              color={COLOR.grey}
+            />
+          </TouchableOpacity>
 
           <Icon
             name="forward"

@@ -11,7 +11,8 @@ const styles = StyleSheet.create({
   },
 
   storyCard: {
-    zIndex: 1
+    zIndex: 1,
+    paddingBottom: 20
   },
 
   contentContainer: {

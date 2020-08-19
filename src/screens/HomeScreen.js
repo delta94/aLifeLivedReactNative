@@ -22,7 +22,6 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
 
   const onLoad = async () => {
     const allStories = await getAllPublicStories();
-
     if (allStories.status === 200) {
       saveAllStories(allStories.data);
       return setRefreshing(false);
@@ -57,32 +56,33 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
 
     // If already bookmarked 
     if (hasUserBookMarkedStory) {
-      // Update UI
       const response = await unBookMarkStory(storyID, userReducer.id);
-      response.status === 200 ? removeBookMarkedStory(storyID) : null ;
+      response.status === 200 ? removeBookMarkedStory(storyID) : console.log("ERROR") ;
     } else {
       const response = await bookMarkStory(storyID, userReducer.id);
-      response.status === 200 ? addBookMarkedStory(storyID) : setDidBookmark(false);
+      response.status === 200 ? addBookMarkedStory(storyID) : console.log("ERROR");
     };
   };
 
   const renderStories = ({ item }) => {
-    const hasUserLikedStory = userReducer.likedStories ? userReducer.likedStories.includes(item.id) : false;
-    const hasUserBookMarkedStory = userReducer.bookMarks ? userReducer.bookMarks.includes(item.id) : false;
+    const hasUserLikedStory = userReducer.likedStories ? userReducer.likedStories.includes(item._id) : false;
+    const hasUserBookMarkedStory = userReducer.bookMarks ? userReducer.bookMarks.includes(item._id) : false;
+    // const likes = allCollectionsReducer.stories.find(({_id}) => _id === item._id);
 
+    console.log(likes);
+    
     return (
       <>
-        <Text style={styles.headerText}>Popular</Text>
-        <TouchableOpacity onPress={() => onStoryPress(item.id)} style={styles.storyCard}>
+        <TouchableOpacity onPress={() => onStoryPress(item._id)} style={styles.storyCard}>
           <StoryCardComponent
             title={item.title}
             description={item.description}
             tags={item.tags}
             avatarURL={item.interviewer.avatarURL}
-            likes={item.likes}
+            likes={likes}
             hasUserLikedStory={hasUserLikedStory}
             hasUserBookMarkedStory={hasUserBookMarkedStory}
-            onBookMarkPress={() => onBookmarkPress(hasUserBookMarkedStory, item.id)}
+            onBookMarkPress={() => onBookmarkPress(hasUserBookMarkedStory, item._id)}
           />
         </TouchableOpacity>
       </>
@@ -92,10 +92,11 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
+        <Text style={styles.headerText}>Popular</Text>
         <FlatList
           data={allCollectionsReducer.stories}
           renderItem={renderStories}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item._id}
           refreshing={refreshing}
           onRefresh={handleRefresh}
         />

@@ -121,7 +121,8 @@ const AppNavigation = (props) => {
   const trackPlayerOnLoad = async () => {
     setIsLoading(true);
     await TrackPlayer.setupPlayer({
-      iosCategoryMode: 'spokenAudio'
+      iosCategoryMode: 'spokenAudio',
+      waitForBuffer: true
     }).then(() => {
       console.log('Player is set up');
     });
