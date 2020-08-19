@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text} from 'react-native';
+import { View, Text, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 
 // API
@@ -92,27 +92,35 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
 
     // Handles if the user has liked before if so user can dislike
     if (didLike) {
+      // call first to allow update of UI quickly
+      setStoryLikes(storyLikes - 1);
+      setDidLike(false);
+      
       const response = await unLikeStory(route.params.storyID, route.params.userID);
 
       if (response.status === 200) {
         // Removes from reducer
-        removeLikedStory(route.params.storyID);
-        setStoryLikes(storyLikes - 1);
-        return setDidLike(false);
+        return removeLikedStory(route.params.storyID);
       } else { 
-        console.log("ERROR")
+        //  If error then return to original state
+        setStoryLikes(storyLikes + 1);
+        setDidLike(true);
+        return console.log("ERROR")
       }
     // If user has not liked or recently un liked
     } else {
+      setStoryLikes(storyLikes + 1);
+      setDidLike(true);
       const response = await likeStory(route.params.storyID, route.params.userID);
 
       if (response.status === 200) {
-        setStoryLikes(storyLikes + 1);
         // Add to reducer
-        addLikedStory(route.params.storyID)
-        return setDidLike(true);
+        return addLikedStory(route.params.storyID);
       } else {
-        console.log("Error")
+        // If error return to original state
+        setStoryLikes(storyLikes - 1);
+        setDidLike(false);
+        return console.log("Error");
       }
     }
   };
@@ -125,26 +133,16 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
       return navigation.navigate("Login");
     };
 
+    // If already bookmarked 
     if (didBookmark) {
-      const response = await unBookMarkStory(route.params.storyID, route.params.userID);
-
-      if (response.status === 200) {
-        // Remove from reducer
-        removeBookMarkedStory(route.params.storyID)
-        return setDidBookmark(false);
-      } else {
-        console.log('error');
-      };
+      // Update UI
+      setDidBookmark(false);
+      const response = await unBookMarkStory(route.params.storyID, route.params.userID);     
+      response.status === 200 ? removeBookMarkedStory(route.params.storyID) : setDidBookmark(true);
     } else {
+      setDidBookmark(true);
       const response = await bookMarkStory(route.params.storyID, route.params.userID);
-
-      if (response.status === 200) {
-        // Add to reducer
-        addBookMarkedStory(route.params.storyID);
-        return setDidBookmark(true);
-      } else {
-        console.log("error");
-      };
+      response.status === 200 ? addBookMarkedStory(route.params.storyID) : setDidBookmark(false);
     };
   };
 
@@ -162,14 +160,16 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
   return (
     <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
-        <Icon
-          name="times"
-          type='font-awesome-5'
-          size={ICON_SIZE.iconSizeMedium}
-          style={{alignSelf: 'flex-start'}}
-          color={COLOR.grey}
-          onPress={() => handleOnClose()}
-        />
+        <TouchableOpacity onPress={() => handleOnClose()}>
+          <Icon
+            name="times"
+            type='font-awesome-5'
+            size={ICON_SIZE.iconSizeMedium}
+            style={{alignSelf: 'flex-start'}}
+            color={COLOR.grey}
+            
+          />
+        </TouchableOpacity>
 
         <View style={styles.header}>
           <AvatarComponent

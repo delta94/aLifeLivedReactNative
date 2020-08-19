@@ -8,7 +8,10 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopEndRadius: BORDER_RADIUS.medium,
     borderTopLeftRadius: BORDER_RADIUS.medium,
+  },
 
+  storyCard: {
+    zIndex: 1
   },
 
   contentContainer: {

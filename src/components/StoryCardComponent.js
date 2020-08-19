@@ -11,7 +11,7 @@ import styles from '../styles/components/StoryCardComponent';
 // Icons
 import { Icon } from 'react-native-elements'
 
-const StoryCardComponent = ({title, description, tags, avatarURL, likes, hasUserLikedStory, hasUserBookMarkedStory}) => {
+const StoryCardComponent = ({title, description, tags, avatarURL, likes, hasUserLikedStory, hasUserBookMarkedStory, onBookMarkPress}) => {
   return (
     <View style={styles.container}>
       <View style={styles.imageAndTextContainer}>
@@ -38,7 +38,7 @@ const StoryCardComponent = ({title, description, tags, avatarURL, likes, hasUser
           </View>
         </View>
       </View>
-      <View style={styles.bookMarkContainer}>
+      <TouchableOpacity style={styles.bookMarkContainer} onPress={() => onBookMarkPress()}>
         <Icon
           name="bookmark"
           type='font-awesome-5'
@@ -47,8 +47,7 @@ const StoryCardComponent = ({title, description, tags, avatarURL, likes, hasUser
           color={COLOR.grey}
           disabledStyle={{ backgroundColor: null }}
         />
-      </View>
-
+      </TouchableOpacity>
     </View>
   )
 };

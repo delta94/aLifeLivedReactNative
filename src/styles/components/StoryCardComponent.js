@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
 
   bookMarkContainer: {
     justifyContent: "flex-end",
+    zIndex: 4
   }
 });
 

@@ -4,6 +4,7 @@ import {View, Text, Image, FlatList, TouchableOpacity} from 'react-native';
 
 // Actions
 import { saveAllStories } from './../redux/actions/allCollections';
+import { addBookMarkedStory, removeBookMarkedStory } from './../redux/actions/userActions';
 
 // API
 import {getAllPublicStories} from './../api/getRequests/getStory';
@@ -15,7 +16,7 @@ import StoryCardComponent from './../components/StoryCardComponent';
 // Styles
 import styles from './../styles/screens/HomeScreen';
 
-const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, saveAllStories}) => {
+const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, saveAllStories, addBookMarkedStory, removeBookMarkedStory}) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -47,10 +48,21 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
   };
 
   // Handle when user clicks on bookmark button
-  const onBookmarkPress = async () => {
+  const onBookmarkPress = async (hasUserBookMarkedStory, storyID) => {
     // If user is not logged in
     if (!userReducer.id) {
       return navigation.navigate("Login");
+    };
+
+
+    // If already bookmarked 
+    if (hasUserBookMarkedStory) {
+      // Update UI
+      const response = await unBookMarkStory(storyID, userReducer.id);
+      response.status === 200 ? removeBookMarkedStory(storyID) : null ;
+    } else {
+      const response = await bookMarkStory(storyID, userReducer.id);
+      response.status === 200 ? addBookMarkedStory(storyID) : setDidBookmark(false);
     };
   };
 
@@ -61,7 +73,7 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
     return (
       <>
         <Text style={styles.headerText}>Popular</Text>
-        <TouchableOpacity onPress={() => onStoryPress(item.id)}>
+        <TouchableOpacity onPress={() => onStoryPress(item.id)} style={styles.storyCard}>
           <StoryCardComponent
             title={item.title}
             description={item.description}
@@ -70,7 +82,7 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
             likes={item.likes}
             hasUserLikedStory={hasUserLikedStory}
             hasUserBookMarkedStory={hasUserBookMarkedStory}
-            onBookMarkPress={() => onBookmarkPress()}
+            onBookMarkPress={() => onBookmarkPress(hasUserBookMarkedStory, item.id)}
           />
         </TouchableOpacity>
       </>
@@ -101,7 +113,9 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    saveAllStories: (stories) => dispatch(saveAllStories(stories))
+    saveAllStories: (stories) => dispatch(saveAllStories(stories)),
+    addBookMarkedStory: (storyID) => dispatch(addBookMarkedStory(storyID)),
+    removeBookMarkedStory: (storyID) => dispatch(removeBookMarkedStory(storyID))
   }
 };
 
