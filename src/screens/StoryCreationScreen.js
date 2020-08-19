@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import { useOrientation } from './../helpers/orientation';
 
 // Actions
-import { saveAllQuestions } from './../redux/actions/questionActions';
+import { saveAllQuestions, setSubQuestionActiveFalse } from './../redux/actions/questionActions';
 import { saveAllTags, resetStoryReducer, saveStoryDetails } from './../redux/actions/storyActions';
 
 // API
@@ -52,6 +52,9 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
   // Below are array states
   const [selectedTags, setSelectedTags] = useState([]);
 
+  const [questions, setQuestions] = useState(questionReducer.questions);
+
+
   // Loads questions.
   const loadQuestions = async () => {
     setIsLoading(true);
@@ -61,6 +64,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
     if (response.status === 200) {
       try {
         saveAllQuestions(response.data);
+        setQuestions(response.data);
         setIsLoading(true);
       } catch (error) {
         setIsLoading(false);
@@ -105,19 +109,20 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
         about: storyAbout,
         description: storyDescription,
         interviewee: interviewee,
-        title: storyTitle,
+        title: storyTitle ? storyTitle : "left blank",
         isPublic: isStoryPublic,
         isSelfInterview: isSelfInterview,
         selectedTags: selectedTags,
         interviewer: userID,
-        responses: responses,
       };
       // Saves story data to redux 
       saveStoryDetails(storyData);
       const storyID = await createStory(storyData);
 
       // unpack audio response and call finaliseStoryStreams
-      finaliseStoryStreams(collocateStorySegments(), storyID);
+      const storySegments = collocateStorySegments();
+      if (storySegments.length > 0)
+        finaliseStoryStreams(storySegments, storyID);
 
       // Navigates to the story
       navigation.navigate("View Story", {storyID});
@@ -136,13 +141,13 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
   const collocateStorySegments = () => {
     const audioSegments = [];
     let question, subquestion;
-    for (question of questionReducer.questions) {
+    for (question of /*questionReducer.*/questions) {
       if (question.response === 'AUDIO') {
-        audioSegments.push(questionToAudioSegment());
+        audioSegments.push(questionToAudioSegment(question));
       }
-      for (subquestion of question.SubQuestions) {
-        if (question.response === 'AUDIO') {
-          audioSegments.push(questionToAudioSegment());
+      for (subquestion of question.subQuestions) {
+        if (subquestion.response === 'AUDIO') {
+          audioSegments.push(questionToAudioSegment(subquestion));
         }
       }
     }

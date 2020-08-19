@@ -17,10 +17,10 @@ import styles from './../styles/components/StoryQuestionSectionComponent';
 const StoryQuestionSectionComponent = ({questionTitle, questionAudioFileId, questionID, playerState, playAudio, pauseAudio, subQuestionActive, subQuestion}) => {
 
   const track = {
-    id: questionID,
-    url: audioFileIdToUrl(questionAudioFileId),
-    title: questionTitle,
-    artist: questionTitle,
+    id: subQuestionActive ? subQuestion.id : questionID,
+    url: audioFileIdToUrl(subQuestionActive ? subQuestion.audioFile : questionAudioFileId),
+    title: subQuestionActive ? subQuestion.title : questionTitle,
+    artist: subQuestionActive ? subQuestion.title : questionTitle,
   };
 
   const handleTextDisplay = () => {
@@ -76,7 +76,7 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioFileId, ques
       <Animatable.Text animation="fadeIn" easing="ease-in" style={styles.questionTitleContainer}>
         <Text style={styles.questionTitle}>{handleTextDisplay()}</Text>
       </Animatable.Text>
-      { questionAudioURL ? handlePlayPauseButton() : null}
+      { questionAudioFileId ? handlePlayPauseButton() : null}
       
     </View>
   );

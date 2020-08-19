@@ -11,7 +11,7 @@ import {audioStream, initialiseStream, sequenceStream, audioFileIdToUrl, channel
 import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
 
 // Actions
-import { saveAllQuestions, incrementQuestionIndex, resetQuestionReducerToOriginalState, resetSubQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
+import { incrementQuestionIndex, resetQuestionReducerToOriginalState, resetSubQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
 import {setPlayerState, resetRecorderState, setRecordedAudioFilepath} from './../redux/actions/recorderActions';
 import {saveResponse} from './../redux/actions/storyActions';
 
@@ -93,19 +93,20 @@ const StoryRecordingScreen = ({
   const [subQuestions, setSubQuestions] = useState([]);
   const subQuestionIndex = questionReducer.subQuestionIndex;
 
-  // Recording States
-  const [timerSeconds, setTimerSeconds] = useState(currentQuestion().audioDuration ? currentQuestion().audioDuration : 0);
-  const [recordedURL, setRecordedURL] = useState('');
-  const playerState = recorderReducer.playerState;
 
 
 
   const currentQuestion = () => {
-    if (subQuestionActive)
-      return questions[questionIndex].SubQuestions[subQuestionIndex];
+    if (subQuestionActive) {
+      return subQuestions[subQuestionIndex];
+    }
     else
       return questions[questionIndex];
   }
+  // Recording States
+  const [timerSeconds, setTimerSeconds] = useState(currentQuestion().audioDuration ? currentQuestion().audioDuration : 0);
+  const [recordedURL, setRecordedURL] = useState('');
+  const playerState = recorderReducer.playerState;
 
   const setQuestionResponse = (response) => {
     currentQuestion().response = response;
@@ -117,6 +118,20 @@ const StoryRecordingScreen = ({
 
   const setQuestionAudioDuration = () => {
     currentQuestion().audioDuration = timerSeconds;
+  }
+
+  const currentMatchedSubQuestions = () => {
+    try {
+      const responseMatch = questions[questionIndex].response;
+      return questions[questionIndex].subQuestions.filter(
+        (subQuestion) => {
+          return subQuestion.decisionType === responseMatch;
+        },
+      );
+    }
+    catch (err) {
+      return [];
+    }
   }
 
 
@@ -199,23 +214,24 @@ const StoryRecordingScreen = ({
     }
   };
 
+  //TODO: refactor
   const handleOnYes = async () => {
     setQuestionResponse('YES');
     
     // Gets the subQuestions 
-    const allSubQuestions = handleIfSubQuestion()
+    //const allSubQuestions = handleIfSubQuestion()
 
     // Filters the array and sees if there are any yes decision types
-    const filteredYesSubQuestions = await handleYesDecision(allSubQuestions);
+    //const filteredYesSubQuestions = await handleYesDecision(allSubQuestions);
 
-    if (filteredYesSubQuestions.length === 0) {
+    if (currentMatchedSubQuestions().length === 0) {
       setIsInitialiseLoaded(false);
       setSubQuestionActive(false);
       return incrementQuestionIndex();
     };
 
     setSubQuestionActive(true);
-    setSubQuestions(filteredYesSubQuestions);
+    setSubQuestions(currentMatchedSubQuestions());
 
     // Below handles the onload, default set to null to handle the first question.
     setSubQuestionActive(true);
@@ -226,18 +242,19 @@ const StoryRecordingScreen = ({
   const handleOnNo = async () => {
     setQuestionResponse('NO');
     // Gets the subQuestions 
-    const allQuestions = await handleIfSubQuestion();
+    //const allQuestions = await handleIfSubQuestion();
 
     // Filters the array and sees if there are any no decision types
-    const filteredNoSubQuestions = handleNoDecision(allQuestions);
+    //const filteredNoSubQuestions = handleNoDecision(allQuestions);
 
-    if (filteredNoSubQuestions.length <= 0) {
+    if (currentMatchedSubQuestions().length <= 0) {
       setIsInitialiseLoaded(false);
       return incrementQuestionIndex();
     };
 
     setSubQuestionActive(true);
-    setSubQuestions(filteredNoSubQuestions);
+    setSubQuestions(currentMatchedSubQuestions());
+
     setSubQuestionActive(true);
     setIsInitialiseLoaded(false);
     return incrementSubQuestionIndex();
@@ -296,37 +313,12 @@ const StoryRecordingScreen = ({
 
   // When the user is at the last question
   const handleEndOfQuestions = async () => {
-    // Finalise stream and creates response with questionID and audio File
-    const questionId = subQuestionActive ? subQuestions[subQuestionIndex].subQuestionID : questions[questionIndex].id;
-    const responseID = await finaliseStreamAndCreateResponse(questionId)
-
-    // IF the question doesn't have any recording then it won't fire a response call.
-    if (responseID) {
-      // Save response to redux 
-      saveResponse(responseID)
-    };
-
     // Resets states
     resetRecorderState();
     resetQuestionReducerToOriginalState();
 
     // Navigates to final create story page
     return navigation.navigate('Create Story', {step: 3});
-  };
-
-  // The below handles if there is a subQuestion linked to the master question
-  const handleIfSubQuestion = () => {
-    if (questions[questionIndex].SubQuestions.length <= 0) {
-      setSubQuestions([]);
-      return [];
-    };
-    
-    if (subQuestionActive) {
-      return;
-    } else if (questions[questionIndex].SubQuestions){
-      setSubQuestions(questions[questionIndex].SubQuestions);
-      return questions[questionIndex].SubQuestions;
-    } 
   };
 
   // When user presses the close button
@@ -368,7 +360,7 @@ const StoryRecordingScreen = ({
       <View style={styles.questionContainer}>
         <StoryQuestionSectionComponent
           questionTitle={questions[questionIndex].title}
-          questionAudioFileId={questions[questionIndex].isYesOrNo && subQuestionActive === false ? null : questions[questionIndex].audioFileId}
+          questionAudioFileId={questions[questionIndex].isYesOrNo && subQuestionActive === false ? null : questions[questionIndex].audioFile}
           subQuestion={subQuestionActive ? subQuestions[subQuestionIndex] : null}
           subQuestionActive={subQuestionActive}
           questionID={questions[questionIndex].id}
@@ -431,7 +423,7 @@ const mapDispatchToProps = (dispatch) => {
     resetRecorderState: () => dispatch(resetRecorderState()),
 
     // Question reducer actions
-    saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions)),
+    //saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions)),
     saveSubQuestions:  (subQuestions) => dispatch(saveSubQuestions(subQuestions)), 
     incrementQuestionIndex: () => dispatch(incrementQuestionIndex()),
     decrementQuestionIndex: () => dispatch(decrementQuestionIndex()),
