@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import {View, Text, Image, FlatList, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList, TouchableOpacity} from 'react-native';
 
 // Actions
 import { saveAllStories } from './../redux/actions/allCollections';
@@ -48,11 +48,11 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
 
   // Handle when user clicks on bookmark button
   const onBookmarkPress = async (hasUserBookMarkedStory, storyID) => {
+
     // If user is not logged in
     if (!userReducer.id) {
       return navigation.navigate("Login");
     };
-
 
     // If already bookmarked 
     if (hasUserBookMarkedStory) {

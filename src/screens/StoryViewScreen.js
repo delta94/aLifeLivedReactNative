@@ -5,7 +5,6 @@ import TrackPlayer, {
   useTrackPlayerEvents,
   TrackPlayerEvents,
   useTrackPlayerProgress, 
-  STATE_PLAYING,
 } from 'react-native-track-player';
 
 // API
@@ -25,14 +24,15 @@ import styles from './../styles/screens/StoryViewScreen';
 import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
 // Icon
-import { Icon } from 'react-native-elements'
+import IconComponent from './../components/IconComponent';
+
 
 const events = [
   TrackPlayerEvents.PLAYBACK_STATE
 ];
 
 const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
-  const {position, bufferedPosition, duration} = useTrackPlayerProgress();
+  const {position, duration} = useTrackPlayerProgress();
   const [story, setStory] = useState(null);
   const [tags, setTags] = useState([]);
   const [storyLikes, setStoryLikes] = useState(0);
@@ -43,8 +43,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
 
   // Gets the player state and sets local state. 
   useTrackPlayerEvents(events, (event) => {
-    console.log(event);
-    setAudioState(event.state)
+    return setAudioState(event.state);
   });
 
   const onLoad = async () => {
@@ -114,7 +113,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
       )
     });
 
-    return tag
+    return tag;
   };
 
   // Handle when user presses on heart button
@@ -210,7 +209,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
     <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={() => handleOnClose()}>
-          <Icon
+          <IconComponent
             name="times"
             type='font-awesome-5'
             size={ICON_SIZE.iconSizeMedium}
@@ -230,10 +229,10 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
           <View style={styles.headerTextContainer}>
             <Text style={styles.headerTitleText}>{story === null ? '' : story.title}</Text>
             <View style={styles.headerSubContentContainer}>
-              <Icon name="user" type="font-awesome-5" solid={true} size={ICON_SIZE.iconSizeSmall} color={COLOR.grey} />
+              <IconComponent name="user" type="font-awesome-5" solid={true} size={ICON_SIZE.iconSizeSmall} color={COLOR.grey} />
               <Text style={styles.headerSubText}>{story === null ? '' : story.interviewer.username}</Text>
                 
-              <Icon name="heart" type="font-awesome-5" solid={true} size={ICON_SIZE.iconSizeSmall} color={COLOR.red} />
+              <IconComponent name="heart" type="font-awesome-5" solid={true} size={ICON_SIZE.iconSizeSmall} color={COLOR.red} />
               <Text style={styles.headerSubText}>{story === null ? '' : storyLikes}</Text>
             </View>
 
@@ -254,7 +253,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
         </View>
         <View style={styles.audioControllerContainer}>
           <TouchableOpacity onPress={() => onRewind()}>
-            <Icon
+            <IconComponent
               name="backward"
               type='font-awesome-5'
               size={ICON_SIZE.iconSizeXLarge}
@@ -263,7 +262,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => audioState === "playing" ? onPause() : onPlay()}>
-            <Icon
+            <IconComponent
               name={audioState === "playing" ? "pause" : "play"}
               type='font-awesome-5'
               size={ICON_SIZE.iconSizeXLarge}
@@ -272,7 +271,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => onFastForward()}>
-            <Icon
+            <IconComponent
               name="forward"
               type='font-awesome-5'
               size={ICON_SIZE.iconSizeXLarge}
@@ -282,25 +281,27 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
         </View>
 
         <View style={styles.bookMarkContainer}>
-          <Icon
-            name="heart"
-            solid={didLike}
-            type='font-awesome-5'
-            size={ICON_SIZE.iconSizeLarge}
-            disabledStyle={{backgroundColor: null}}
-            color={COLOR.red}
-            onPress={() => onHeartPress()}
-          />
-
-          <Icon
-            name="bookmark"
-            type='font-awesome-5'
-            size={ICON_SIZE.iconSizeLarge}
-            disabledStyle={{ backgroundColor: null }}
-            solid={didBookmark}
-            color={COLOR.grey}
-            onPress={() => onBookmarkPress()}
-          />
+          <TouchableOpacity onPress={() => onHeartPress()}>
+            <IconComponent
+              name="heart"
+              solid={didLike}
+              type='font-awesome-5'
+              size={ICON_SIZE.iconSizeLarge}
+              disabledStyle={{backgroundColor: null}}
+              color={COLOR.red}
+              
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => onBookmarkPress()}>
+            <IconComponent
+              name="bookmark"
+              type='font-awesome-5'
+              size={ICON_SIZE.iconSizeLarge}
+              disabledStyle={{ backgroundColor: null }}
+              solid={didBookmark}
+              color={COLOR.grey}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </View>

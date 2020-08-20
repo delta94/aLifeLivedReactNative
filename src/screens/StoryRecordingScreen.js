@@ -1,8 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, PermissionsAndroid, Platform} from 'react-native';
+import {View, Text, PermissionsAndroid, Platform, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {Buffer} from 'buffer';
-import TrackPlayer from 'react-native-track-player'; 
+import TrackPlayer, {
+  useTrackPlayerEvents,
+  TrackPlayerEvents,
+  useTrackPlayerProgress,
+} from 'react-native-track-player';
 
 import AudioRecord from '@alifelived/react-native-audio-record';
 
@@ -27,10 +31,13 @@ import StoryButtonsComponent from '../components/StoryButtonsComponent';
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import IconComponent from './../components/IconComponent';
 
 // Styles
 import styles from './../styles/screens/StoryRecordingScreen';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
+
+const events = [TrackPlayerEvents.PLAYBACK_STATE];
 
 const StoryRecordingScreen = ({
   // Question Reducer
@@ -71,6 +78,11 @@ const StoryRecordingScreen = ({
   const [skipOption, setSkipOption] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialiseLoaded, setIsInitialiseLoaded] = useState(false);
+
+    // Gets the player state and sets local state. 
+  useTrackPlayerEvents(events, (event) => {
+    console.log(event);
+  });
 
   // timer use effect
   useEffect(() => {
@@ -161,7 +173,6 @@ const StoryRecordingScreen = ({
     }
     await TrackPlayer.add(playTheseTracks);
     
-    console.log(await TrackPlayer.getQueue());
     await TrackPlayer.play();
     console.log(await TrackPlayer.getState());
 
@@ -344,13 +355,15 @@ const StoryRecordingScreen = ({
     <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
         <View style={styles.crossIconContainer}>
-          <AntDesign
-            name="close"
+        <TouchableOpacity onPress={() => onClose()}>
+          <IconComponent
+            name="times"
+            type='font-awesome-5'
             size={ICON_SIZE.iconSizeMedium}
+            style={{alignSelf: 'flex-start'}}
             color={COLOR.grey}
-            style={styles.icon}
-            onPress={() => onClose()}
           />
+        </TouchableOpacity>
         </View>
         <View style={styles.timerContainer}>
           <StoryTimerComponent
