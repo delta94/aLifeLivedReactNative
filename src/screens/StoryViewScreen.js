@@ -1,7 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import { View, Text, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import TrackPlayer, { useTrackPlayerEvents, TrackPlayerEvents, STATE_PLAYING } from 'react-native-track-player';
+import TrackPlayer, {
+  useTrackPlayerEvents,
+  TrackPlayerEvents,
+  useTrackPlayerProgress, 
+  STATE_PLAYING,
+} from 'react-native-track-player';
 
 // API
 import {getStoryByID} from './../api/getRequests/getStory';
@@ -13,6 +18,7 @@ import { removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedSt
 
 // Component
 import AvatarComponent from './../components/AvatarComponent';
+import SliderComponent from './../components/SliderComponent';
 
 // Styles
 import styles from './../styles/screens/StoryViewScreen';
@@ -25,8 +31,8 @@ const events = [
   TrackPlayerEvents.PLAYBACK_STATE
 ];
 
-
 const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
+  const {position, bufferedPosition, duration} = useTrackPlayerProgress();
   const [story, setStory] = useState(null);
   const [tags, setTags] = useState([]);
   const [storyLikes, setStoryLikes] = useState(0);
@@ -37,6 +43,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
 
   // Gets the player state and sets local state. 
   useTrackPlayerEvents(events, (event) => {
+    console.log(event);
     setAudioState(event.state)
   });
 
@@ -75,7 +82,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
 
     // Loads track 
     await TrackPlayer.add(track);
-
+    
     // If user is not logged
     if (route.params.userID) {
       // Below checks if the user has already liked or bookmarked the story, if so it disables button
@@ -87,7 +94,6 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
       return setDidBookmark(hasUserBookmarkedStory);
     };
   };
-
 
   useEffect(() => {
     onLoad();
@@ -197,7 +203,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
   const onRewind = async () => {
     // Gets the current track position then seeks to position - 5 seconds
     const position = await TrackPlayer.getPosition();
-    return TrackPlayer.seekTo(position + 5);
+    return TrackPlayer.seekTo(position - 5);
   };
 
   return (
@@ -243,6 +249,9 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
       </View>
 
       <View style={styles.bottomContainer}>
+        <View style={styles.sliderContainer}>
+          <SliderComponent maxValue={duration} currentPosition={position} />
+        </View>
         <View style={styles.audioControllerContainer}>
           <TouchableOpacity onPress={() => onRewind()}>
             <Icon

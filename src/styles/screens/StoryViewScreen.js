@@ -91,14 +91,20 @@ const styles = StyleSheet.create({
   },
 
   bottomContainer: {
-    flex: 0.9,
+    flex: 1.2,
     display: 'flex',
     flexDirection: 'column',
     alignContent: 'center',
-    paddingTop: 30,
+    paddingTop: 20,
     backgroundColor: COLOR.white,
     borderTopLeftRadius: BORDER_RADIUS.medium,
     borderTopRightRadius: BORDER_RADIUS.medium,
+  },
+
+  sliderContainer: {
+    marginRight: 10,
+    marginLeft: 10,
+    marginBottom: 5
   },
 
   audioControllerContainer: {
