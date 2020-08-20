@@ -67,10 +67,7 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
   const renderStories = ({ item }) => {
     const hasUserLikedStory = userReducer.likedStories ? userReducer.likedStories.includes(item._id) : false;
     const hasUserBookMarkedStory = userReducer.bookMarks ? userReducer.bookMarks.includes(item._id) : false;
-    // const likes = allCollectionsReducer.stories.find(({_id}) => _id === item._id);
 
-    console.log(likes);
-    
     return (
       <>
         <TouchableOpacity onPress={() => onStoryPress(item._id)} style={styles.storyCard}>
@@ -79,7 +76,7 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
             description={item.description}
             tags={item.tags}
             avatarURL={item.interviewer.avatarURL}
-            likes={likes}
+            likes={item.likes}
             hasUserLikedStory={hasUserLikedStory}
             hasUserBookMarkedStory={hasUserBookMarkedStory}
             onBookMarkPress={() => onBookmarkPress(hasUserBookMarkedStory, item._id)}

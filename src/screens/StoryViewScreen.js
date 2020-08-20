@@ -34,9 +34,11 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
   const [didBookmark, setDidBookmark] = useState(false);
   const [audioState, setAudioState] = useState("NONE");
 
+
+  // Gets the player state and sets local state. 
   useTrackPlayerEvents(events, (event) => {
-    console.log("MAXXXX");
-  })
+    setAudioState(event.state)
+  });
 
   const onLoad = async () => {
     // If for some reason reducer is undefined resort to api call
@@ -67,6 +69,9 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
       artist: storyData.interviewer.username
     };
 
+
+    // Removes any other tracks 
+    await TrackPlayer.reset();
 
     // Loads track 
     await TrackPlayer.add(track);
@@ -170,21 +175,30 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
     };
   };
 
+
   // Handle when user clicks play
   const onPlay = async () => {
-    console.log(await TrackPlayer.getState())
     await TrackPlayer.play();
   };
 
   // Handle when user clicks pause
-  const onPause = () => {
-
+  const onPause = async () => {
+    return await TrackPlayer.pause();
   };
 
   // Handle when user clicks fast forward 
-
+  const onFastForward = async () => {
+    // Gets the current track position then seeks to position + 5 seconds
+    const position = await TrackPlayer.getPosition();
+    return TrackPlayer.seekTo(position + 5);
+  };
 
   // Handle when user clicks rewind
+  const onRewind = async () => {
+    // Gets the current track position then seeks to position - 5 seconds
+    const position = await TrackPlayer.getPosition();
+    return TrackPlayer.seekTo(position + 5);
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -196,7 +210,6 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
             size={ICON_SIZE.iconSizeMedium}
             style={{alignSelf: 'flex-start'}}
             color={COLOR.grey}
-            
           />
         </TouchableOpacity>
 
@@ -205,7 +218,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
             isRounded={true}
             size="large"
             iconName="user"
-            source={story === null ? '' : story.interviewer.avatar}
+            source={story === null ? '' : story.interviewer.avatarURL}
           />
 
           <View style={styles.headerTextContainer}>
@@ -231,28 +244,32 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
 
       <View style={styles.bottomContainer}>
         <View style={styles.audioControllerContainer}>
-          <Icon
-            name="backward"
-            type='font-awesome-5'
-            size={ICON_SIZE.iconSizeXLarge}
-            color={COLOR.grey}
-          />
-
-          <TouchableOpacity onPress={() => onPlay()}>
+          <TouchableOpacity onPress={() => onRewind()}>
             <Icon
-              name="play"
+              name="backward"
               type='font-awesome-5'
               size={ICON_SIZE.iconSizeXLarge}
               color={COLOR.grey}
             />
           </TouchableOpacity>
 
-          <Icon
-            name="forward"
-            type='font-awesome-5'
-            size={ICON_SIZE.iconSizeXLarge}
-            color={COLOR.grey}
-          />
+          <TouchableOpacity onPress={() => audioState === "playing" ? onPause() : onPlay()}>
+            <Icon
+              name={audioState === "playing" ? "pause" : "play"}
+              type='font-awesome-5'
+              size={ICON_SIZE.iconSizeXLarge}
+              color={COLOR.grey}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => onFastForward()}>
+            <Icon
+              name="forward"
+              type='font-awesome-5'
+              size={ICON_SIZE.iconSizeXLarge}
+              color={COLOR.grey}
+            />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.bookMarkContainer}>
