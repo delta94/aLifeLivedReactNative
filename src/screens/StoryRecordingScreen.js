@@ -4,15 +4,15 @@ import {connect} from 'react-redux';
 import {Buffer} from 'buffer';
 import TrackPlayer from 'react-native-track-player'; 
 
-import AudioRecord from 'react-native-audio-record';
+import AudioRecord from '@alifelived/react-native-audio-record';
 
 // API
-import {audioStream, initialiseStream, sequenceStream} from './../api/postRequests/audioStream';
+import {audioStream, initialiseStream, sequenceStream, audioFileIdToUrl, channelIdToUrl} from './../api/postRequests/audioStream';
 import {getSubQuestionFromQuestionID} from './../api/getRequests/getSubQuestions';
 
 // Actions
-import { saveAllQuestions, incrementQuestionIndex, resetQuestionReducerToOriginalState, resetSubQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
-import {setPlayerState, resetRecorderState} from './../redux/actions/recorderActions';
+import { incrementQuestionIndex, resetQuestionReducerToOriginalState, resetSubQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
+import {setPlayerState, resetRecorderState, setRecordedAudioFilepath} from './../redux/actions/recorderActions';
 import {saveResponse} from './../redux/actions/storyActions';
 
 // Helpers
@@ -46,6 +46,7 @@ const StoryRecordingScreen = ({
   // Recorder Reducer
   recorderReducer,
   setPlayerState,
+  setRecordedAudioFilepath,
   resetRecorderState,
 
   // User Reducer
@@ -71,11 +72,18 @@ const StoryRecordingScreen = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialiseLoaded, setIsInitialiseLoaded] = useState(false);
 
-  // Recording States
-  const [timerSeconds, setTimerSeconds] = useState(0);
-  const [recordedURL, setRecordedURL] = useState('');
-  const playerState = recorderReducer.playerState;
+  // timer use effect
+  useEffect(() => {
+    if (playerState === 'RECORDING') {
+      const interval = setInterval(() => {
+        setTimerSeconds(timerSeconds + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+    }, [timerSeconds, playerState]);
 
+  const recordedFilePath = recorderReducer.filePath;
+  
   // Questions state
   const [questions] = useState(questionReducer.questions);
   const questionIndex = questionReducer.questionIndex;
@@ -85,6 +93,48 @@ const StoryRecordingScreen = ({
   const [subQuestions, setSubQuestions] = useState([]);
   const subQuestionIndex = questionReducer.subQuestionIndex;
 
+
+
+
+  const currentQuestion = () => {
+    if (subQuestionActive) {
+      return subQuestions[subQuestionIndex];
+    }
+    else
+      return questions[questionIndex];
+  }
+  // Recording States
+  const [timerSeconds, setTimerSeconds] = useState(currentQuestion().audioDuration ? currentQuestion().audioDuration : 0);
+  const [recordedURL, setRecordedURL] = useState('');
+  const playerState = recorderReducer.playerState;
+
+  const setQuestionResponse = (response) => {
+    currentQuestion().response = response;
+  }
+
+  const setQuestionChannel = (chanId) => {
+    currentQuestion().channelId = chanId;
+  }
+
+  const setQuestionAudioDuration = () => {
+    currentQuestion().audioDuration = timerSeconds;
+  }
+
+  const currentMatchedSubQuestions = () => {
+    try {
+      const responseMatch = questions[questionIndex].response;
+      return questions[questionIndex].subQuestions.filter(
+        (subQuestion) => {
+          return subQuestion.decisionType === responseMatch;
+        },
+      );
+    }
+    catch (err) {
+      return [];
+    }
+  }
+
+
   // Loads questions.
   const onLoad = async () => {
     setIsInitialiseLoaded(false);
@@ -92,7 +142,6 @@ const StoryRecordingScreen = ({
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
     ]): null;
 
-    initialiseStream(userReducer.id);
     await AudioRecord.init(options);
     setIsInitialiseLoaded(true);
   };
@@ -102,29 +151,24 @@ const StoryRecordingScreen = ({
     await TrackPlayer.stop();
     return setPlayerState('IDLE');
   };
-
+  
   // Play audio
   const playAudio = async (track) => {
-    await TrackPlayer.add([track]);
-
-    if (recordedURL) {
-      const recordedTrack = {
-        id: 'recording',
-        url: recordedURL,
-        title: 'TEST',
-        artist: 'TEST',
-      };
-
+    const playTheseTracks = [track];
+    if (currentQuestion().response === 'AUDIO') {
       // IF there is a recording it will play the recording after the question. As if it was the real thing
-      await TrackPlayer.add([recordedTrack]);
+      playTheseTracks.push(channelIdToTrack(currentQuestion().channelId));
     }
+    await TrackPlayer.add(playTheseTracks);
 
-    await TrackPlayer.play();
-    return setPlayerState('PLAYING');
+     await TrackPlayer.play();
+     return setPlayerState('PLAYING');
   };
-
   // Start recording
   const onRecordStart = async () => {
+    if (!currentQuestion().channelId)
+      setQuestionChannel(await initialiseStream());
+
     AudioRecord.start();
     
     // This is needed or it sends warns
@@ -139,17 +183,30 @@ const StoryRecordingScreen = ({
 
   // When user hits the pause.
   const onRecordPause = async () => {
+    setPlayerState("PAUSED");
     await AudioRecord.stop();
-    sequenceStream();
-    return setPlayerState("PAUSED");
+    setQuestionResponse('AUDIO');
+    setQuestionAudioDuration();
+    const filePath = await sequenceStream();
+    return; //setRecordedAudioFilepath(filePath);
   };
+
+  const channelIdToTrack = (channelId) => {
+    return {
+      id: 'recording',
+      url: channelIdToUrl(channelId),
+      title: 'TEST',
+      artist: 'TEST',
+    };
+  }
 
   // Handles the back button out of subQuestions
   const onBackButton = async () => {
     // if index is less than or equal to 0 then turn subQuestion active off and reset index
     if (subQuestionIndex <= 0) {
       setSubQuestionActive(false);
-      return resetSubQuestionIndex();
+      resetSubQuestionIndex();
+      return decrementQuestionIndex();
     } else if (subQuestionIndex > 0) {
       return decrementSubQuestionIndex();
     } else {
@@ -157,21 +214,24 @@ const StoryRecordingScreen = ({
     }
   };
 
+  //TODO: refactor
   const handleOnYes = async () => {
+    setQuestionResponse('YES');
+    
     // Gets the subQuestions 
-    const allQuestions = await handleIfSubQuestion()
+    //const allSubQuestions = handleIfSubQuestion()
 
     // Filters the array and sees if there are any yes decision types
-    const filteredYesSubQuestions = await handleYesDecision(allQuestions);
+    //const filteredYesSubQuestions = await handleYesDecision(allSubQuestions);
 
-    if (filteredYesSubQuestions.length === 0) {
+    if (currentMatchedSubQuestions().length === 0) {
       setIsInitialiseLoaded(false);
       setSubQuestionActive(false);
       return incrementQuestionIndex();
     };
 
     setSubQuestionActive(true);
-    setSubQuestions(filteredYesSubQuestions);
+    setSubQuestions(currentMatchedSubQuestions());
 
     // Below handles the onload, default set to null to handle the first question.
     setSubQuestionActive(true);
@@ -180,19 +240,21 @@ const StoryRecordingScreen = ({
   };
 
   const handleOnNo = async () => {
+    setQuestionResponse('NO');
     // Gets the subQuestions 
-    const allQuestions = await handleIfSubQuestion();
+    //const allQuestions = await handleIfSubQuestion();
 
     // Filters the array and sees if there are any no decision types
-    const filteredNoSubQuestions = handleNoDecision(allQuestions);
+    //const filteredNoSubQuestions = handleNoDecision(allQuestions);
 
-    if (filteredNoSubQuestions.length <= 0) {
+    if (currentMatchedSubQuestions().length <= 0) {
       setIsInitialiseLoaded(false);
       return incrementQuestionIndex();
     };
 
     setSubQuestionActive(true);
-    setSubQuestions(filteredNoSubQuestions);
+    setSubQuestions(currentMatchedSubQuestions());
+
     setSubQuestionActive(true);
     setIsInitialiseLoaded(false);
     return incrementSubQuestionIndex();
@@ -203,10 +265,10 @@ const StoryRecordingScreen = ({
     const questionId = subQuestionActive ? subQuestions[subQuestionIndex].subQuestionID : questions[questionIndex].id;
 
     // Finalise stream and creates response with questionID and audio File
-    const responseID = await finaliseStreamAndCreateResponse(questionId);
+    //const responseID = await finaliseStreamAndCreateResponse(questionId);
 
     // Save response to redux 
-    saveResponse(responseID)
+    //saveResponse(responseID)
 
     // if subQ is the last one
     if (subQuestionIndex === subQuestions.length - 1) {
@@ -229,6 +291,7 @@ const StoryRecordingScreen = ({
 
   // The below handles the on skip
   const handleOnSkip = async () => {
+    setQuestionResponse('SKIP');
     // If subQuestion active and isn't last sub Q
     if (subQuestionActive && subQuestionIndex !== subQuestions.length - 1) {
       incrementSubQuestionIndex();
@@ -249,37 +312,13 @@ const StoryRecordingScreen = ({
   };
 
   // When the user is at the last question
-  // TODO: FIRE RESPONSE HERE
   const handleEndOfQuestions = async () => {
-    // Finalise stream and creates response with questionID and audio File
-    const questionId = subQuestionActive ? subQuestions[subQuestionIndex].subQuestionID : questions[questionIndex].id;
-    const responseID = await finaliseStreamAndCreateResponse(questionId)
-
-    // Save response to redux 
-    saveResponse(responseID)
-
     // Resets states
     resetRecorderState();
     resetQuestionReducerToOriginalState();
 
     // Navigates to final create story page
     return navigation.navigate('Create Story', {step: 3});
-  };
-
-  // The below handles if there is a subQuestion linked to the master question
-  const handleIfSubQuestion = async () => {
-    if (await questions[questionIndex].subQuestions.length <= 0) {
-      setSubQuestions([]);
-      return [];
-    };
-    
-    if (subQuestionActive) {
-      return;
-    } else if (questions[questionIndex].subQuestions){
-      const responseData = await getSubQuestionFromQuestionID(questions[questionIndex].id);
-      setSubQuestions(responseData);
-      return responseData;
-    } 
   };
 
   // When user presses the close button
@@ -289,18 +328,12 @@ const StoryRecordingScreen = ({
     return resetQuestionReducerToOriginalState();
   };
 
-  // This controls the timer and loads the questions.
+  // This controls loads the questions.
   useEffect(() => {
     if (isInitialiseLoaded === false) {
       onLoad();
     };
 
-    // Need to figure out a better timer
-    // if (playerState === 'RECORDING') {
-    //   setTimeout(() => {
-    //     setTimerSeconds(timerSeconds + 1);
-    //   }, 1000);
-    // }
   }, [playerState, questionIndex, subQuestionIndex]);
 
 
@@ -327,7 +360,7 @@ const StoryRecordingScreen = ({
       <View style={styles.questionContainer}>
         <StoryQuestionSectionComponent
           questionTitle={questions[questionIndex].title}
-          questionAudioURL={questions[questionIndex].isYesOrNo && subQuestionActive === false ? null : questions[questionIndex].audioFileURL}
+          questionAudioFileId={questions[questionIndex].isYesOrNo && subQuestionActive === false ? null : questions[questionIndex].audioFile}
           subQuestion={subQuestionActive ? subQuestions[subQuestionIndex] : null}
           subQuestionActive={subQuestionActive}
           questionID={questions[questionIndex].id}
@@ -336,6 +369,7 @@ const StoryRecordingScreen = ({
           pauseAudio={() => pauseAudio()}
           questionAudioPlaying={(isAudioPlaying) => setPlayerState(isAudioPlaying)}
         />
+
       </View>
 
       <View style={styles.footer}>
@@ -385,10 +419,11 @@ const mapDispatchToProps = (dispatch) => {
   return {
     // Recorder reducer actions
     setPlayerState: (playerState) => dispatch(setPlayerState(playerState)),
+    setRecordedAudioFilepath: (filePath) =>dispatch(setRecordedAudioFilepath(filePath)),
     resetRecorderState: () => dispatch(resetRecorderState()),
 
     // Question reducer actions
-    saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions)),
+    //saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions)),
     saveSubQuestions:  (subQuestions) => dispatch(saveSubQuestions(subQuestions)), 
     incrementQuestionIndex: () => dispatch(incrementQuestionIndex()),
     decrementQuestionIndex: () => dispatch(decrementQuestionIndex()),

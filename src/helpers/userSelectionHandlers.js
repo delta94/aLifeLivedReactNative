@@ -1,4 +1,4 @@
-export const handleYesDecision = (subQuestions) => {
+/*export const handleYesDecision = (subQuestions) => {
 
   // Filters the array and sees if there are any yes decision types
   const filteredSubQuestions = subQuestions.filter(
@@ -17,4 +17,4 @@ export const handleNoDecision = (subQuestions) => {
   });
 
   return filteredSubQuestions;
-};
+};*/

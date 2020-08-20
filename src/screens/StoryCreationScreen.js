@@ -7,13 +7,16 @@ import {connect} from 'react-redux';
 import { useOrientation } from './../helpers/orientation';
 
 // Actions
-import { saveAllQuestions } from './../redux/actions/questionActions';
+import { saveAllQuestions, setSubQuestionActiveFalse } from './../redux/actions/questionActions';
 import { saveAllTags, resetStoryReducer, saveStoryDetails } from './../redux/actions/storyActions';
 
 // API
 import { getAllQuestions } from './../api/getRequests/getQuestions';
 import { getAllTags } from './../api/getRequests/getTags';
 import {createStory} from './../api/postRequests/createStory';
+
+import {finaliseStoryStreams} from './../api/postRequests/audioStream';
+
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -29,7 +32,7 @@ import ButtonComponent from './../components/ButtonComponent';
 import styles from './../styles/screens/StoryCreationScreen';
 import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
-const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags, storyReducer, userReducer, resetStoryReducer, saveStoryDetails}) => {  
+const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags, storyReducer, userReducer, questionReducer, resetStoryReducer, saveStoryDetails}) => {  
   const orientation = useOrientation();
   
   // Below is all basic form things
@@ -42,14 +45,15 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
   const [interviewee, setIntervieweeName] = useState("");
   const [storyTitle, setStoryTitle] = useState("");
 
-  
-
   // Below are boolean states
-  const [isStoryPrivate, setIsStoryPrivate] = useState(null);
+  const [isStoryPublic, setIsStoryPublic] = useState(null);
   const [isSelfInterview, setIsSelfInterview] = useState(null);
 
   // Below are array states
   const [selectedTags, setSelectedTags] = useState([]);
+
+  const [questions, setQuestions] = useState(questionReducer.questions);
+
 
   // Loads questions.
   const loadQuestions = async () => {
@@ -60,6 +64,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
     if (response.status === 200) {
       try {
         saveAllQuestions(response.data);
+        setQuestions(response.data);
         setIsLoading(true);
       } catch (error) {
         setIsLoading(false);
@@ -87,36 +92,75 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
     return setIsLoading(false);
   };
 
-  console.log(storyReducer);
   // Handles when the user hits next
   const handleOnNextButton = async () => {
     if (step === 2) {
       await loadQuestions();
       navigation.navigate('Record Story');
       // Increase step because user returns here to create story at the end of recording questions. 
-      setStep(step + 1);
-      return setIsLoading(false);
+      setIsLoading(false);
+      return setStep(step + 1);
     } else if (step >= 3) {
+      setIsLoading(true);
+      // Gets data to send to server
       const userID = userReducer.id;
-      const responses = storyReducer.responses;
+      //const responses = storyReducer.responses;
       const storyData = {
         about: storyAbout,
-        description: storyDescription, 
+        description: storyDescription,
         interviewee: interviewee,
-        title: storyTitle,
-        isPublic: isStoryPrivate,
+        title: storyTitle ? storyTitle : "left blank",
+        isPublic: isStoryPublic,
         isSelfInterview: isSelfInterview,
         selectedTags: selectedTags,
         interviewer: userID,
-        responses: responses
       };
-
+      // Saves story data to redux 
       saveStoryDetails(storyData);
-      await createStory(storyData);
+      const storyID = await createStory(storyData);
+
+      // unpack audio response and call finaliseStoryStreams
+      const storySegments = collocateStorySegments();
+      if (storySegments.length > 0)
+        finaliseStoryStreams(storySegments, storyID);
+
+      // Navigates to the story
+      navigation.navigate("View Story", {storyID});
+      resetStoryReducer();
+      return setIsLoading(false);
     } else {
       return setStep(step + 1)
     }
   };
+
+  // steps through the questions objects
+  // create a reference object identifying
+  // the sequence of audio that needs to be
+  // compiled (by the audio server) for the
+  // finalised story post
+  const collocateStorySegments = () => {
+    const audioSegments = [];
+    let question, subquestion;
+    for (question of /*questionReducer.*/questions) {
+      if (question.response === 'AUDIO') {
+        audioSegments.push(questionToAudioSegment(question));
+      }
+      for (subquestion of question.subQuestions) {
+        if (subquestion.response === 'AUDIO') {
+          audioSegments.push(questionToAudioSegment(subquestion));
+        }
+      }
+    }
+
+    return audioSegments;
+  }
+
+  const questionToAudioSegment = ( quest ) => {
+    return {
+      questionAudioFile: quest.audioFile,
+      answerAudioChannel: quest.channelId
+    }
+  }
 
   const handleOnClose = () => {
     resetStoryReducer();
@@ -137,9 +181,9 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
           <View>
             <Text style={styles.footerHeaderText}>Do you wish to make your story private or public?</Text>
             <CreateStoryPrivacyComponent
-              isStoryPrivate={isStoryPrivate}
-              setStoryPrivate={() => setIsStoryPrivate(true)}
-              setStoryPublic={() => setIsStoryPrivate(false)}
+              isStoryPrivate={isStoryPublic}
+              setStoryPrivate={() => setIsStoryPublic(false)}
+              setStoryPublic={() => setIsStoryPublic(true)}
             />
           </View>
         )
@@ -230,7 +274,8 @@ const mapDispatchToProps = (dispatch) => {
 function mapStateToProps (state) {
   return {
     storyReducer: state.storyReducer,
-    userReducer: state.userReducer
+    userReducer: state.userReducer,
+    questionReducer: state.questionReducer
   }
 };
 
