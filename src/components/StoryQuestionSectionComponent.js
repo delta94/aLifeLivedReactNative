@@ -1,6 +1,9 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 
+import {audioFileIdToUrl} from './../api/postRequests/audioStream';
+
+
 // Animation
 import * as Animatable from 'react-native-animatable';
 
@@ -11,13 +14,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 import styles from './../styles/components/StoryQuestionSectionComponent';
 
-const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, questionID, playerState, playAudio, pauseAudio, subQuestionActive, subQuestion}) => {
+const StoryQuestionSectionComponent = ({questionTitle, questionAudioFileId, questionID, playerState, playAudio, pauseAudio, subQuestionActive, subQuestion}) => {
 
   const track = {
-    id: questionID,
-    url: questionAudioURL,
-    title: questionTitle,
-    artist: questionTitle,
+    id: subQuestionActive ? subQuestion.id : questionID,
+    url: audioFileIdToUrl(subQuestionActive ? subQuestion.audioFile : questionAudioFileId),
+    title: subQuestionActive ? subQuestion.title : questionTitle,
+    artist: subQuestionActive ? subQuestion.title : questionTitle,
   };
 
   const handleTextDisplay = () => {
@@ -73,7 +76,7 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioURL, questio
       <Animatable.Text animation="fadeIn" easing="ease-in" style={styles.questionTitleContainer}>
         <Text style={styles.questionTitle}>{handleTextDisplay()}</Text>
       </Animatable.Text>
-      { questionAudioURL ? handlePlayPauseButton() : null}
+      { questionAudioFileId ? handlePlayPauseButton() : null}
       
     </View>
   );
