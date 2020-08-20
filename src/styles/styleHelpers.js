@@ -7,13 +7,15 @@ export const COLOR = {
   lightGrey: "#E5E5E5",
   limeGreen: '#0FCFA6',
   white: 'white', 
-  green: "#009387"
+  green: "#009387",
+  red: "red"
 };
 
 export const ICON_SIZE = {
   iconSizeXLarge: 40,
   iconSizeLarge: 30,
-  iconSizeMedium: 25
+  iconSizeMedium: 25,
+  iconSizeSmall: 20
 };
 
 export const FONT_SIZE = {
