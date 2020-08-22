@@ -10,6 +10,9 @@ import TrackPlayer from 'react-native-track-player';
 // API 
 import {getUserByID} from './../api/getRequests/getUser';
 
+// Constants 
+import {HEADER_OPTIONS} from './../appConstants';
+
 // Icon imports
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
@@ -51,31 +54,19 @@ const StoryStack = createStackNavigator();
 const SearchStack = createStackNavigator();
 const StoryViewStack = createStackNavigator();
 
-
 // The below are stacks they can hold a number of screens. We're using this because of the tab.
 const HomeStackScreen = () => (
   <HomeStack.Navigator>
-    <HomeStack.Screen 
-      name="Home" 
-      component={HomeScreen} 
-      options={{
-        title: "A Life Lived",
-        headerTitleAlign: 'left',
-        headerStyle: {
-          backgroundColor: COLOR.grey,
-          shadowOffset: {
-            height: 0,
-          },
-        },
-        headerTitleStyle: {
-          color: COLOR.limeGreen,
-          fontSize: FONT_SIZE.largeSize
-        },
-        headerStatusBarHeight: 60,
-        cardStyle: {backgroundColor: COLOR.grey}
-      }}
+    <HomeStack.Screen
+      name="Home"
+      component={HomeScreen}
+      options={HEADER_OPTIONS}
     />
-    <StoryStack.Screen name="View Story" component={StoryViewScreen} options={{cardStyle: { backgroundColor: COLOR.grey }, headerShown: false}} />
+    <StoryStack.Screen
+      name="View Story"
+      component={StoryViewScreen}
+      options={{cardStyle: {backgroundColor: COLOR.grey}, headerShown: false}}
+    />
   </HomeStack.Navigator>
 );
 
@@ -94,7 +85,7 @@ const StoryStackScreen = () => (
 
 const SearchStackScreen = () => (
   <SearchStack.Navigator>
-    <SearchStack.Screen name="Search" component={SearchScreen} />
+    <SearchStack.Screen name="Search" component={SearchScreen} options={HEADER_OPTIONS} />
   </SearchStack.Navigator>
 );
 
