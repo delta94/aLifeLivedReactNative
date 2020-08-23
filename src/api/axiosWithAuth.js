@@ -7,11 +7,11 @@ import {
 let authToken;
 
 const axiosAPI = axios.create({
-  baseURL: /*BACKEND_BASE_ROUTE*/"http://192.168.1.108:8080",
+  baseURL: BACKEND_BASE_ROUTE,
 });
 
 const axiosAudioAPI = axios.create({
-  baseURL: /*AUDIO_API_BASE_ROUTE*/"http://192.168.1.108:4000",
+  baseURL: AUDIO_API_BASE_ROUTE,
 });
 
 const retrieveAuthToken = async () => {

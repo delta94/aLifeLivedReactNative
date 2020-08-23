@@ -1,7 +1,6 @@
 import {axiosAudioAPI} from './../axiosWithAuth';
 import {Buffer} from 'buffer';
-//import {AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
-const AUDIO_API_BASE_ROUTE = "http://192.168.1.108:4000";
+import {AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
 
 let channelId, chunkNum, chunkResponses, uploadChunkPromise, packets;
 
