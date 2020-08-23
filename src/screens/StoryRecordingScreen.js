@@ -154,6 +154,7 @@ const StoryRecordingScreen = ({
   
   // Play audio
   const playAudio = async (track) => {
+    await TrackPlayer.reset();
     const playTheseTracks = [track];
     if (currentQuestion().response === 'AUDIO') {
       // IF there is a recording it will play the recording after the question. As if it was the real thing
