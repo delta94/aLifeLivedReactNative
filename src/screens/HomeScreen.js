@@ -1,51 +1,120 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import {View, Text, Image, FlatList} from 'react-native';
+import {View, Text, FlatList, TouchableOpacity} from 'react-native';
+
+// Actions
+import { saveAllStories } from './../redux/actions/allCollections';
+import { addBookMarkedStory, removeBookMarkedStory } from './../redux/actions/userActions';
 
 // API
 import {getAllPublicStories} from './../api/getRequests/getStory';
+import { bookMarkStory, unBookMarkStory } from './../api/putRequests/user';
 
 // Components
 import StoryCardComponent from './../components/StoryCardComponent';
 
-const HomeScreen = (props) => {
+// Styles
+import styles from './../styles/screens/HomeScreen';
 
-  const [stories, setStories] = useState([]);
+const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, saveAllStories, addBookMarkedStory, removeBookMarkedStory}) => {
+
+  const [refreshing, setRefreshing] = useState(false);
 
   const onLoad = async () => {
     const allStories = await getAllPublicStories();
-    return setStories(allStories.data)
+    if (allStories.status === 200) {
+      saveAllStories(allStories.data);
+      return setRefreshing(false);
+    } else {
+      console.log("ERROR");
+      return setRefreshing(false);
+    }
   };
-
-  const renderStories = ({item}) => (
-    <StoryCardComponent 
-      title={item.title}
-      description={item.description}
-      tags={item.tags}
-    />
-  );
 
   useEffect(() => {
     onLoad();
   }, []);
 
+  const handleRefresh = () => {
+    setRefreshing(true);
+    return onLoad();
+  };
+
+  const onStoryPress = (storyID) => {
+    const userID = userReducer.id
+    // Navigates to the StoryStack then to view Story
+    navigation.navigate("View Story", {storyID, userID});
+  };
+
+  // Handle when user clicks on bookmark button
+  const onBookmarkPress = async (hasUserBookMarkedStory, storyID) => {
+
+    // If user is not logged in
+    if (!userReducer.id) {
+      return navigation.navigate("Login");
+    };
+
+    // If already bookmarked 
+    if (hasUserBookMarkedStory) {
+      const response = await unBookMarkStory(storyID, userReducer.id);
+      response.status === 200 ? removeBookMarkedStory(storyID) : console.log("ERROR") ;
+    } else {
+      const response = await bookMarkStory(storyID, userReducer.id);
+      response.status === 200 ? addBookMarkedStory(storyID) : console.log("ERROR");
+    };
+  };
+
+  const renderStories = ({ item }) => {
+    const hasUserLikedStory = userReducer.likedStories ? userReducer.likedStories.includes(item._id) : false;
+    const hasUserBookMarkedStory = userReducer.bookMarks ? userReducer.bookMarks.includes(item._id) : false;
+
+    return (
+      <>
+        <TouchableOpacity onPress={() => onStoryPress(item._id)} style={styles.storyCard}>
+          <StoryCardComponent
+            title={item.title}
+            description={item.description}
+            tags={item.tags}
+            avatarURL={item.interviewer.avatarURL}
+            likes={item.likes}
+            hasUserLikedStory={hasUserLikedStory}
+            hasUserBookMarkedStory={hasUserBookMarkedStory}
+            onBookMarkPress={() => onBookmarkPress(hasUserBookMarkedStory, item._id)}
+          />
+        </TouchableOpacity>
+      </>
+    )
+  };
 
   return (
-    <View>
-      <Text> {props.userReducer.firstName ? props.userReducer.firstName : "YO"} </Text>
-      <FlatList 
-        data={stories}
-        renderItem={renderStories}
-        keyExtractor={item => item.id}
-      />
+    <View style={styles.container}>
+      <View style={styles.contentContainer}>
+        <Text style={styles.headerText}>Popular</Text>
+        <FlatList
+          data={allCollectionsReducer.stories}
+          renderItem={renderStories}
+          keyExtractor={item => item._id}
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+        />
+      </View>
     </View>
   );
 };
 
 function mapStateToProps(state) {
   return {
-    userReducer: state.userReducer
+    userReducer: state.userReducer,
+    allCollectionsReducer: state.allCollectionsReducer
   };
 };
 
-export default connect(mapStateToProps)(HomeScreen);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    saveAllStories: (stories) => dispatch(saveAllStories(stories)),
+    addBookMarkedStory: (storyID) => dispatch(addBookMarkedStory(storyID)),
+    removeBookMarkedStory: (storyID) => dispatch(removeBookMarkedStory(storyID))
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

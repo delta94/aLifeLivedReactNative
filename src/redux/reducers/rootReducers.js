@@ -5,12 +5,14 @@ import userReducer from './userReducer';
 import storyReducer from './storyReducer';
 import questionReducer from './questionReducer';
 import recorderReducer from './recorderReducer';
+import allCollectionsReducer from './allCollectionsReducer';
 
 const allReducers = {
   userReducer,
   storyReducer,
   questionReducer,
-  recorderReducer
+  recorderReducer,
+  allCollectionsReducer
 };
 
 const rootReducer = combineReducers(allReducers);

@@ -1,4 +1,4 @@
-import {USER_LOGIN_SUCCESSFUL, SET_USER_TOKEN, REMOVE_USER_TOKEN} from './../actions/allActions';
+import { USER_LOGIN_SUCCESSFUL, SET_USER_TOKEN, REMOVE_USER_TOKEN, REMOVE_LIKED_STORY, REMOVE_BOOKMARKED_STORY, ADD_LIKED_STORY, ADD_BOOKMARKED_STORY} from './../actions/allActions';
 
 const userDefaultState = {
   id: null,
@@ -8,7 +8,8 @@ const userDefaultState = {
   firstName: "",
   lastName: "",
   avatarURL: "",
-  bookMarks: []
+  bookMarks: [],
+  likedStories: [],
 };
 
 const userReducer = (state = userDefaultState, action) => {
@@ -21,6 +22,8 @@ const userReducer = (state = userDefaultState, action) => {
       const lastName = userData.lastName;
       const avatarURL = userData.avatarURL;
       const bookMarks = userData.bookMarks;
+      const likedStories = userData.likedStories;
+
       return {
         ...state,
         id: encryptedToken,
@@ -30,7 +33,8 @@ const userReducer = (state = userDefaultState, action) => {
         firstName: firstName,
         lastName: lastName,
         avatarURL: avatarURL,
-        bookMarks: bookMarks
+        bookMarks: bookMarks,
+        likedStories: likedStories
       };
     case SET_USER_TOKEN:      
       return {
@@ -40,6 +44,28 @@ const userReducer = (state = userDefaultState, action) => {
     case REMOVE_USER_TOKEN: 
       return {
         id: null
+      }
+    case REMOVE_LIKED_STORY: 
+      const updatedLikedList = state.likedStories.filter(story => story != action.payload);
+      return {
+        ...state,
+        likedStories: updatedLikedList
+      }
+    case ADD_LIKED_STORY: 
+      return {
+        ...state,
+        likedStories: state.likedStories.concat(action.payload)
+      }
+    case ADD_BOOKMARKED_STORY:
+      return {
+        ...state,
+        bookMarks: state.bookMarks.concat(action.payload)
+      }
+    case REMOVE_BOOKMARKED_STORY: 
+      const updatedBookmarkList = state.bookMarks.filter(story => story != action.payload);
+      return {
+        ...state,
+        bookMarks: updatedBookmarkList
       }
     default:
       return state;

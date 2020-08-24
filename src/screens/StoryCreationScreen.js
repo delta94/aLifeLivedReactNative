@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
-import {ScrollView } from "react-native-gesture-handler";
+import {ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import {connect} from 'react-redux';
 
 // Helpers
@@ -17,9 +17,8 @@ import {createStory} from './../api/postRequests/createStory';
 
 import {finaliseStoryStreams} from './../api/postRequests/audioStream';
 
-
 // Icon
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import IconComponent from './../components/IconComponent';
 
 // Components
 import CreateStoryComponent from './../components/CreateStoryComponent';
@@ -164,6 +163,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
 
   const handleOnClose = () => {
     resetStoryReducer();
+    // Resets the stack screen location so you don't appear in that screen when you return to stack
     return navigation.reset({ routes: [{ name: 'Home' }] });
   };
 
@@ -219,16 +219,22 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
   return (
     <View style={styles.mainContainer} onPress={Keyboard.dismiss}>
       <View style={styles.headerContainer}>
-        <AntDesign
-          name="close"
-          size={ICON_SIZE.iconSizeMedium}
-          color={COLOR.grey}
-          style={styles.icon}
-          onPress={() => handleOnClose()}
-        />
-        <Text style={styles.headerText}>{step >= 3 ? "You're nearly done..." : "Create Your Story"}</Text>
+        <TouchableOpacity onPress={() => handleOnClose()}>
+          <IconComponent
+            name="times"
+            type="font-awesome-5"
+            size={ICON_SIZE.iconSizeMedium}
+            style={{alignSelf: 'flex-start'}}
+            color={COLOR.grey}
+          />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>
+          {step >= 3 ? "You're nearly done..." : 'Create Your Story'}
+        </Text>
       </View>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? "padding" : "height"} style={styles.footer}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.footer}>
         <View style={styles.footer}>
           <ScrollView keyboardShouldPersistTaps="handled">
             <View style={styles.contentContainer}>{handleFormStage()}</View>
@@ -249,7 +255,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
           )}
 
           <ButtonComponent
-            title={step >= 3 ? "Finish" : "Next"}
+            title={step >= 3 ? 'Finish' : 'Next'}
             buttonSize="small"
             buttonType="solid"
             isLoading={isLoading}

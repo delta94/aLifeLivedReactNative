@@ -5,11 +5,7 @@ export const getStoryByID = async (id) => {
     const response = await axiosGetWithAuth(`/story/${id}`)
     return response;
   } catch (error) {
-    console.log(error);
-    return {
-      error,
-      errorMessage: error.response.data.message
-    }
+    return error;
   }
 };
 
