@@ -1,6 +1,7 @@
 import {axiosAudioAPI} from './../axiosWithAuth';
 import {Buffer} from 'buffer';
 import {AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
+
 let channelId, chunkNum, chunkResponses, uploadChunkPromise, packets;
 
 const PACKETS_TO_CHUNK = 100; // chunk RAM size == 2kB x PACKETS_TO_CHUNK
@@ -69,7 +70,9 @@ const uploadChunk = async () => {
 // For multiple recording sessions, audio is appended to the
 // pre-existing WAV file.
 // Returns path to down-stream able audio
-export const sequenceStream = async (chanId=channelId) => {
+// Final indicates that the server should hold off returning until
+// mp3 conversion is completed
+export const sequenceStream = async (chanId=channelId ) => {
   try {
     console.log('sequenceStream() with chunkNum', chunkNum);
     // In case a prior chunk upload is still in progress, wait for it to finish
@@ -137,5 +140,5 @@ export const channelIdToUrl = ( channelId ) => {
 }
 
 export const audioFileIdToUrl = ( audioFileId ) => {
-  return `${AUDIO_API_BASE_ROUTE}/audio/${audioFileId}.wav`;
+  return `${AUDIO_API_BASE_ROUTE}/audio/${audioFileId}.mp3`;
 }

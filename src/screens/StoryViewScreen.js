@@ -47,6 +47,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
   });
 
   const onLoad = async () => {
+
     // If for some reason reducer is undefined resort to api call
     if (!allCollectionsReducer.stories) {
       const response = await getStoryByID(route.params.storyID);
@@ -74,6 +75,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
       title: storyData.title,
       artist: storyData.interviewer.username
     };
+
 
 
     // Removes any other tracks 
