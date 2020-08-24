@@ -9,18 +9,17 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: BORDER_RADIUS.medium,
   },
 
-  storyCard: {
-    zIndex: 1,
-    paddingBottom: 20,
-  },
-
   contentContainer: {
     flex: 1,
     marginLeft: 10,
     marginRight: 10,
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+  },
+
+  card: {
+    zIndex: 1,
+    paddingBottom: 20
   },
 
   headerText: {
