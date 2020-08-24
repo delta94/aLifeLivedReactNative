@@ -122,7 +122,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       // unpack audio response and call finaliseStoryStreams
       const storySegments = collocateStorySegments();
       if (storySegments.length > 0)
-        finaliseStoryStreams(storySegments, storyID);
+        await finaliseStoryStreams(storySegments, storyID);
 
       // Navigates to the story
       navigation.navigate("View Story", {storyID});

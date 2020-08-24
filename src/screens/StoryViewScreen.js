@@ -23,7 +23,6 @@ const StoryViewScreen = ({route, navigation}) => {
 
   const onLoad = async () => {
     const storyData = await getStoryByID(route.params.storyID)
-    setResponses(storyData.data.responses);
     return setStory(storyData.data);
   };
 
