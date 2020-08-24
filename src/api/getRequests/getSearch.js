@@ -5,9 +5,6 @@ export const getSearchResults = async (search) => {
     const data = await axiosAPI.get(`/search/?search=${search}`);
     return data;
   } catch (error) {
-    return {
-      error,
-      errorMessage: error.response.data.message
-    }
+    return error;
   };
 };
