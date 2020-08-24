@@ -43,7 +43,7 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
   const onStoryPress = (storyID) => {
     const userID = userReducer.id
     // Navigates to the StoryStack then to view Story
-    navigation.navigate("View Story", {storyID, userID});
+    return navigation.navigate("View Story", {storyID, userID});
   };
 
   // Handle when user clicks on bookmark button
@@ -89,8 +89,8 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
-        <Text style={styles.headerText}>Popular</Text>
         <FlatList
+          ListHeaderComponent={() => {return (<Text style={styles.headerText}>Popular</Text>)}}
           data={allCollectionsReducer.stories}
           renderItem={renderStories}
           keyExtractor={item => item._id}
@@ -106,7 +106,7 @@ function mapStateToProps(state) {
   return {
     userReducer: state.userReducer,
     allCollectionsReducer: state.allCollectionsReducer
-  };
+  }
 };
 
 const mapDispatchToProps = (dispatch) => {

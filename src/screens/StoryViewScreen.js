@@ -31,7 +31,7 @@ const events = [
   TrackPlayerEvents.PLAYBACK_STATE
 ];
 
-const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
+const StoryViewScreen = ({ route, navigation, goBack, userReducer, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
   const {position, duration} = useTrackPlayerProgress();
   const [story, setStory] = useState(null);
   const [tags, setTags] = useState([]);
@@ -100,7 +100,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
 
   // When the user presses the cross button
   const handleOnClose = () => {
-    return navigation.reset({ routes: [{ name: 'Home' }] });
+    return navigation.goBack();
   };
 
   // Displays the tags of story
