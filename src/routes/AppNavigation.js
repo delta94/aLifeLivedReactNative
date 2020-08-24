@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import React, {useState, useEffect} from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'; 
 import {connect} from 'react-redux';
@@ -8,9 +7,6 @@ import TrackPlayer from 'react-native-track-player';
 
 // API 
 import {getUserByID} from './../api/getRequests/getUser';
-
-// Constants 
-import {HEADER_OPTIONS} from './../appConstants';
 
 // Icon
 import IconComponent from './../components/IconComponent';
@@ -25,79 +21,23 @@ import {getToken} from './../helpers/asyncStorage';
 import { setUserToken } from './../redux/actions/userActions';
 import {userLoginSuccessful} from './../redux/actions/userActions';
 
+// Stacks
+import { ProfileStackScreen } from './ProfileStackScreen';
+import { HomeStackScreen } from './HomeStackScreen';
+import { NotificationsStackScreen } from './NotificationsStackScreen';
+import { LoginAndSignUpStackScreen } from './AuthenticationStackScreen';
+import { SearchStackScreen } from './SearchStackScreen';
+import { StoryStackScreen } from './StoryStackScreen';
+
 // Screens
-import LoginScreen from './../screens/LoginScreen';
-import SignUpScreen from './../screens/SignUpScreen';
-import HomeScreen from './../screens/HomeScreen';
 import SplashScreen from './../screens/SplashScreen';
-import ProfileScreen from './../screens/ProfileScreen';
-import NotificationsScreen from './../screens/NotificationsScreen';
-import StoryCreationScreen from './../screens/StoryCreationScreen';
-import SearchScreen from './../screens/SearchScreen';
-import StoryRecordingScreen from './../screens/StoryRecordingScreen';
-import StoryViewScreen from './../screens/StoryViewScreen';
 
 // Styles
-import {COLOR, ICON_SIZE, BORDER_RADIUS, FONT_SIZE} from './../styles/styleHelpers';
+import {COLOR, ICON_SIZE} from './../styles/styleHelpers';
 
 const Tabs = createBottomTabNavigator();
 
-// Stack Navigators
-const HomeStack = createStackNavigator();
-const LoginAndSignUpStack = createStackNavigator();
-const ProfileStack = createStackNavigator();
-const NotificationsStack = createStackNavigator();
-const StoryStack = createStackNavigator();
-const SearchStack = createStackNavigator();
-const StoryViewStack = createStackNavigator();
 
-// The below are stacks they can hold a number of screens. We're using this because of the tab.
-const HomeStackScreen = () => (
-  <HomeStack.Navigator>
-    <HomeStack.Screen
-      name="Home"
-      component={HomeScreen}
-      options={HEADER_OPTIONS}
-    />
-    <StoryStack.Screen
-      name="View Story"
-      component={StoryViewScreen}
-      options={{cardStyle: {backgroundColor: COLOR.grey}, headerShown: false}}
-    />
-  </HomeStack.Navigator>
-);
-
-const NotificationsStackScreen = () => (
-  <NotificationsStack.Navigator>
-    <NotificationsStack.Screen name="Notifications" component={NotificationsScreen} />
-  </NotificationsStack.Navigator>
-);
-
-const StoryStackScreen = () => (
-  <StoryStack.Navigator screenOptions={{ headerShown: false }}>
-    <StoryStack.Screen name="Create Story" component={StoryCreationScreen} initialParams={{step: 0}} options={{cardStyle: {backgroundColor: COLOR.white}}} />
-    <StoryStack.Screen name="Record Story" component={StoryRecordingScreen} />
-  </StoryStack.Navigator>
-);
-
-const SearchStackScreen = () => (
-  <SearchStack.Navigator>
-    <SearchStack.Screen name="Search" component={SearchScreen} options={HEADER_OPTIONS} />
-  </SearchStack.Navigator>
-);
-
-const ProfileStackScreen = () => (
-  <ProfileStack.Navigator>
-    <ProfileStack.Screen name="Profile" component={ProfileScreen} />
-  </ProfileStack.Navigator>
-);
-
-const LoginAndSignUpStackScreen = () => (
-  <LoginAndSignUpStack.Navigator screenOptions={{ headerShown: false}}>
-    <LoginAndSignUpStack.Screen name="Login" component={LoginScreen} />
-    <LoginAndSignUpStack.Screen name="SignUp" component={SignUpScreen}/>
-  </LoginAndSignUpStack.Navigator>
-);
 
 const AppNavigation = (props) => {
 

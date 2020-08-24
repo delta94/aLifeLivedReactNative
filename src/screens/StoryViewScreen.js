@@ -31,7 +31,7 @@ const events = [
   TrackPlayerEvents.PLAYBACK_STATE
 ];
 
-const StoryViewScreen = ({ route, navigation, goBack, userReducer, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
+const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
   const {position, duration} = useTrackPlayerProgress();
   const [story, setStory] = useState(null);
   const [tags, setTags] = useState([]);
@@ -48,6 +48,7 @@ const StoryViewScreen = ({ route, navigation, goBack, userReducer, removeLikedSt
 
   const onLoad = async () => {
     // If for some reason reducer is undefined resort to api call
+    console.log(allCollectionsReducer);
     if (!allCollectionsReducer.stories) {
       const response = await getStoryByID(route.params.storyID);
       if (response.status === 200) {

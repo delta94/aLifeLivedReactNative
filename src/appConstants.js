@@ -1,17 +1,15 @@
 // Styles
-import {COLOR, ICON_SIZE, BORDER_RADIUS, FONT_SIZE} from './styles/styleHelpers';
+import {COLOR, FONT_SIZE} from './styles/styleHelpers';
 
 export const TOKEN_IDENTIFIER = 'A_LIFE_LIVED_TOKEN';
 
-// Header
+// DEFAULT HEADER
 export const HEADER_OPTIONS = {
   title: "A Life Lived",
   headerTitleAlign: 'left',
   headerStyle: {  
     backgroundColor: COLOR.grey,
-    shadowOffset: {
-      height: 0
-    }
+    shadowOffset: {height: 0},
   },
   headerTitleStyle: {
     color: COLOR.limeGreen,
@@ -19,4 +17,14 @@ export const HEADER_OPTIONS = {
   },
   headerStatusBarHeight: 60,
   cardStyle: {backgroundColor: COLOR.grey}
+};
+
+// PROFILE HEADER
+export const PROFILE_HEADER_OPTIONS = {
+  headerTitleAlign: 'left',
+  headerStyle: {
+    backgroundColor: COLOR.grey,
+    shadowOffset: { height: 0 },
+    height: 200
+  },
 };

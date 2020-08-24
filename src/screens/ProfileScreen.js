@@ -15,15 +15,15 @@ const ProfileScreen = (props) => {
   const onSignOut = async () => {
     try {   
       await AsyncStorage.removeItem("A_LIFE_LIVED_TOKEN"); 
-      props.removeUserToken();
+      return props.removeUserToken();
     } catch (error) {
-      console.log(error);  
+      return console.log(error);  
     }
   };
 
   return (
     <View>
-      <Text> HELLO PROFILE SCREEN!! </Text>
+      <Text> HELLO PROFILE!! </Text>
       <ButtonComponent 
         title="Signout"
         buttonType="clear"
