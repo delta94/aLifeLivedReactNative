@@ -1,8 +1,7 @@
 import 'react-native-gesture-handler';
 import React, {useState, useEffect} from 'react';
-import {Text, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer, StackActions} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'; 
 import {connect} from 'react-redux';
 import TrackPlayer from 'react-native-track-player';
@@ -13,10 +12,8 @@ import {getUserByID} from './../api/getRequests/getUser';
 // Constants 
 import {HEADER_OPTIONS} from './../appConstants';
 
-// Icon imports
-import IonIcons from 'react-native-vector-icons/Ionicons';
-import FontAwesomeIcons from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// Icon
+import IconComponent from './../components/IconComponent';
 
 // Services
 import trackPlayerServices from '../services/services';
@@ -156,52 +153,52 @@ const AppNavigation = (props) => {
   function screenOptions (route) {
     const screenOptions = {
       tabBarIcon: ({focused}) => {
-        let iconName;
-
         switch (route.name) {
           case 'Home':
-            iconName = focused ? 'home' : 'home-outline';
             return (
-              <MaterialCommunityIcons
-                name={iconName}
+              <IconComponent
+                name='home'
+                type='font-awesome-5'
                 size={ICON_SIZE.iconSizeMedium}
-                color={COLOR.grey}
+                color={focused ? COLOR.limeGreen : COLOR.grey}
               />
             );
           case 'Notifications':
-            iconName = focused ? 'bell' : 'bell-outline';
             return (
-              <MaterialCommunityIcons
-                name={iconName}
+              <IconComponent
+                name='bell'
+                type='font-awesome-5'
+                solid={true}
                 size={ICON_SIZE.iconSizeMedium}
-                color={COLOR.grey}
+                color={focused ? COLOR.limeGreen : COLOR.grey}
               />
             );
           case 'Create Story':
-            iconName = focused ? 'microphone' : 'microphone-outline';
             return (
-              <MaterialCommunityIcons
-                name={iconName}
+              <IconComponent
+                name='microphone'
+                type='font-awesome-5'
                 size={ICON_SIZE.iconSizeMedium}
-                color={COLOR.grey}
+                color={focused ? COLOR.limeGreen : COLOR.grey}
               />
             );
           case 'Search':
-            iconName = focused ? 'md-search' : 'ios-search';
             return (
-              <IonIcons
-                name={iconName}
+              <IconComponent
+                name='search'
+                type='font-awesome-5'
                 size={ICON_SIZE.iconSizeMedium}
-                color={COLOR.grey}
+                color={focused ? COLOR.limeGreen : COLOR.grey}
               />
             );
           case 'Profile':
-            iconName = focused ? 'user' : 'user-o';
             return (
-              <FontAwesomeIcons
-                name={iconName}
+              <IconComponent
+                name='user'
+                solid={true}
+                type='font-awesome-5'
                 size={ICON_SIZE.iconSizeMedium}
-                color={COLOR.grey}
+                color={focused ? COLOR.limeGreen : COLOR.grey}
               />
             );
           case 'SignUp': 

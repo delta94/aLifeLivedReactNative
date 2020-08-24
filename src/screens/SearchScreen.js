@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { connect } from 'react-redux';
 import {View, Text, TouchableOpacity, SectionList} from 'react-native';
 import {SearchBar} from 'react-native-elements';
@@ -16,7 +16,6 @@ import UserCardComponent from './../components/UserCardComponent';
 
 // Styles
 import styles from './../styles/screens/SearchScreen';
-import { COLOR } from '../styles/styleHelpers';
 
 const SearchScreen = ({ navigation, userReducer, addBookMarkedStory, removeBookMarkedStory}) => {
 
@@ -26,11 +25,23 @@ const SearchScreen = ({ navigation, userReducer, addBookMarkedStory, removeBookM
   const [isLoading, setIsLoading] = useState(false);
 
   const updateSearch = async (search) => {
+    setIsLoading(true);
+    
+    // Sets the search to update
     setSearch(search);
+
+    // Calls API
     const response = await getSearchResults(search);
-    // If no data returned still ensure that the states are empty arrays
-    setUserResults(!response.data ? [] : response.data.users);
-    return setStoryResults(!response.data ? [] : response.data.stories);
+
+    if (response.status === 200) {
+      // If no data returned still ensure that the states are empty arrays
+      setUserResults(!response.data ? [] : response.data.users);
+      setStoryResults(!response.data ? [] : response.data.stories);
+      return setIsLoading(false);
+    } else {
+      console.log('error');
+      return setIsLoading(false);
+    }
   };
 
   // When the user clicks on user card
@@ -109,7 +120,7 @@ const SearchScreen = ({ navigation, userReducer, addBookMarkedStory, removeBookM
       <View style={styles.contentContainer}>
         <View style={styles.resultsContainer}>
           <SearchBar
-            placeholder="Try searching for...war stories, sporting achievements"
+            placeholder="Search for users or stories"
             onChangeText={(search) => updateSearch(search)}
             containerStyle={{ backgroundColor: 'none', borderBottomWidth: 0 }}
             value={search}
