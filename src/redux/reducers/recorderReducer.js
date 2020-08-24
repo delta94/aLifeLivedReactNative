@@ -1,4 +1,4 @@
-import { PLAYER_STATE, RESET_RECORDER_STATE, SET_RECORDED_AUDIO_FILEPATH } from './../actions/allActions';
+import { PLAYER_STATE, RESET_RECORDER_STATE } from './../actions/allActions';
 
 
 const recorderDefaultState = {
@@ -12,12 +12,7 @@ const recorderReducer = (state = recorderDefaultState, action) => {
         ...state,
         ...action.payload
       }
-      case SET_RECORDED_AUDIO_FILEPATH:
-        return {
-          ...state,
-          ...action.payload
-          }
-      case RESET_RECORDER_STATE: 
+    case RESET_RECORDER_STATE: 
       return recorderDefaultState;
     default:
       return state
