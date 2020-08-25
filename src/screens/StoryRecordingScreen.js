@@ -11,7 +11,7 @@ import TrackPlayer, {
 import AudioRecord from '@alifelived/react-native-audio-record';
 
 // API
-import {audioStream, initialiseStream, sequenceStream, channelIdToUrl} from './../api/postRequests/audioStream';
+import {audioStream, initialiseAudioStream, getUnusedChannel, sequenceStream, channelIdToUrl} from './../api/postRequests/audioStream';
 
 // Actions
 import { incrementQuestionIndex, resetQuestionReducerToOriginalState, resetSubQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
@@ -141,6 +141,7 @@ const StoryRecordingScreen = ({
 
   // Loads questions.
   const onLoad = async () => {
+    initialiseAudioStream();
     setIsInitialiseLoaded(false);
     Platform.OS === 'android' ? await PermissionsAndroid.requestMultiple([
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
@@ -174,7 +175,7 @@ const StoryRecordingScreen = ({
   // Start recording
   const onRecordStart = async () => {
     if (!currentQuestion().channelId)
-      setQuestionChannel(await initialiseStream());
+      setQuestionChannel( getUnusedChannel());
 
     AudioRecord.start();
     

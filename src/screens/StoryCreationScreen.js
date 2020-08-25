@@ -9,6 +9,7 @@ import { useOrientation } from './../helpers/orientation';
 // Actions
 import { saveAllQuestions, setSubQuestionActiveFalse } from './../redux/actions/questionActions';
 import { saveAllTags, resetStoryReducer, saveStoryDetails } from './../redux/actions/storyActions';
+import { saveNewStory } from './../redux/actions/allCollections';
 
 // API
 import { getAllQuestions } from './../api/getRequests/getQuestions';
@@ -31,7 +32,7 @@ import ButtonComponent from './../components/ButtonComponent';
 import styles from './../styles/screens/StoryCreationScreen';
 import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
-const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags, storyReducer, userReducer, questionReducer, resetStoryReducer, saveStoryDetails}) => {  
+const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags, storyReducer, userReducer, questionReducer, resetStoryReducer, saveStoryDetails, saveNewStory}) => {  
   const orientation = useOrientation();
   
   // Below is all basic form things
@@ -104,7 +105,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       // Gets data to send to server
       const userID = userReducer.id;
       //const responses = storyReducer.responses;
-      const storyData = {
+      let storyData = {
         about: storyAbout,
         description: storyDescription,
         interviewee: interviewee,
@@ -120,8 +121,13 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
 
       // unpack audio response and call finaliseStoryStreams
       const storySegments = collocateStorySegments();
-      if (storySegments.length > 0)
-        await finaliseStoryStreams(storySegments, storyID);
+      if (storySegments.length > 0) {
+        storyData = await finaliseStoryStreams(storySegments, storyID);
+        console.log('got updated story object ', storyData);
+      }
+
+      // save to the all collections reducer
+      saveNewStory(storyData);
 
       // Navigates to the story
       navigation.navigate("View Story", {storyID});
@@ -273,7 +279,8 @@ const mapDispatchToProps = (dispatch) => {
     saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions)),
     saveAllTags: (data) => dispatch(saveAllTags(data)),
     resetStoryReducer: () => dispatch(resetStoryReducer()),
-    saveStoryDetails: (storyData) => dispatch(saveStoryDetails(storyData))
+    saveStoryDetails: (storyData) => dispatch(saveStoryDetails(storyData)),
+    saveNewStory: (storyData) => dispatch(saveNewStory(storyData))
   }
 };
 
