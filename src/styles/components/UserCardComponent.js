@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     borderBottomWidth: 0.5,
     paddingBottom: 15,
   },
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
 
   contentContainer: {
-    marginLeft: 10
+    marginLeft: 10,
   },
 
   header: {
@@ -27,26 +27,8 @@ const styles = StyleSheet.create({
     color: COLOR.grey,
   },
 
-  likesContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-
-  likes: {
-    marginLeft: 10,
-    color: COLOR.grey
-  },
-
-  bookMarkContainer: {
-    marginRight: 20,
-    zIndex: 4
-  },
-
   iconContainer: {
-    display: "flex",
-    flexDirection: "row"
+    justifyContent: "center"
   }
 });
 

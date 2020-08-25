@@ -9,9 +9,9 @@ import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 import styles from '../styles/components/StoryCardComponent';
 
 // Icons
-import { Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements';
 
-const StoryCardComponent = ({title, description, tags, avatarURL, likes, hasUserLikedStory, hasUserBookMarkedStory, onBookMarkPress}) => {
+const StoryCardComponent = ({title, avatarURL, likes, hasUserLikedStory, hasUserBookMarkedStory, onBookMarkPress}) => {
   return (
     <View style={styles.container}>
       <View style={styles.imageAndTextContainer}>
@@ -38,16 +38,25 @@ const StoryCardComponent = ({title, description, tags, avatarURL, likes, hasUser
           </View>
         </View>
       </View>
-      <TouchableOpacity style={styles.bookMarkContainer} onPress={() => onBookMarkPress()}>
-        <Icon
-          name="bookmark"
-          type='font-awesome-5'
-          solid={hasUserBookMarkedStory}
+      <View style={styles.iconContainer}>
+        <TouchableOpacity style={styles.bookMarkContainer} onPress={() => onBookMarkPress()}>
+          <Icon
+            name="bookmark"
+            type='font-awesome-5'
+            solid={hasUserBookMarkedStory}
+            size={ICON_SIZE.iconSizeSmall}
+            color={COLOR.grey}
+            disabledStyle={{ backgroundColor: null }}
+          />
+        </TouchableOpacity>
+        <IconComponent
+          name="chevron-right"
+          type="font-awesome-5"
+          style={{ alignSelf: "flex-start" }}
           size={ICON_SIZE.iconSizeSmall}
           color={COLOR.grey}
-          disabledStyle={{ backgroundColor: null }}
         />
-      </TouchableOpacity>
+      </View>
     </View>
   )
 };
