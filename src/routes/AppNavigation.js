@@ -158,9 +158,9 @@ const AppNavigation = (props) => {
   // Move navigators into there own files
   const MainStackNavigator = () => {
     return (
-      <RootStack.Navigator screenOptions={{headerShown: 'none'}}>
-        <RootStack.Screen name="Tabs Navigator" component={TabsNavigator} options={{ title: '', headerShown: false }} />
-        <RootStack.Screen name="View Story" component={ViewStoryStackScreen} options={{ title: '', headerShown: false}} />
+      <RootStack.Navigator>
+        <RootStack.Screen name="Tabs Navigator" component={TabsNavigator} options={{headerShown: false }} />
+        <RootStack.Screen name="View Story" component={ViewStoryStackScreen} options={{headerShown: false}} />
       </RootStack.Navigator>
     )
   };
