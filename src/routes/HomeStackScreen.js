@@ -20,10 +20,5 @@ export const HomeStackScreen = () => (
       component={HomeScreen}
       options={HEADER_OPTIONS}
     />
-    <HomeStack.Screen
-      name="View Story"
-      component={StoryViewScreen}
-      options={{ cardStyle: { backgroundColor: COLOR.grey }, headerShown: false }}
-    />
   </HomeStack.Navigator>
 );

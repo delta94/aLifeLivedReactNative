@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'; 
+import { createStackNavigator } from '@react-navigation/stack';
 import {connect} from 'react-redux';
 import TrackPlayer from 'react-native-track-player';
 
@@ -27,7 +28,7 @@ import { HomeStackScreen } from './HomeStackScreen';
 import { NotificationsStackScreen } from './NotificationsStackScreen';
 import { LoginAndSignUpStackScreen } from './AuthenticationStackScreen';
 import { SearchStackScreen } from './SearchStackScreen';
-import { StoryStackScreen } from './StoryStackScreen';
+import { StoryStackScreen, ViewStoryStackScreen } from './StoryStackScreen';
 
 // Screens
 import SplashScreen from './../screens/SplashScreen';
@@ -36,13 +37,13 @@ import SplashScreen from './../screens/SplashScreen';
 import {COLOR, ICON_SIZE} from './../styles/styleHelpers';
 
 const Tabs = createBottomTabNavigator();
-
-
+const RootStack = createStackNavigator();
 
 const AppNavigation = (props) => {
 
   // The below is used for authentication
-  const userToken = props.userReducer.id
+  const userToken = props.userReducer.id;
+  const [user, setUser] = useState(props.userReducer);
   const [isLoading, setIsLoading] = useState(false);
 
   // sets up track player
@@ -153,15 +154,34 @@ const AppNavigation = (props) => {
     return screenOptions        
   };
 
+
+  // Move navigators into there own files
+  const MainStackNavigator = () => {
+    return (
+      <RootStack.Navigator screenOptions={{headerShown: 'none'}}>
+        <RootStack.Screen name="Tabs Navigator" component={TabsNavigator} options={{ title: '', headerShown: false }} />
+        <RootStack.Screen name="View Story" component={ViewStoryStackScreen} options={{ title: '', headerShown: false}} />
+      </RootStack.Navigator>
+    )
+  };
+
+  const TabsNavigator = () => {
+    return (
+      <Tabs.Navigator tabBarOptions={tabDefaultOptions} screenOptions={({ route }) => screenOptions(route)} >
+        <Tabs.Screen name="Home" component={HomeStackScreen} />
+        <Tabs.Screen name="Notifications" component={userToken ? NotificationsStackScreen : LoginAndSignUpStackScreen} options={userToken ? { tabBarVisible: true } : { tabBarVisible: false }} />
+        <Tabs.Screen name="Create Story" component={userToken ? StoryStackScreen : LoginAndSignUpStackScreen} options={{ tabBarVisible: false }} />
+        <Tabs.Screen name="Search" component={SearchStackScreen} />
+        <Tabs.Screen name="Profile" options={userToken ? { tabBarVisible: true } : { tabBarVisible: false }} initialParams={null} >
+          {(props) => userToken ? <ProfileStackScreen {...props} /> : <LoginAndSignUpStackScreen  />}
+        </Tabs.Screen>
+      </Tabs.Navigator>
+    )
+  };
+
   return (
     <NavigationContainer>
-        <Tabs.Navigator tabBarOptions={tabDefaultOptions} screenOptions={({route}) => screenOptions(route)}>
-          <Tabs.Screen name="Home" component={HomeStackScreen} />
-          <Tabs.Screen name="Notifications" component={userToken ? NotificationsStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} />
-          <Tabs.Screen name="Create Story" component={userToken ? StoryStackScreen : LoginAndSignUpStackScreen} options={{tabBarVisible: false}} /> 
-          <Tabs.Screen name="Search" component={SearchStackScreen} />
-          <Tabs.Screen name="Profile" component={userToken ? ProfileStackScreen : LoginAndSignUpStackScreen} options={userToken ? {tabBarVisible: true} : {tabBarVisible: false}} />
-        </Tabs.Navigator>
+      <MainStackNavigator />
     </NavigationContainer>
   );
 };

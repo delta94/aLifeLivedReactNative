@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text} from 'react-native';
+import { connect } from 'react-redux';
 
 // Components
 import AvatarComponent from './AvatarComponent';
@@ -8,8 +9,15 @@ import IconComponent from './IconComponent';
 
 // Styles
 import styles from './../styles/components/HeaderProfileComponent';
+import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
-export function HeaderProfileComponent({route}) {
+const HeaderProfileComponent = ({ userReducer, route, navigation, navigation: { setParams }}) => {
+
+  // When the user firsts logs in it sets the params. Also allows use to reuse this screen for user profiles
+  useEffect(() => {
+    setParams(userReducer)
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.avatarAndTextContainer}>
@@ -17,12 +25,12 @@ export function HeaderProfileComponent({route}) {
           isRounded={false}
           isSquare
           showEditButton={false}
-          size="medium"
-          source={""}
+          size="large"
+          source={route.params.avatarURL}
         />
         <View style={styles.textContainer}>
-          <Text>{route.params.user}</Text>
-          <Text>Username</Text>
+          <Text style={styles.headerText}>{route.params.firstName}</Text>
+          <Text style={styles.subText}>{route.params.username}</Text>
         </View>
       </View>
 
@@ -53,12 +61,19 @@ export function HeaderProfileComponent({route}) {
                 color="white"
               />
             }
+            onButtonPress={() => navigation.navigate("Settings")}
             buttonSize="small"
           />
         </View>
-
       </View>
-
     </View>    
   )
 };
+
+function mapStateToProps(state) {
+  return {
+    userReducer: state.userReducer,
+  }
+};
+
+export default connect(mapStateToProps)(HeaderProfileComponent);

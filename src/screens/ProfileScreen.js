@@ -1,42 +1,122 @@
-import React from 'react';
-import {View, Text} from 'react-native';
-import {connect} from 'react-redux';
-import AsyncStorage from '@react-native-community/async-storage';
-
-// Redux Actions
-import {removeUserToken} from './../redux/actions/userActions';
+import React, {useEffect, useState} from 'react';
+import {View, Text, ScrollView, FlatList, TouchableOpacity} from 'react-native';
+import { connect } from 'react-redux';
 
 // Components
-import ButtonComponent from './../components/ButtonComponent';
+import ButtonClearComponent from './../components/ButtonClearComponent';
+import StoryCardComponent from './../components/StoryCardComponent';
 
+// Styles
+import styles from './../styles/screens/ProfileScreen';
 
-const ProfileScreen = (props) => {
+const ProfileScreen = ({userReducer, allCollectionsReducer, navigation}) => {
+  const [profileDisplay, setProfileDisplay] = useState("MY_STORIES");
+  const [data, setData] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const onSignOut = async () => {
-    try {   
-      await AsyncStorage.removeItem("A_LIFE_LIVED_TOKEN"); 
-      return props.removeUserToken();
-    } catch (error) {
-      return console.log(error);  
+  const dataDisplay = () => {
+    switch (profileDisplay) {
+      case "LIKED_STORIES":
+        // Sets the data display to show all the users liked stories. 
+        userReducer.likedStories.map((likedStory) => {
+          setData(allCollectionsReducer.stories.filter(story => story._id === likedStory));
+        });
+        return setRefreshing(false);
+      case "BOOKMARKED_STORIES": 
+        // Sets the data display to show all the users liked stories. 
+        userReducer.bookMarks.map((bookmarkedStory) => {
+          setData(allCollectionsReducer.stories.filter(story => story._id === bookmarkedStory));
+        });
+        return setRefreshing(false);
+      default:
+        return setRefreshing(false);
     }
   };
 
+  useEffect(() => {
+    dataDisplay();
+  }, [profileDisplay]);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    return dataDisplay();
+  };
+
+  const onStoryPress = (storyID) => {
+    const userID = userReducer.id
+    // Navigates to the StoryStack then to view Story
+    return navigation.push('View Story', { screen: 'View Story', params: { storyID, userID } });
+  };
+
+  const renderStories = ({ item }) => {
+    const hasUserLikedStory = userReducer.likedStories ? userReducer.likedStories.includes(item._id) : false;
+    const hasUserBookMarkedStory = userReducer.bookMarks ? userReducer.bookMarks.includes(item._id) : false;
+
+    return (
+      <>
+        <TouchableOpacity onPress={() => onStoryPress(item._id)} style={styles.storyCard}>
+          <StoryCardComponent
+            title={item.title}
+            description={item.description}
+            tags={item.tags}
+            avatarURL={item.interviewer ? item.interviewer.avatarURL : null}
+            likes={item.likes}
+            hasUserLikedStory={hasUserLikedStory}
+            hasUserBookMarkedStory={hasUserBookMarkedStory}
+          />
+        </TouchableOpacity>
+      </>
+    )
+  };
+
   return (
-    <View>
-      <Text> HELLO PROFILE!! </Text>
-      <ButtonComponent 
-        title="Signout"
-        buttonType="clear"
-        onButtonPress={() => onSignOut()}
-      />
+    <View style={styles.container}>
+      <View style={styles.buttonListDisplay}>
+        <ScrollView horizontal={true}>
+          <View style={styles.buttonItem}>
+            <ButtonClearComponent
+              title="My Stories"
+              onButtonPress={() => setProfileDisplay("MY_STORIES")}
+              style={styles.buttonItem}
+            />
+          </View>
+
+          <View style={styles.buttonItem}>
+            <ButtonClearComponent
+              title="Book marked stories"
+              onButtonPress={() => setProfileDisplay("BOOKMARKED_STORIES")}
+              style={styles.buttonItem}
+            />
+          </View>
+
+          <View style={styles.buttonItem}>
+            <ButtonClearComponent
+              title="Liked Stories"
+              onButtonPress={() => setProfileDisplay("LIKED_STORIES")}
+            />
+          </View>
+        </ScrollView>
+      </View>
+
+      <View>
+        <FlatList 
+          data={data}
+          renderItem={renderStories}
+          keyExtractor={item => item._id}
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+        />
+      </View>
     </View>
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
+function mapStateToProps(state) {
   return {
-    removeUserToken: () => dispatch(removeUserToken())
-  }
+    userReducer: state.userReducer,
+    allCollectionsReducer: state.allCollectionsReducer
+  };
 };
 
-export default connect(null, mapDispatchToProps)(ProfileScreen);
+
+export default connect(mapStateToProps)(ProfileScreen);

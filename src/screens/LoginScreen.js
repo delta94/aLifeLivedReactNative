@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import { View, Text, Keyboard, ScrollView, KeyboardAvoidingView} from 'react-native';
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { View, Text, ScrollView, KeyboardAvoidingView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 

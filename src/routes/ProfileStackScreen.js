@@ -3,30 +3,37 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 // Screens
 import ProfileScreen from './../screens/ProfileScreen';
+import SettingsScreen from './../screens/SettingsScreen';
 
 // Components
-import { HeaderProfileComponent } from './../components/HeaderProfileComponent';
+import HeaderProfileComponent from './../components/HeaderProfileComponent';
 
 // Styles
 import { COLOR } from './../styles/styleHelpers';
 
 const ProfileStack = createStackNavigator();
 
-export const ProfileStackScreen = () => (
+export const ProfileStackScreen = (props) => (
   <ProfileStack.Navigator>
     <ProfileStack.Screen
       name="Profile"
       component={ProfileScreen}
-      initialParams={{ user: "MAX" }}
-      options={({ route }) => ({
+      options={({ route, navigation }) => ({
         headerTitleAlign: 'left',
         headerStyle: {
           backgroundColor: COLOR.grey,
           shadowOffset: { height: 0 },
           height: 200
         },
-        headerTitle: props => <HeaderProfileComponent route={route} {...props} />,
+        cardStyle: { backgroundColor: COLOR.grey },
+        headerTitle: () => <HeaderProfileComponent {...props} />,
       })}
+    />
+
+    <ProfileStack.Screen
+      name="Settings"
+      component={SettingsScreen}
+      options={{headerLeft: null}}
     />
   </ProfileStack.Navigator>
 );

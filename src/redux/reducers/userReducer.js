@@ -7,6 +7,7 @@ const userDefaultState = {
   isAdmin: false,
   firstName: "",
   lastName: "",
+  username: "",
   avatarURL: "",
   bookMarks: [],
   likedStories: [],
@@ -16,13 +17,14 @@ const userReducer = (state = userDefaultState, action) => {
   switch (action.type) {
     case USER_LOGIN_SUCCESSFUL:
       const userData = action.payload.userData;
-      const encryptedToken = userData.id;
+      const encryptedToken = userData._id;
       const emailAddress = userData.emailAddress;
       const firstName = userData.firstName;
       const lastName = userData.lastName;
       const avatarURL = userData.avatarURL;
-      const bookMarks = userData.bookMarks;
+      const bookMarks = userData.bookmarks;
       const likedStories = userData.likedStories;
+      const username = userData.username;
 
       return {
         ...state,
@@ -32,6 +34,7 @@ const userReducer = (state = userDefaultState, action) => {
         isAdmin: false,
         firstName: firstName,
         lastName: lastName,
+        username: username,
         avatarURL: avatarURL,
         bookMarks: bookMarks,
         likedStories: likedStories

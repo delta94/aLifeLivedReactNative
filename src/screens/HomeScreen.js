@@ -43,7 +43,8 @@ const HomeScreen = ({ route, navigation, userReducer, allCollectionsReducer, sav
   const onStoryPress = (storyID) => {
     const userID = userReducer.id
     // Navigates to the StoryStack then to view Story
-    return navigation.navigate("View Story", {storyID, userID});
+    // return navigation.navigate("View Story", {storyID, userID});
+    navigation.push('View Story', { screen: 'View Story', params: {storyID, userID} });
   };
 
   // Handle when user clicks on bookmark button

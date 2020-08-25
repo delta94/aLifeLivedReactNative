@@ -32,6 +32,7 @@ const events = [
 ];
 
 const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
+
   const {position, duration} = useTrackPlayerProgress();
   const [story, setStory] = useState(null);
   const [tags, setTags] = useState([]);
@@ -40,7 +41,6 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
   const [didBookmark, setDidBookmark] = useState(false);
   const [audioState, setAudioState] = useState("NONE");
 
-
   // Gets the player state and sets local state. 
   useTrackPlayerEvents(events, (event) => {
     return setAudioState(event.state);
@@ -48,7 +48,6 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
 
   const onLoad = async () => {
     // If for some reason reducer is undefined resort to api call
-    console.log(allCollectionsReducer);
     if (!allCollectionsReducer.stories) {
       const response = await getStoryByID(route.params.storyID);
       if (response.status === 200) {

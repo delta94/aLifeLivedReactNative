@@ -18,13 +18,3 @@ export const HEADER_OPTIONS = {
   headerStatusBarHeight: 60,
   cardStyle: {backgroundColor: COLOR.grey}
 };
-
-// PROFILE HEADER
-export const PROFILE_HEADER_OPTIONS = {
-  headerTitleAlign: 'left',
-  headerStyle: {
-    backgroundColor: COLOR.grey,
-    shadowOffset: { height: 0 },
-    height: 200
-  },
-};
