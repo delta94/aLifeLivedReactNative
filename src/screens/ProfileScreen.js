@@ -18,17 +18,25 @@ const ProfileScreen = ({userReducer, allCollectionsReducer, navigation}) => {
     switch (profileDisplay) {
       case "LIKED_STORIES":
         // Sets the data display to show all the users liked stories. 
-        userReducer.likedStories.map((likedStory) => {
-          setData(allCollectionsReducer.stories.filter(story => story._id === likedStory));
+        const likedStories = userReducer.likedStories.map((likedStory) => {
+          const filteredStory = allCollectionsReducer.stories.filter(story => story._id === likedStory);
+          return filteredStory[0];
         });
+
+        setData(likedStories);
         return setRefreshing(false);
       case "BOOKMARKED_STORIES": 
-        // Sets the data display to show all the users liked stories. 
-        userReducer.bookMarks.map((bookmarkedStory) => {
-          setData(allCollectionsReducer.stories.filter(story => story._id === bookmarkedStory));
+        // Sets the data display to show all the users bookmarked stories. 
+        const bookmarkedStories = userReducer.bookMarks.map((bookmarkedStory) => {
+          const bookmarkedStories = allCollectionsReducer.stories.filter(story => story._id === bookmarkedStory);
+          return bookmarkedStories[0];
         });
+
+        setData(bookmarkedStories);
         return setRefreshing(false);
       default:
+        // ensures it is displaying the correct data nad if none then display none. 
+        setData([]);
         return setRefreshing(false);
     }
   };
@@ -98,7 +106,7 @@ const ProfileScreen = ({userReducer, allCollectionsReducer, navigation}) => {
         </ScrollView>
       </View>
 
-      <View>
+      <View style={styles.flatListContainer}>
         <FlatList 
           data={data}
           renderItem={renderStories}

@@ -1,9 +1,9 @@
 import { USER_LOGIN_SUCCESSFUL, SET_USER_TOKEN, REMOVE_USER_TOKEN, REMOVE_LIKED_STORY, REMOVE_BOOKMARKED_STORY, ADD_LIKED_STORY, ADD_BOOKMARKED_STORY} from './allActions';
 
-export const userLoginSuccessful = (userData) => {
+export const userLoginSuccessful = (userData, authToken) => {
   return {
     type: USER_LOGIN_SUCCESSFUL,
-    payload: {userData}
+    payload: {userData, authToken}
   };
 };
 

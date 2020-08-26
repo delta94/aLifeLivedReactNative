@@ -9,17 +9,15 @@ import TrackPlayer from 'react-native-track-player';
 // API 
 import {getUserByID} from './../api/getRequests/getUser';
 
-// Icon
-import IconComponent from './../components/IconComponent';
-
 // Services
 import trackPlayerServices from '../services/services';
 
 // Helpers
+import {screenOptions} from './../helpers/routeScreenOptions';
 import {getToken} from './../helpers/asyncStorage';
 
 // Redux Actions
-import { setUserToken } from './../redux/actions/userActions';
+import {setUserToken} from './../redux/actions/userActions';
 import {userLoginSuccessful} from './../redux/actions/userActions';
 
 // Stacks
@@ -33,17 +31,13 @@ import { StoryStackScreen, ViewStoryStackScreen } from './StoryStackScreen';
 // Screens
 import SplashScreen from './../screens/SplashScreen';
 
-// Styles
-import {COLOR, ICON_SIZE} from './../styles/styleHelpers';
-
 const Tabs = createBottomTabNavigator();
 const RootStack = createStackNavigator();
 
-const AppNavigation = (props) => {
-
+const AppNavigation = ({userReducer, userLoginSuccessful, setUserToken}) => {
   // The below is used for authentication
-  const userToken = props.userReducer.id;
-  const [user, setUser] = useState(props.userReducer);
+  // const userToken = props.userReducer.id;
+  const token = userReducer.id;
   const [isLoading, setIsLoading] = useState(false);
 
   // sets up track player
@@ -51,7 +45,7 @@ const AppNavigation = (props) => {
     setIsLoading(true);
     await TrackPlayer.setupPlayer({
       iosCategoryMode: 'spokenAudio',
-      waitForBuffer: true
+      waitForBuffer: true,
     }).then(() => {
       console.log('Player is set up');
     });
@@ -64,119 +58,81 @@ const AppNavigation = (props) => {
     // Function firing twice on load, need to only fire once.
     try {
       const encryptedToken = await getToken();
+      setUserToken(encryptedToken);
       const userData = await getUserByID(encryptedToken);
-      return props.userLoginSuccessful(userData.data)
+      const authToken = userData.headers.authtoken;
+      return userLoginSuccessful(userData.data, authToken);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // The below handles the basic tab options 
+  // The below handles the basic tab options
   const tabDefaultOptions = {
     showLabel: false,
-    tabBarVisible: false
+    tabBarVisible: false,
   };
 
   useEffect(() => {
     trackPlayerOnLoad();
     getEncryptedToken();
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 1000);
   }, []);
 
   // Below will be where we handle the loading splash screen.
   if (isLoading) {
     return <SplashScreen />;
-  };
- 
-  // The below sets the icon for drawer
-  function screenOptions (route) {
-    const screenOptions = {
-      tabBarIcon: ({focused}) => {
-        switch (route.name) {
-          case 'Home':
-            return (
-              <IconComponent
-                name='home'
-                type='font-awesome-5'
-                size={ICON_SIZE.iconSizeMedium}
-                color={focused ? COLOR.limeGreen : COLOR.grey}
-              />
-            );
-          case 'Notifications':
-            return (
-              <IconComponent
-                name='bell'
-                type='font-awesome-5'
-                solid={true}
-                size={ICON_SIZE.iconSizeMedium}
-                color={focused ? COLOR.limeGreen : COLOR.grey}
-              />
-            );
-          case 'Create Story':
-            return (
-              <IconComponent
-                name='microphone'
-                type='font-awesome-5'
-                size={ICON_SIZE.iconSizeMedium}
-                color={focused ? COLOR.limeGreen : COLOR.grey}
-              />
-            );
-          case 'Search':
-            return (
-              <IconComponent
-                name='search'
-                type='font-awesome-5'
-                size={ICON_SIZE.iconSizeMedium}
-                color={focused ? COLOR.limeGreen : COLOR.grey}
-              />
-            );
-          case 'Profile':
-            return (
-              <IconComponent
-                name='user'
-                solid={true}
-                type='font-awesome-5'
-                size={ICON_SIZE.iconSizeMedium}
-                color={focused ? COLOR.limeGreen : COLOR.grey}
-              />
-            );
-          case 'SignUp': 
-            const tabBarVisible = false
-            return tabBarVisible
-          default:
-            break;
-        }
-      }
-    };  
+  }
 
-    return screenOptions        
-  };
-
-
-  // Move navigators into there own files
   const MainStackNavigator = () => {
     return (
       <RootStack.Navigator>
-        <RootStack.Screen name="Tabs Navigator" component={TabsNavigator} options={{headerShown: false }} />
-        <RootStack.Screen name="View Story" component={ViewStoryStackScreen} options={{headerShown: false}} />
+        <RootStack.Screen
+          name="Tabs Navigator"
+          component={TabsNavigator}
+          options={{headerShown: false}}
+        />
+        <RootStack.Screen
+          name="View Story"
+          component={ViewStoryStackScreen}
+          options={{headerShown: false}}
+        />
       </RootStack.Navigator>
-    )
+    );
   };
 
   const TabsNavigator = () => {
     return (
-      <Tabs.Navigator tabBarOptions={tabDefaultOptions} screenOptions={({ route }) => screenOptions(route)} >
+      <Tabs.Navigator
+        tabBarOptions={tabDefaultOptions}
+        screenOptions={({route}) => screenOptions(route)}>
         <Tabs.Screen name="Home" component={HomeStackScreen} />
-        <Tabs.Screen name="Notifications" component={userToken ? NotificationsStackScreen : LoginAndSignUpStackScreen} options={userToken ? { tabBarVisible: true } : { tabBarVisible: false }} />
-        <Tabs.Screen name="Create Story" component={userToken ? StoryStackScreen : LoginAndSignUpStackScreen} options={{ tabBarVisible: false }} />
+        <Tabs.Screen
+          name="Notifications"
+          component={
+            token ? NotificationsStackScreen : LoginAndSignUpStackScreen
+          }
+          options={token ? {tabBarVisible: true} : {tabBarVisible: false}}
+        />
+        <Tabs.Screen
+          name="Create Story"
+          component={token ? StoryStackScreen : LoginAndSignUpStackScreen}
+          options={{tabBarVisible: false}}
+        />
         <Tabs.Screen name="Search" component={SearchStackScreen} />
-        <Tabs.Screen name="Profile" options={userToken ? { tabBarVisible: true } : { tabBarVisible: false }} initialParams={null} >
-          {(props) => userToken ? <ProfileStackScreen {...props} /> : <LoginAndSignUpStackScreen  />}
+        <Tabs.Screen
+          name="Profile"
+          options={token ? {tabBarVisible: true} : {tabBarVisible: false}}
+          initialParams={null}>
+          {(props) =>
+            token ? (
+              <ProfileStackScreen {...props} />
+            ) : (
+              <LoginAndSignUpStackScreen />
+            )
+          }
         </Tabs.Screen>
       </Tabs.Navigator>
-    )
+    );
   };
 
   return (
@@ -195,7 +151,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
   return {
     setUserToken: (encryptedToken) => dispatch(setUserToken(encryptedToken)),
-    userLoginSuccessful: (userData) => dispatch(userLoginSuccessful(userData))
+    userLoginSuccessful: (userData, authToken) => dispatch(userLoginSuccessful(userData, authToken))
   };
 };
 

@@ -16,8 +16,9 @@ const userDefaultState = {
 const userReducer = (state = userDefaultState, action) => {
   switch (action.type) {
     case USER_LOGIN_SUCCESSFUL:
+      console.log(action.payload);
       const userData = action.payload.userData;
-      const encryptedToken = userData._id;
+      const encryptedToken = action.payload.authToken;
       const emailAddress = userData.emailAddress;
       const firstName = userData.firstName;
       const lastName = userData.lastName;
@@ -39,7 +40,7 @@ const userReducer = (state = userDefaultState, action) => {
         bookMarks: bookMarks,
         likedStories: likedStories
       };
-    case SET_USER_TOKEN:      
+    case SET_USER_TOKEN:  
       return {
         ...state,
         id: action.payload.encryptedToken

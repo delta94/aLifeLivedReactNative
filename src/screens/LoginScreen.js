@@ -41,10 +41,10 @@ const LoginScreen = (props) => {
     if (data.status === 200) {
       try {
         const userData = data.data;
-        storeToken(userData.id);
-        props.userLoginSuccessful(userData);
-        setIsLoading(false);
-        return navigation.navigate('Home');
+        const authToken = data.headers.authtoken;
+        storeToken(authToken);
+        props.userLoginSuccessful(userData, authToken);
+        return setIsLoading(false);
       } catch (error) {
         console.log(error);
         setIsLoading(false);
@@ -122,7 +122,7 @@ const LoginScreen = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    userLoginSuccessful: (userData) => dispatch(userLoginSuccessful(userData))
+    userLoginSuccessful: (userData, authToken) => dispatch(userLoginSuccessful(userData, authToken))
   };
 };
 

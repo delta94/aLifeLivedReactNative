@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { FLEX, COLOR, FONT_SIZE, BORDER_RADIUS, HEADER_MARGINS } from './../styleHelpers';
+import {COLOR, FONT_SIZE, BORDER_RADIUS} from './../styleHelpers';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,12 +13,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: "center",
     borderTopLeftRadius: 100,
-    marginLeft: 20,
+    marginLeft: 30,
     overflow: "hidden",
   },
 
   buttonItem: {
     margin: 10
+  },
+
+  flatListContainer: {
+    margin: 10,
+    marginTop: 40
+  },
+
+  storyCard: {
+    marginBottom: 10
   }
 });
 

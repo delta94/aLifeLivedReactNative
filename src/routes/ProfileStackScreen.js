@@ -14,11 +14,7 @@ import { COLOR } from './../styles/styleHelpers';
 const ProfileStack = createStackNavigator();
 
 export const ProfileStackScreen = (props) => (
-  <ProfileStack.Navigator>
-    <ProfileStack.Screen
-      name="Profile"
-      component={ProfileScreen}
-      options={({ route, navigation }) => ({
+  <ProfileStack.Navigator screenOptions={({ route, navigation }) => ({
         headerTitleAlign: 'left',
         headerStyle: {
           backgroundColor: COLOR.grey,
@@ -27,8 +23,8 @@ export const ProfileStackScreen = (props) => (
         },
         cardStyle: { backgroundColor: COLOR.grey },
         headerTitle: () => <HeaderProfileComponent {...props} />,
-      })}
-    />
+      })}>
+    <ProfileStack.Screen name="Profile" component={ProfileScreen} />
 
     <ProfileStack.Screen
       name="Settings"

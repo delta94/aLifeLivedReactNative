@@ -79,10 +79,11 @@ const SignUpScreen = (props) => {
     if (response.status === 200) {
       try {
         const userData = response.data;
-        storeToken(userData.id);
-        props.userLoginSuccessful(userData);
-        setIsLoading(false);
-        // return navigation.navigate('Home');
+        const authToken = response.headers.authtoken;
+        storeToken(authToken);
+        props.userLoginSuccessful(userData, authToken);
+        navigation.navigate("Home");
+        return setIsLoading(false);
       } catch (error) {
         console.log(error);
         setIsLoading(false);
@@ -319,7 +320,7 @@ const SignUpScreen = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    userLoginSuccessful: (userData) => dispatch(userLoginSuccessful(userData)),
+    userLoginSuccessful: (userData, authToken) => dispatch(userLoginSuccessful(userData, authToken)),
   };
 };
 
