@@ -1,5 +1,6 @@
 // All collections actions
 export const SAVE_ALL_STORIES = "SAVE_ALL_STORIES";
+export const SAVE_NEW_STORY = "SAVE_NEW_STORY";
 
 // User actions
 export const USER_LOGIN_SUCCESSFUL = "USER_LOGIN_SUCCESSFUL";

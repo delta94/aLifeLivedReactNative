@@ -1,4 +1,4 @@
-import { SAVE_ALL_STORIES } from './../actions/allActions';
+import { SAVE_ALL_STORIES, SAVE_NEW_STORY } from './../actions/allActions';
 
 const allCollectionsDefaultState = {
   stories: [
@@ -25,10 +25,15 @@ const allCollectionsReducer = (state = allCollectionsDefaultState, action) => {
   switch (action.type) {
     case SAVE_ALL_STORIES:
       return {
-        ...state,
+        ...state, 
         stories: action.payload
       }
-    default:
+    case SAVE_NEW_STORY:
+      state.stories.push(action.payload);
+      return {
+        ...state
+      }
+      default:
       return state;
   }
 };

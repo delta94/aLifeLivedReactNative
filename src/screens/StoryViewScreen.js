@@ -11,6 +11,7 @@ import TrackPlayer, {
 import {getStoryByID} from './../api/getRequests/getStory';
 import { likeStory, unLikeStory } from './../api/putRequests/story';
 import { bookMarkStory, unBookMarkStory } from './../api/putRequests/user';
+import {audioFileIdToUrl} from './../api/postRequests/audioStream';
 
 // Actions
 import { removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory } from './../redux/actions/userActions';
@@ -47,6 +48,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
   });
 
   const onLoad = async () => {
+
     // If for some reason reducer is undefined resort to api call
     if (!allCollectionsReducer.stories) {
       const response = await getStoryByID(route.params.storyID);
@@ -70,10 +72,11 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
     // Audio player track
     const track = {
       id: storyData._id,
-      url: "https://a-life-lived-s3-bucket.s3-ap-southeast-2.amazonaws.com/questionAudioFiles/A+life+lived+dummy+questions.WAV",
+      url: audioFileIdToUrl(storyData.responseAudioFile),
       title: storyData.title,
       artist: storyData.interviewer.username
     };
+
 
 
     // Removes any other tracks 
