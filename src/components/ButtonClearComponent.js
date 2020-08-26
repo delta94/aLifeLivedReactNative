@@ -9,6 +9,8 @@ const ButtonClearComponent = ({
   isLoading,
   onButtonPress,
   disabled,
+  titleStyle,
+  buttonType
 }) => {
   const handleOnPress = () => {
     return onButtonPress();
@@ -17,10 +19,12 @@ const ButtonClearComponent = ({
   return (
     <Button
       title={title}
-      type={"clear"}
+      type={buttonType}
       loading={isLoading ? true : false}
       disabled={disabled}
+      raised={true}
       onPress={handleOnPress}
+      titleStyle={titleStyle}
     />
   );
 };

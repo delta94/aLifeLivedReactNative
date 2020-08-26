@@ -8,15 +8,21 @@ import StoryCardComponent from './../components/StoryCardComponent';
 
 // Styles
 import styles from './../styles/screens/ProfileScreen';
+import { COLOR } from '../styles/styleHelpers';
 
 const ProfileScreen = ({userReducer, allCollectionsReducer, navigation}) => {
-  const [profileDisplay, setProfileDisplay] = useState("MY_STORIES");
+  const MY_STORIES = "MY_STORIES";
+  const BOOKMARKED_STORIES = 'BOOKMARKED_STORIES';
+  const LIKED_STORIES = "LIKED_STORIES"
+
+  const [profileDisplay, setProfileDisplay] = useState(MY_STORIES);
+  const [buttonFocused, setButtonFocused] = useState(MY_STORIES);
   const [data, setData] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
 
   const dataDisplay = () => {
     switch (profileDisplay) {
-      case "LIKED_STORIES":
+      case LIKED_STORIES:
 
         // If no data then return empty array.
         if (!userReducer.likedStories) {
@@ -31,7 +37,7 @@ const ProfileScreen = ({userReducer, allCollectionsReducer, navigation}) => {
 
         setData(likedStories);
         return setRefreshing(false);
-      case "BOOKMARKED_STORIES": 
+      case BOOKMARKED_STORIES: 
 
         // If no data then return empty array.
         if (!userReducer.bookMarks) {
@@ -46,6 +52,9 @@ const ProfileScreen = ({userReducer, allCollectionsReducer, navigation}) => {
 
         setData(bookmarkedStories);
         return setRefreshing(false);
+      case MY_STORIES: 
+        console.log("MAXXXX");
+        break;
       default:
         // ensures it is displaying the correct data nad if none then display none. 
         setData([]);
@@ -67,6 +76,14 @@ const ProfileScreen = ({userReducer, allCollectionsReducer, navigation}) => {
     // Navigates to the StoryStack then to view Story
     return navigation.push('View Story', { screen: 'View Story', params: { storyID, userID } });
   };
+
+  const onNoData = () => {
+    return (
+      <View>
+        <Text style={styles.headerText}>This looks blank...try liking, bookmarking or creating amazing stories!</Text>
+      </View>
+    )
+  }
 
   const renderStories = ({ item }) => {
     const hasUserLikedStory = userReducer.likedStories ? userReducer.likedStories.includes(item._id) : false;
@@ -93,38 +110,44 @@ const ProfileScreen = ({userReducer, allCollectionsReducer, navigation}) => {
     <View style={styles.container}>
       <View style={styles.buttonListDisplay}>
         <ScrollView horizontal={true}>
-          <View style={styles.buttonItem}>
+          <View style={buttonFocused == MY_STORIES ? styles.buttonFocused : styles.buttonItem}>
             <ButtonClearComponent
+              buttonType="clear"
               title="My Stories"
-              onButtonPress={() => setProfileDisplay("MY_STORIES")}
-              style={styles.buttonItem}
+              onButtonPress={() => {setProfileDisplay(MY_STORIES), setButtonFocused(MY_STORIES)}}
+              titleStyle={buttonFocused == MY_STORIES ? styles.buttonFocusedText : {color: COLOR.grey}}
             />
           </View>
 
-          <View style={styles.buttonItem}>
+          <View style={buttonFocused == BOOKMARKED_STORIES ? styles.buttonFocused : styles.buttonItem}>
             <ButtonClearComponent
+              buttonType="clear"
               title="Book marked stories"
-              onButtonPress={() => setProfileDisplay("BOOKMARKED_STORIES")}
+              onButtonPress={() => {setProfileDisplay(BOOKMARKED_STORIES), setButtonFocused(BOOKMARKED_STORIES)}}
               style={styles.buttonItem}
+              titleStyle={buttonFocused == BOOKMARKED_STORIES ? styles.buttonFocusedText : {color: COLOR.grey}}
             />
           </View>
 
-          <View style={styles.buttonItem}>
+          <View style={buttonFocused == LIKED_STORIES ? styles.buttonFocused : styles.buttonItem}>
             <ButtonClearComponent
+              buttonType="clear"
               title="Liked Stories"
-              onButtonPress={() => setProfileDisplay("LIKED_STORIES")}
+              onButtonPress={() => {setProfileDisplay(LIKED_STORIES), setButtonFocused(LIKED_STORIES) }}
+              titleStyle={buttonFocused == LIKED_STORIES ? styles.buttonFocusedText : {color: COLOR.grey}}
             />
           </View>
         </ScrollView>
       </View>
 
       <View style={styles.flatListContainer}>
-        <FlatList 
+        <FlatList
           data={data}
           renderItem={renderStories}
-          keyExtractor={item => item._id}
+          keyExtractor={(item) => item._id}
           refreshing={refreshing}
           onRefresh={handleRefresh}
+          ListEmptyComponent={onNoData()}
         />
       </View>
     </View>

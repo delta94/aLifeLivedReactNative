@@ -306,6 +306,7 @@ const SignUpScreen = (props) => {
 
                 <ButtonClearComponent
                   title="Already have an account?"
+                  buttonType="clear"
                   onButtonPress={() => navigation.push('Login')}
                 />
               </View>

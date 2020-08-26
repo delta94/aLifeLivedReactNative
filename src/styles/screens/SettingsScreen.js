@@ -5,9 +5,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLOR.white,
     flex: 1,
-    borderTopLeftRadius: 100,
+    borderTopEndRadius: BORDER_RADIUS.medium,
+    borderTopLeftRadius: BORDER_RADIUS.medium,
   },
-
 });
 
 export default styles;

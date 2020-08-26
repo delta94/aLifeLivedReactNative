@@ -29,14 +29,17 @@ const SettingsScreen = ({ returnUserReducerToDefaultState, navigation: {setParam
     <View style={styles.container}>
       <ButtonClearComponent
         title="FAQ"
+        buttonType="clear"
       />
 
       <ButtonClearComponent
         title="Contact us"
+        buttonType="clear"
       />
 
       <ButtonClearComponent
         title="Sign out"
+        buttonType="clear"
         onButtonPress={() => onSignOut()}
       />
     </View>

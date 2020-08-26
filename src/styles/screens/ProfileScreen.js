@@ -5,30 +5,52 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLOR.white,
     flex: 1,
-    borderTopLeftRadius: 100,
+    borderTopEndRadius: BORDER_RADIUS.medium,
+    borderTopLeftRadius: BORDER_RADIUS.medium,
   },
 
   buttonListDisplay: {
-    display: "flex",
+    display: 'flex',
     flexDirection: 'row',
-    justifyContent: "center",
-    borderTopLeftRadius: 100,
-    marginLeft: 30,
-    overflow: "hidden",
+    justifyContent: 'center',
+    overflow: 'hidden',
+    borderTopRightRadius: BORDER_RADIUS.medium,
+    borderTopLeftRadius: BORDER_RADIUS.medium,
   },
 
   buttonItem: {
-    margin: 10
+    margin: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+
+  buttonFocused: {
+    margin: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: COLOR.limeGreen,
+  },
+
+  buttonFocusedText: {
+    color: COLOR.white,
+    fontWeight: 'bold',
+
+  },
+
+  headerText: {
+    color: COLOR.grey,
+    fontWeight: 'bold',
+    fontSize: FONT_SIZE.mediumSize,
   },
 
   flatListContainer: {
     margin: 10,
-    marginTop: 40
+    marginTop: 40,
   },
 
   storyCard: {
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 });
 
 export default styles;

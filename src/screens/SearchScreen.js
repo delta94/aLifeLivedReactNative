@@ -122,7 +122,7 @@ const SearchScreen = ({ navigation, userReducer, addBookMarkedStory, removeBookM
           <SearchBar
             placeholder="Search for users or stories"
             onChangeText={(search) => updateSearch(search)}
-            containerStyle={{ backgroundColor: 'none', borderBottomWidth: 0 }}
+            containerStyle={{ backgroundColor: 'none', borderBottomWidth: 0, borderTopWidth: 0 }}
             value={search}
             showLoading={isLoading}
             showCancel

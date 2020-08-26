@@ -18,11 +18,11 @@ export const ProfileStackScreen = (props) => (
     screenOptions={({ route, navigation }) => ({
         headerTitleAlign: 'left',
         headerStyle: {
-          backgroundColor: COLOR.grey,
+          backgroundColor: COLOR.limeGreen,
           shadowOffset: { height: 0 },
           height: 200
         },
-        cardStyle: { backgroundColor: COLOR.grey },
+        cardStyle: { backgroundColor: COLOR.limeGreen },
         headerTitle: () => <HeaderProfileComponent {...props} />,
       })}
     >
