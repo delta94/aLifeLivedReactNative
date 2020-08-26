@@ -1,29 +1,41 @@
 import {axiosAudioAPI} from './../axiosWithAuth';
 import {Buffer} from 'buffer';
-import {AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
-let channelId, chunkNum, chunkResponses, uploadChunkPromise, packets;
+//import {AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
+const AUDIO_API_BASE_ROUTE = "http://192.168.1.108:4000";
+
+let channelId, chunkNum, chunkResponses, uploadChunkPromise, packets, preInitialisedChannel;
 
 const PACKETS_TO_CHUNK = 100; // chunk RAM size == 2kB x PACKETS_TO_CHUNK
 
 //  This should be called as soon as the screen is displayed to the user.
 //  It should be called once only.
-export const initialiseStream = async (userId) => {
+export const initialiseAudioStream = async () => {
   try {
-    console.log(`initialiseStream()`);
+    console.log(`initialiseAudioStream()`);
     packets = [];
     chunkNum = 1;
     chunkResponses = [];
-    console.log(userId);
-    const response = await axiosAudioAPI.post("/requestChannel", {userId: userId});
-    channelId = response.data.channelId;
-
-    console.log('received channelId ', channelId);
-
-    return channelId;
+    if (!preInitialisedChannel) {
+      const response = await axiosAudioAPI.post("/requestChannel");
+      preInitialisedChannel = response.data.channelId;
+    }
   } catch(err) {
-    console.error('initialise Stream ', err);
+    console.error('initialiseAudioStream ', err);
   }
 };
+
+// Supplies pre-initialised channel and requests a new one to be created.
+// Allows on-demand supply of pre-provisioned channels, thereby
+// eliminating channel creation wait times
+export const getUnusedChannel = () => {
+  channelId = preInitialisedChannel;
+  axiosAudioAPI.post("/requestChannel").then((response)=> {
+    preInitialisedChannel = response.data.channelId;
+  }).catch((err) => {
+    console.error('getUnusedChannel ', err);
+  });
+  return channelId;
+}
 
 export const setChannelId = (chanId) => {
   channelId = chanId;
@@ -69,7 +81,9 @@ const uploadChunk = async () => {
 // For multiple recording sessions, audio is appended to the
 // pre-existing WAV file.
 // Returns path to down-stream able audio
-export const sequenceStream = async (chanId=channelId) => {
+// Final indicates that the server should hold off returning until
+// mp3 conversion is completed
+export const sequenceStream = async (chanId=channelId ) => {
   try {
     console.log('sequenceStream() with chunkNum', chunkNum);
     // In case a prior chunk upload is still in progress, wait for it to finish
@@ -87,14 +101,12 @@ export const sequenceStream = async (chanId=channelId) => {
       channelId: chanId,
       chunkResponses
     });
-    const streamingLink = `${AUDIO_API_BASE_ROUTE}/${result.data.wavFilepath}`;
-    console.log(streamingLink);
 
     // reset these to allow multiple consecutive sequencing ops on the same channel
     chunkNum = 1;
     chunkResponses = [];
 
-    return streamingLink;
+    return;
   } catch (error) {
       console.log(error);
   }
@@ -116,6 +128,9 @@ export const finaliseStream = async (chanId=channelId) => {
   }
 };
 
+// sends the composed storyStreams object to the audio server
+// for audio composition, upload to S3, and association with the story object
+// returns the updated story object as received from audio server
 export const finaliseStoryStreams = async ( storyStreams, storyId ) => {
   try {
     console.log('finaliseStoryStreams');
@@ -124,7 +139,7 @@ export const finaliseStoryStreams = async ( storyStreams, storyId ) => {
       storyStreams
     });
     
-    return;
+    return result.data;
   } catch (error) {
       console.log(error);
   }
@@ -137,5 +152,5 @@ export const channelIdToUrl = ( channelId ) => {
 }
 
 export const audioFileIdToUrl = ( audioFileId ) => {
-  return `${AUDIO_API_BASE_ROUTE}/audio/${audioFileId}.wav`;
+  return `${AUDIO_API_BASE_ROUTE}/audio/${audioFileId}.mp3`;
 }
