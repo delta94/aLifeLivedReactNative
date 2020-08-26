@@ -1,4 +1,13 @@
-import { USER_LOGIN_SUCCESSFUL, SET_USER_TOKEN, REMOVE_USER_TOKEN, REMOVE_LIKED_STORY, REMOVE_BOOKMARKED_STORY, ADD_LIKED_STORY, ADD_BOOKMARKED_STORY} from './../actions/allActions';
+import {
+  USER_LOGIN_SUCCESSFUL,
+  SET_USER_TOKEN,
+  REMOVE_USER_TOKEN,
+  REMOVE_LIKED_STORY,
+  REMOVE_BOOKMARKED_STORY,
+  ADD_LIKED_STORY,
+  ADD_BOOKMARKED_STORY,
+  RETURN_USER_REDUCER_TO_DEFAULT_STATE,
+} from './../actions/allActions';
 
 const userDefaultState = {
   id: null,
@@ -16,13 +25,12 @@ const userDefaultState = {
 const userReducer = (state = userDefaultState, action) => {
   switch (action.type) {
     case USER_LOGIN_SUCCESSFUL:
-      console.log(action.payload);
       const userData = action.payload.userData;
       const encryptedToken = action.payload.authToken;
       const emailAddress = userData.emailAddress;
       const firstName = userData.firstName;
       const lastName = userData.lastName;
-      const avatarURL = userData.avatarURL;
+      const avatarURL = userData.avatarURL ? userData.avatarURL : "";
       const bookMarks = userData.bookmarks;
       const likedStories = userData.likedStories;
       const username = userData.username;
@@ -71,6 +79,8 @@ const userReducer = (state = userDefaultState, action) => {
         ...state,
         bookMarks: updatedBookmarkList
       }
+    case RETURN_USER_REDUCER_TO_DEFAULT_STATE:
+      return userDefaultState;
     default:
       return state;
   }

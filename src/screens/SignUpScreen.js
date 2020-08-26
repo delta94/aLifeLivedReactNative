@@ -63,7 +63,6 @@ const SignUpScreen = (props) => {
 
     const imageResponseData = await imageUpload(formData);
     const avatarURL = imageResponseData.data;
-    
     const userData = {
       firstName: firstName,
       lastName: lastName,
@@ -71,7 +70,7 @@ const SignUpScreen = (props) => {
       username: username, 
       mobileNumber: mobileNumber,
       password: password,
-      avatarURL: avatarURL
+      avatarURL: avatarURL 
     };
 
     const response = await signUp(userData);
@@ -82,7 +81,6 @@ const SignUpScreen = (props) => {
         const authToken = response.headers.authtoken;
         storeToken(authToken);
         props.userLoginSuccessful(userData, authToken);
-        navigation.navigate("Home");
         return setIsLoading(false);
       } catch (error) {
         console.log(error);

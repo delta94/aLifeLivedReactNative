@@ -122,7 +122,7 @@ const AppNavigation = ({userReducer, userLoginSuccessful, setUserToken}) => {
         <Tabs.Screen
           name="Profile"
           options={token ? {tabBarVisible: true} : {tabBarVisible: false}}
-          initialParams={null}>
+          initialParams={userReducer}>
           {(props) =>
             token ? (
               <ProfileStackScreen {...props} />

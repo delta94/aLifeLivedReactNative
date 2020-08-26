@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import { connect } from 'react-redux';
 
 // Redux Actions
-import { removeUserToken } from './../redux/actions/userActions';
+import { returnUserReducerToDefaultState } from './../redux/actions/userActions';
 
 // Helpers
 import { removeToken } from './../helpers/asyncStorage';
@@ -14,12 +14,12 @@ import ButtonClearComponent from './../components/ButtonClearComponent';
 // Styles
 import styles from './../styles/screens/SettingsScreen';
 
-const SettingsScreen = ({ removeUserToken, navigation: {setParams} }) => {
+const SettingsScreen = ({ returnUserReducerToDefaultState, navigation: {setParams} }) => {
   
   const onSignOut = async () => {
     try {
-      await removeToken();
-      return removeUserToken();
+      returnUserReducerToDefaultState();
+      return await removeToken();
     } catch (error) {
       return console.log(error);
     }
@@ -45,8 +45,8 @@ const SettingsScreen = ({ removeUserToken, navigation: {setParams} }) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    removeUserToken: () => dispatch(removeUserToken())
-  }
+    returnUserReducerToDefaultState: () => dispatch(returnUserReducerToDefaultState()),
+  };
 };
 
 export default connect(null, mapDispatchToProps)(SettingsScreen);

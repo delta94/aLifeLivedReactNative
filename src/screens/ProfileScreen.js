@@ -17,6 +17,12 @@ const ProfileScreen = ({userReducer, allCollectionsReducer, navigation}) => {
   const dataDisplay = () => {
     switch (profileDisplay) {
       case "LIKED_STORIES":
+
+        // If no data then return empty array.
+        if (!userReducer.likedStories) {
+          return setData([]);
+        };
+
         // Sets the data display to show all the users liked stories. 
         const likedStories = userReducer.likedStories.map((likedStory) => {
           const filteredStory = allCollectionsReducer.stories.filter(story => story._id === likedStory);
@@ -26,6 +32,12 @@ const ProfileScreen = ({userReducer, allCollectionsReducer, navigation}) => {
         setData(likedStories);
         return setRefreshing(false);
       case "BOOKMARKED_STORIES": 
+
+        // If no data then return empty array.
+        if (!userReducer.bookMarks) {
+          return setData([]);
+        };
+        
         // Sets the data display to show all the users bookmarked stories. 
         const bookmarkedStories = userReducer.bookMarks.map((bookmarkedStory) => {
           const bookmarkedStories = allCollectionsReducer.stories.filter(story => story._id === bookmarkedStory);

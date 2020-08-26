@@ -11,13 +11,7 @@ import IconComponent from './IconComponent';
 import styles from './../styles/components/HeaderProfileComponent';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
-const HeaderProfileComponent = ({ userReducer, route, navigation, navigation: { setParams }}) => {
-
-  // When the user firsts logs in it sets the params. Also allows use to reuse this screen for user profiles
-  useEffect(() => {
-    setParams(userReducer)
-  }, []);
-
+const HeaderProfileComponent = ({route, navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.avatarAndTextContainer}>

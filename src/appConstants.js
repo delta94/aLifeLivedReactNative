@@ -8,13 +8,13 @@ export const HEADER_OPTIONS = {
   title: "A Life Lived",
   headerTitleAlign: 'left',
   headerStyle: {  
-    backgroundColor: COLOR.grey,
+    backgroundColor: COLOR.limeGreen,
     shadowOffset: {height: 0},
   },
   headerTitleStyle: {
-    color: COLOR.limeGreen,
+    color: COLOR.grey,
     fontSize: FONT_SIZE.largeSize,
   },
   headerStatusBarHeight: 60,
-  cardStyle: {backgroundColor: COLOR.grey}
+  cardStyle: {backgroundColor: COLOR.limeGreen}
 };

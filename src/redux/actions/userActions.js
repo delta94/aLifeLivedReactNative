@@ -1,4 +1,13 @@
-import { USER_LOGIN_SUCCESSFUL, SET_USER_TOKEN, REMOVE_USER_TOKEN, REMOVE_LIKED_STORY, REMOVE_BOOKMARKED_STORY, ADD_LIKED_STORY, ADD_BOOKMARKED_STORY} from './allActions';
+import {
+  USER_LOGIN_SUCCESSFUL,
+  SET_USER_TOKEN,
+  REMOVE_USER_TOKEN,
+  REMOVE_LIKED_STORY,
+  REMOVE_BOOKMARKED_STORY,
+  ADD_LIKED_STORY,
+  ADD_BOOKMARKED_STORY,
+  RETURN_USER_REDUCER_TO_DEFAULT_STATE,
+} from './allActions';
 
 export const userLoginSuccessful = (userData, authToken) => {
   return {
@@ -46,4 +55,8 @@ export const addBookMarkedStory = (storyID) => {
     type: ADD_BOOKMARKED_STORY,
     payload: storyID
   }
+};
+
+export const returnUserReducerToDefaultState = () => {
+  return {type: RETURN_USER_REDUCER_TO_DEFAULT_STATE};
 };
