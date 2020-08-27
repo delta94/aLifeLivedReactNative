@@ -1,8 +1,7 @@
 import {axiosAudioAPI} from './../axiosWithAuth';
 import {Buffer} from 'buffer';
 //import {AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
-const AUDIO_API_BASE_ROUTE = "http://192.168.1.108:4000";
-
+const AUDIO_API_BASE_ROUTE = "https://a-life-lived-audio-server-stag.herokuapp.com"
 let channelId, chunkNum, chunkResponses, uploadChunkPromise, packets, preInitialisedChannel;
 
 const PACKETS_TO_CHUNK = 100; // chunk RAM size == 2kB x PACKETS_TO_CHUNK
@@ -143,7 +142,33 @@ export const finaliseStoryStreams = async ( storyStreams, storyId ) => {
   } catch (error) {
       console.log(error);
   }
+}
 
+// called when user aborts a story without wishing to save --
+// terminates the referenced channels on the server
+export const terminateChannels = async ( questions ) => {
+  try {
+    console.log('terminateChannels');
+
+    let question, subquestion;
+    const terminateChannels = [];
+    for (question of questions) {
+      if (question.response === 'AUDIO') {
+        terminateChannels.push(question.channelId);
+      }
+      for (subquestion of question.subQuestions) {
+        if (subquestion.response === 'AUDIO') {
+          terminateChannels.push(subquestion.channelId);
+        }
+      }
+    }
+    const result = await axiosAudioAPI.post('/terminateChannels', {
+      channels: terminateChannels
+    });
+    return result.data;
+  } catch (error) {
+      console.log(error);
+  }
 }
 
 // url mapping is determined by the structure of the audio server

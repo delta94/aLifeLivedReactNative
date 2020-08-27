@@ -11,7 +11,7 @@ import TrackPlayer, {
 import AudioRecord from '@alifelived/react-native-audio-record';
 
 // API
-import {audioStream, initialiseAudioStream, getUnusedChannel, sequenceStream, channelIdToUrl} from './../api/postRequests/audioStream';
+import {audioStream, initialiseAudioStream, getUnusedChannel, sequenceStream, channelIdToUrl, terminateChannels} from './../api/postRequests/audioStream';
 
 // Actions
 import { incrementQuestionIndex, resetQuestionReducerToOriginalState, resetSubQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
@@ -301,6 +301,7 @@ const StoryRecordingScreen = ({
   const onClose = () => {
     navigation.reset({routes: [{name: 'Home'}]});
     resetRecorderState();
+    terminateChannels(questions);
     return resetQuestionReducerToOriginalState();
   };
 
