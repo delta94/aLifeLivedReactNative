@@ -44,6 +44,7 @@ const LoginScreen = (props) => {
         const authToken = data.headers.authtoken;
         storeToken(authToken);
         props.userLoginSuccessful(userData, authToken);
+        props.navigation.navigate('tabsNavigator', {screen: 'Home'})
         return setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -68,7 +69,7 @@ const LoginScreen = (props) => {
             size={ICON_SIZE.iconSizeMedium}
             color={COLOR.grey}
             style={styles.icon}
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate('tabsNavigator', {screen: 'Home'})}
           />
         <ScrollView>
           <KeyboardAvoidingView behavior="padding">

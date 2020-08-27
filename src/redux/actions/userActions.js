@@ -7,6 +7,7 @@ import {
   ADD_LIKED_STORY,
   ADD_BOOKMARKED_STORY,
   RETURN_USER_REDUCER_TO_DEFAULT_STATE,
+  SET_USER_STORIES
 } from './allActions';
 
 export const userLoginSuccessful = (userData, authToken) => {
@@ -59,4 +60,11 @@ export const addBookMarkedStory = (storyID) => {
 
 export const returnUserReducerToDefaultState = () => {
   return {type: RETURN_USER_REDUCER_TO_DEFAULT_STATE};
+};
+
+export const setUserStories = (stories) => {
+  return {
+    type: SET_USER_STORIES,
+    payload: stories
+  }
 };

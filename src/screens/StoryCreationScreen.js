@@ -115,6 +115,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
         selectedTags: selectedTags,
         interviewer: userID,
       };
+
       // Saves story data to redux 
       saveStoryDetails(storyData);
       const storyID = await createStory(storyData);
@@ -129,8 +130,15 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       // save to the all collections reducer
       saveNewStory(storyData);
 
-      // Navigates to the story
-      navigation.navigate("View Story", {storyID});
+      // Navigates to the story - Need to pass stack name first then screen. Due to View story being in sep stack.
+      navigation.navigate('screensNavigator', {
+        screen: 'storyStack',
+        params: {
+          screen: 'View Story',
+          params: {storyID}
+        },
+      });
+
       resetStoryReducer();
       return setIsLoading(false);
     } else {

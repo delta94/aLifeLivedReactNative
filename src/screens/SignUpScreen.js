@@ -81,6 +81,7 @@ const SignUpScreen = (props) => {
         const authToken = response.headers.authtoken;
         storeToken(authToken);
         props.userLoginSuccessful(userData, authToken);
+        props.navigation.navigate('tabsNavigator', { screen: 'Home' })
         return setIsLoading(false);
       } catch (error) {
         console.log(error);

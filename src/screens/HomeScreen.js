@@ -49,11 +49,14 @@ const HomeScreen = ({
 
   const onStoryPress = (storyID) => {
     const userID = userReducer.id;
-    // Navigates to the StoryStack then to view Story
-    // return navigation.navigate("View Story", {storyID, userID});
-    navigation.push('View Story', {
-      screen: 'View Story',
-      params: {storyID, userID},
+
+    // Navigates to the Screens navigator then storyStack then to view Story
+    navigation.navigate('screensNavigator', {
+      screen: 'storyStack',
+      params: {
+        screen: 'View Story',
+        params: {storyID, userID}
+      },
     });
   };
 

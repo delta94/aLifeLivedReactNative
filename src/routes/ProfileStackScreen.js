@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { connect } from 'react-redux';
 
 // Screens
 import ProfileScreen from './../screens/ProfileScreen';
@@ -13,9 +14,10 @@ import { COLOR } from './../styles/styleHelpers';
 
 const ProfileStack = createStackNavigator();
 
-export const ProfileStackScreen = (props) => (
-  <ProfileStack.Navigator 
-    screenOptions={({ route, navigation }) => ({
+export const ProfileStackScreen = (props) => {
+  return (
+    <ProfileStack.Navigator
+      screenOptions={({ route, navigation }) => ({
         headerTitleAlign: 'left',
         headerStyle: {
           backgroundColor: COLOR.limeGreen,
@@ -27,11 +29,20 @@ export const ProfileStackScreen = (props) => (
       })}
     >
 
-    <ProfileStack.Screen name="Profile" component={ProfileScreen} />
-    <ProfileStack.Screen
-      name="Settings"
-      component={SettingsScreen}
-      options={{headerLeft: null}}
-    />
-  </ProfileStack.Navigator>
-);
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+      <ProfileStack.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{ headerLeft: null }}
+      />
+    </ProfileStack.Navigator>
+  )
+};
+
+function mapStateToProps(state) {
+  return {
+    userReducer: state.userReducer
+  }
+};
+
+export default connect(mapStateToProps)(ProfileStackScreen);

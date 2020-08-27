@@ -27,13 +27,11 @@ import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 // Icon
 import IconComponent from './../components/IconComponent';
 
-
 const events = [
   TrackPlayerEvents.PLAYBACK_STATE
 ];
 
 const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
-
   const {position, duration} = useTrackPlayerProgress();
   const [story, setStory] = useState(null);
   const [tags, setTags] = useState([]);
@@ -48,21 +46,20 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
   });
 
   const onLoad = async () => {
+    // IF story is in reducer grab item from the reducer
+    const storyData = allCollectionsReducer.stories.find(({ _id }) => _id === route.params.storyID);
 
     // If for some reason reducer is undefined resort to api call
-    if (!allCollectionsReducer.stories) {
-      const response = await getStoryByID(route.params.storyID);
-      if (response.status === 200) {
-        setStory(response.data);
-        setStoryLikes(response.data.likes)
-        setTags(response.data.tags)
+    if (!allCollectionsReducer.stories || !storyData) {
+      storyData = await getStoryByID(route.params.storyID);
+      if (storyData.status === 200) {
+        setStory(storyData.data);
+        setStoryLikes(storyData.data.likes)
+        setTags(storyData.data.tags)
       } else {
         console.log('error')
       }
-    };
-
-    // ELSE grab item from the reducer
-    const storyData = allCollectionsReducer.stories.find(({ _id }) => _id === route.params.storyID);
+    }
 
     // Sets local state
     setStory(storyData);
@@ -77,14 +74,12 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
       artist: storyData.interviewer.username
     };
 
-
-
     // Removes any other tracks 
     await TrackPlayer.reset();
 
     // Loads track 
     await TrackPlayer.add(track);
-    
+
     // If user is not logged
     if (route.params.userID) {
       // Below checks if the user has already liked or bookmarked the story, if so it disables button
@@ -103,7 +98,7 @@ const StoryViewScreen = ({ route, navigation, userReducer, removeLikedStory, add
 
   // When the user presses the cross button
   const handleOnClose = () => {
-    return navigation.goBack();
+    return navigation.navigate("Home");
   };
 
   // Displays the tags of story

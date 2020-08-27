@@ -2,6 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, ScrollView, FlatList, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 
+// API 
+import { getUserStories } from './../api/getRequests/getUser';
+
+// Redux Actions
+import { setUserStories } from './../redux/actions/userActions';
+
 // Components
 import ButtonClearComponent from './../components/ButtonClearComponent';
 import StoryCardComponent from './../components/StoryCardComponent';
@@ -10,10 +16,10 @@ import StoryCardComponent from './../components/StoryCardComponent';
 import styles from './../styles/screens/ProfileScreen';
 import { COLOR } from '../styles/styleHelpers';
 
-const ProfileScreen = ({userReducer, allCollectionsReducer, navigation}) => {
+const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUserStories}) => {
   const MY_STORIES = "MY_STORIES";
   const BOOKMARKED_STORIES = 'BOOKMARKED_STORIES';
-  const LIKED_STORIES = "LIKED_STORIES"
+  const LIKED_STORIES = "LIKED_STORIES";
 
   const [profileDisplay, setProfileDisplay] = useState(MY_STORIES);
   const [buttonFocused, setButtonFocused] = useState(MY_STORIES);
@@ -53,7 +59,11 @@ const ProfileScreen = ({userReducer, allCollectionsReducer, navigation}) => {
         setData(bookmarkedStories);
         return setRefreshing(false);
       case MY_STORIES: 
-        console.log("MAXXXX");
+        if (!userReducer.userStories) {
+          return setData([]);
+        };
+
+        setData(userReducer.userStories);
         break;
       default:
         // ensures it is displaying the correct data nad if none then display none. 
@@ -66,9 +76,18 @@ const ProfileScreen = ({userReducer, allCollectionsReducer, navigation}) => {
     dataDisplay();
   }, [profileDisplay]);
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setRefreshing(true);
-    return dataDisplay();
+    switch (profileDisplay) {
+      case MY_STORIES:
+        const userStories = await getUserStories(userReducer.id);
+        setUserStories(userStories.data);
+        setRefreshing(false);
+        break;
+      default:
+        setRefreshing(false);
+        break;
+    }
   };
 
   const onStoryPress = (storyID) => {
@@ -161,5 +180,10 @@ function mapStateToProps(state) {
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUserStories: (userStories) => dispatch(setUserStories(userStories))
+  };
+};
 
-export default connect(mapStateToProps)(ProfileScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);

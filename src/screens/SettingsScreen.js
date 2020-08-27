@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import { connect } from 'react-redux';
+import { CommonActions } from '@react-navigation/native';
 
 // Redux Actions
 import { returnUserReducerToDefaultState } from './../redux/actions/userActions';
@@ -14,12 +15,19 @@ import ButtonClearComponent from './../components/ButtonClearComponent';
 // Styles
 import styles from './../styles/screens/SettingsScreen';
 
-const SettingsScreen = ({ returnUserReducerToDefaultState, navigation: {setParams} }) => {
+const SettingsScreen = ({ returnUserReducerToDefaultState, navigation}) => {
   
+
   const onSignOut = async () => {
     try {
       returnUserReducerToDefaultState();
-      return await removeToken();
+      await removeToken();
+      return navigation.navigate('authNavigator', {
+        screen: 'authStack',
+        params: {
+          screen: 'Login'
+        }
+      })
     } catch (error) {
       return console.log(error);
     }
