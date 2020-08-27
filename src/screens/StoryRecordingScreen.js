@@ -11,7 +11,7 @@ import TrackPlayer, {
 import AudioRecord from '@alifelived/react-native-audio-record';
 
 // API
-import {audioStream, initialiseAudioStream, getUnusedChannel, sequenceStream, channelIdToUrl} from './../api/postRequests/audioStream';
+import {audioStream, initialiseAudioStream, getUnusedChannel, sequenceStream, channelIdToUrl, terminateChannels, audioFileIdToUrl} from './../api/postRequests/audioStream';
 
 // Actions
 import { incrementQuestionIndex, resetQuestionReducerToOriginalState, resetSubQuestionIndex, saveSubQuestions, incrementSubQuestionIndex, decrementSubQuestionIndex, decrementQuestionIndex } from './../redux/actions/questionActions';
@@ -107,6 +107,18 @@ const StoryRecordingScreen = ({
     else
       return questions[questionIndex];
   }
+
+  const setCurrentPlaybackTracks = async () => {
+    const questionTrack = audioFileIdToTrack(currentQuestion().audioFile);
+    const tracks = [questionTrack];
+    if (currentQuestion().response === 'AUDIO') {
+      // IF there is a recording it will play the recording after the question. As if it was the real thing
+      tracks.push(channelIdToTrack(currentQuestion().channelId));
+    }
+    await TrackPlayer.reset();
+    await TrackPlayer.add(tracks);
+  }
+
   // Recording States
   const [timerSeconds, setTimerSeconds] = useState(currentQuestion().audioDuration ? currentQuestion().audioDuration : 0);
   const [recordedURL, setRecordedURL] = useState('');
@@ -148,32 +160,25 @@ const StoryRecordingScreen = ({
     ]): null;
 
     await AudioRecord.init(options);
+    await setCurrentPlaybackTracks();
     setIsInitialiseLoaded(true);
   };
 
   // Pause Audio
   const pauseAudio = async () => {
     await TrackPlayer.stop();
+    await setCurrentPlaybackTracks();
     return setPlayerState('IDLE');
   };
   
   // Play audio
-  const playAudio = async (track) => {
-    await TrackPlayer.reset();
-    const playTheseTracks = [track];
-    if (currentQuestion().response === 'AUDIO') {
-      // IF there is a recording it will play the recording after the question. As if it was the real thing
-      playTheseTracks.push(channelIdToTrack(currentQuestion().channelId));
-    }
-    await TrackPlayer.add(playTheseTracks);
-    
+  const playAudio = async () => {
     await TrackPlayer.play();
-    console.log(await TrackPlayer.getState());
-
     return setPlayerState('PLAYING');
   };
   // Start recording
   const onRecordStart = async () => {
+    // grab a channel if none exists
     if (!currentQuestion().channelId)
       setQuestionChannel( getUnusedChannel());
 
@@ -197,16 +202,8 @@ const StoryRecordingScreen = ({
     setQuestionAudioDuration();
     const onFinalQuestion = (questionIndex === questions.length - 1);
     await sequenceStream();
+    await setCurrentPlaybackTracks(); // update audio playback
     return;
-  };
-
-  const channelIdToTrack = (channelId) => {
-    return {
-      id: 'recording',
-      url: channelIdToUrl(channelId),
-      title: 'TEST',
-      artist: 'TEST',
-    };
   };
 
   // Handles the back button out of subQuestions
@@ -301,7 +298,26 @@ const StoryRecordingScreen = ({
   const onClose = () => {
     navigation.reset({routes: [{name: 'Home'}]});
     resetRecorderState();
+    terminateChannels(questions);
     return resetQuestionReducerToOriginalState();
+  };
+
+  const channelIdToTrack = (channelId) => {
+    return {
+      id: 'recording',
+      url: channelIdToUrl(channelId),
+      title: 'TEST',
+      artist: 'TEST',
+    };
+  };
+
+  const audioFileIdToTrack = (audioFile) => {
+    return {
+      id: 'recording',
+      url: audioFileIdToUrl(audioFile),
+      title: 'TEST',
+      artist: 'TEST',
+    };
   };
 
   // This controls loads the questions.
@@ -343,7 +359,7 @@ const StoryRecordingScreen = ({
           subQuestionActive={subQuestionActive}
           questionID={questions[questionIndex].id}
           playerState={playerState}
-          playAudio={(track) => playAudio(track)}
+          playAudio={() => playAudio()}
           pauseAudio={() => pauseAudio()}
           questionAudioPlaying={(isAudioPlaying) => setPlayerState(isAudioPlaying)}
         />
