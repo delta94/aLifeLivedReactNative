@@ -16,7 +16,7 @@ import { getAllQuestions } from './../api/getRequests/getQuestions';
 import { getAllTags } from './../api/getRequests/getTags';
 import {createStory} from './../api/postRequests/createStory';
 
-import {finaliseStoryStreams} from './../api/postRequests/audioStream';
+import {finaliseStoryStreams, terminateChannels} from './../api/postRequests/audioStream';
 
 // Icon
 import IconComponent from './../components/IconComponent';
@@ -154,7 +154,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
   const collocateStorySegments = () => {
     const audioSegments = [];
     let question, subquestion;
-    for (question of /*questionReducer.*/questions) {
+    for (question of questions) {
       if (question.response === 'AUDIO') {
         audioSegments.push(questionToAudioSegment(question));
       }
@@ -177,6 +177,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
 
   const handleOnClose = () => {
     resetStoryReducer();
+    terminateChannels(questions);
     // Resets the stack screen location so you don't appear in that screen when you return to stack
     return navigation.reset({ routes: [{ name: 'Home' }] });
   };
