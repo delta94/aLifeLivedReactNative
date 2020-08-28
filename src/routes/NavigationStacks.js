@@ -17,7 +17,7 @@ import StoryViewScreen from './../screens/StoryViewScreen';
 import SearchScreen from './../screens/SearchScreen';
 
 // Constants 
-import { HEADER_OPTIONS } from './../appConstants';
+import { DEFAULT_HEADER_OPTION } from './helpers/headerOptions';
 
 // Styles
 import { COLOR } from './../styles/styleHelpers';
@@ -42,7 +42,7 @@ export const HomeStackScreen = () => (
     <HomeStack.Screen
       name="Home"
       component={HomeScreen}
-      options={HEADER_OPTIONS}
+      options={({ navigation }) => DEFAULT_HEADER_OPTION(navigation)}
     />
   </HomeStack.Navigator>
 );
@@ -67,7 +67,6 @@ export const ProfileStackScreen = (props) => {
         headerTitle: () => <HeaderProfileComponent {...props}/>,
       })}
     >
-
       <ProfileStack.Screen name="Profile" component={ProfileScreen} />
       <ProfileStack.Screen name="Settings" component={SettingsScreen} options={{ headerLeft: null }} />
     </ProfileStack.Navigator>
@@ -83,7 +82,7 @@ export const StoryStackScreen = () => (
 
 export const SearchStackScreen = () => (
   <SearchStack.Navigator>
-    <SearchStack.Screen name="Search" component={SearchScreen} options={HEADER_OPTIONS} />
+    <SearchStack.Screen name="Search" component={SearchScreen} options={({ navigation }) => DEFAULT_HEADER_OPTION(navigation)} />
   </SearchStack.Navigator>
 );
 
