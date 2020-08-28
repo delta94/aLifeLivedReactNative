@@ -70,16 +70,6 @@ const StoryRecordingScreen = ({
     console.log(event);
   });
 
-  // timer use effect
-  useEffect(() => {
-    if (playerState === 'RECORDING') {
-      const interval = setInterval(() => {
-        setTimerSeconds(timerSeconds + 1);
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-    }, [timerSeconds, playerState]);
-
   // Questions state
   const [questions] = useState(questionReducer.questions);
   const questionIndex = questionReducer.questionIndex;
@@ -97,6 +87,7 @@ const StoryRecordingScreen = ({
       return questions[questionIndex];
   }
 
+
   const setCurrentPlaybackTracks = async () => {
     const questionTrack = audioFileIdToTrack(currentQuestion().audioFile);
     const tracks = [questionTrack];
@@ -108,10 +99,21 @@ const StoryRecordingScreen = ({
     await TrackPlayer.add(tracks);
   }
 
-  // Recording States
-  const [timerSeconds, setTimerSeconds] = useState(currentQuestion().audioDuration ? currentQuestion().audioDuration : 0);
+  const [timerSeconds, setTimerSeconds] = useState(0);
   const [recordedURL, setRecordedURL] = useState('');
   const playerState = recorderReducer.playerState;
+
+  // timer use effect
+  useEffect(() => {
+    if (playerState === 'RECORDING') {
+      const interval = setInterval(() => {
+        setTimerSeconds(timerSeconds + 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+    }, [timerSeconds, playerState]);
+
+
 
   const setQuestionResponse = (response) => {
     currentQuestion().response = response;
@@ -151,6 +153,7 @@ const StoryRecordingScreen = ({
     await AudioRecord.init(options);
     await setCurrentPlaybackTracks();
     setIsInitialiseLoaded(true);
+
   };
 
   // Pause Audio
@@ -313,6 +316,13 @@ const StoryRecordingScreen = ({
       onLoad();
     };
 
+    // update the recording timer based on any previous activity on this question
+    // TODO: find a better way to manage this..
+    let currentQuestionRecordedAudioDuration = currentQuestion().audioDuration;
+    if (isNaN(currentQuestionRecordedAudioDuration)) 
+      currentQuestionRecordedAudioDuration = 0;
+    setTimerSeconds(currentQuestionRecordedAudioDuration);
+  
   }, [playerState, questionIndex, subQuestionIndex]);
 
 
