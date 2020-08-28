@@ -25,6 +25,7 @@ const userDefaultState = {
 };
 
 const userReducer = (state = userDefaultState, action) => {
+  
   switch (action.type) {
     case USER_LOGIN_SUCCESSFUL:
       const userData = action.payload.userData;
@@ -81,7 +82,7 @@ const userReducer = (state = userDefaultState, action) => {
         bookMarks: state.bookMarks.concat(action.payload)
       };
 
-    case REMOVE_BOOKMARKED_STORY: 
+    case REMOVE_BOOKMARKED_STORY:
       const updatedBookmarkList = state.bookMarks.filter(story => story != action.payload);
       return {
         ...state,
@@ -96,7 +97,6 @@ const userReducer = (state = userDefaultState, action) => {
       };
 
     case RETURN_USER_REDUCER_TO_DEFAULT_STATE:
-      console.log("FUCK ME");
       return userDefaultState;
     default:
       return state;

@@ -10,7 +10,9 @@ import IconComponent from './IconComponent';
 import styles from './../styles/components/HeaderProfileComponent';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
-const HeaderProfileComponent = ({route, navigation}) => {
+const HeaderProfileComponent = ({route, navigation, userReducer}) => {
+  // The below handles the display. If there is no params then it will display the user reducer as it assumes that its the own user viewing, else if there is params it assumes the user is viewing another profile.
+  const userData = route.params ? route.params : userReducer;
   return (
     <View style={styles.container}>
       <View style={styles.avatarAndTextContainer}>
@@ -20,11 +22,11 @@ const HeaderProfileComponent = ({route, navigation}) => {
             isSquare
             showEditButton={false}
             size="large"
-            source={route.params.avatarURL}
+            source={userData.avatarURL}
           />
           <View style={styles.textContainer}>
-            <Text style={styles.headerText}>{route.params.firstName} {route.params.lastName}</Text>
-            <Text style={styles.subText}>{route.params.username}</Text>
+            <Text style={styles.headerText}>{userData.firstName} {userData.lastName}</Text>
+            <Text style={styles.subText}>{userData.username}</Text>
           </View>
         </View>
 

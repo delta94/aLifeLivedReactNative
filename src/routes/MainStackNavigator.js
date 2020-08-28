@@ -33,6 +33,7 @@ const MainStackNavigator = ({userReducer, userLoginSuccessful, setUserToken, set
 
   // sets up track player
   const trackPlayerOnLoad = async () => {
+
     setIsLoading(true);
     await TrackPlayer.setupPlayer({
       iosCategoryMode: 'spokenAudio',
@@ -76,7 +77,6 @@ const MainStackNavigator = ({userReducer, userLoginSuccessful, setUserToken, set
         name="tabsNavigator"
         component={TabsNavigator}
         options={{ headerShown: false }}
-        initialParams={userReducer}
       />
       <RootStack.Screen
         name="screensNavigator"

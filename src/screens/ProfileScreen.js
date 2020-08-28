@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 
 // API 
 import { getUserStories } from './../api/getRequests/getUser';
+import { bookMarkStory, unBookMarkStory } from './../api/putRequests/user';
 
 // Redux Actions
 import { setUserStories } from './../redux/actions/userActions';
+import { addBookMarkedStory, removeBookMarkedStory } from './../redux/actions/userActions';
 
 // Components
 import ButtonClearComponent from './../components/ButtonClearComponent';
@@ -16,7 +18,8 @@ import StoryCardComponent from './../components/StoryCardComponent';
 import styles from './../styles/screens/ProfileScreen';
 import { COLOR } from '../styles/styleHelpers';
 
-const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUserStories}) => {
+const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUserStories, addBookMarkedStory,
+  removeBookMarkedStory,}) => {
   const MY_STORIES = "MY_STORIES";
   const BOOKMARKED_STORIES = 'BOOKMARKED_STORIES';
   const LIKED_STORIES = "LIKED_STORIES";
@@ -42,8 +45,10 @@ const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUser
         });
 
         setData(likedStories);
-        return setRefreshing(false);
+        setRefreshing(false);
+        break;
       case BOOKMARKED_STORIES: 
+        const bookmarkedStories = [];
 
         // If no data then return empty array.
         if (!userReducer.bookMarks) {
@@ -51,13 +56,18 @@ const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUser
         };
         
         // Sets the data display to show all the users bookmarked stories. 
-        const bookmarkedStories = userReducer.bookMarks.map((bookmarkedStory) => {
-          const bookmarkedStories = allCollectionsReducer.stories.filter(story => story._id === bookmarkedStory);
-          return bookmarkedStories[0];
+        userReducer.bookMarks.map((bookmarkedStory) => {
+          // If for some reason the story has been deleted or undefined then it doesn't push
+          if (!allCollectionsReducer.stories.filter(story => story._id === bookmarkedStory).length) {
+            return;
+          } else {
+            return bookmarkedStories.push(allCollectionsReducer.stories.filter(story => story._id === bookmarkedStory)[0]);
+          };
         });
 
         setData(bookmarkedStories);
-        return setRefreshing(false);
+        setRefreshing(false);
+        break;
       case MY_STORIES: 
         if (!userReducer.userStories) {
           return setData([]);
@@ -68,7 +78,8 @@ const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUser
       default:
         // ensures it is displaying the correct data nad if none then display none. 
         setData([]);
-        return setRefreshing(false);
+        setRefreshing(false);
+        break;
     }
   };
 
@@ -92,17 +103,39 @@ const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUser
 
   const onStoryPress = (storyID) => {
     const userID = userReducer.id
-    // Navigates to the StoryStack then to view Story
-    return navigation.push('View Story', { screen: 'View Story', params: { storyID, userID } });
+    // Navigates to the Screens navigator then storyStack then to view Story
+    return navigation.navigate('screensNavigator', {
+      screen: 'storyStack',
+      params: {
+        screen: 'View Story',
+        params: { storyID, userID }
+      },
+    });
   };
 
+  const onBookmarkPress = async(hasUserBookMarkedStory, storyID) => {
+    // If already bookmarked
+    if (hasUserBookMarkedStory) {
+      const response = await unBookMarkStory(storyID, userReducer.id);
+      response.status === 200
+        ? removeBookMarkedStory(storyID)
+        : console.log('ERROR');
+    } else {
+      const response = await bookMarkStory(storyID, userReducer.id);
+      response.status === 200
+        ? addBookMarkedStory(storyID)
+        : console.log('ERROR');
+    }
+  };
+
+  // Handle when there is no data to displaying 
   const onNoData = () => {
     return (
       <View>
         <Text style={styles.headerText}>This looks blank...try liking, bookmarking or creating amazing stories!</Text>
       </View>
     )
-  }
+  };
 
   const renderStories = ({ item }) => {
     const hasUserLikedStory = userReducer.likedStories ? userReducer.likedStories.includes(item._id) : false;
@@ -119,6 +152,7 @@ const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUser
             likes={item.likes}
             hasUserLikedStory={hasUserLikedStory}
             hasUserBookMarkedStory={hasUserBookMarkedStory}
+            onBookMarkPress={() => onBookmarkPress(hasUserBookMarkedStory, item._id)}
           />
         </TouchableOpacity>
       </>
@@ -182,7 +216,9 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setUserStories: (userStories) => dispatch(setUserStories(userStories))
+    setUserStories: (userStories) => dispatch(setUserStories(userStories)),
+    addBookMarkedStory: (storyID) => dispatch(addBookMarkedStory(storyID)),
+    removeBookMarkedStory: (storyID) => dispatch(removeBookMarkedStory(storyID)),
   };
 };
 

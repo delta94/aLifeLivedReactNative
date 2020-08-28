@@ -17,7 +17,6 @@ import StoryCardComponent from './../components/StoryCardComponent';
 import styles from './../styles/screens/HomeScreen';
 
 const HomeScreen = ({
-  route,
   navigation,
   userReducer,
   allCollectionsReducer,
@@ -26,8 +25,10 @@ const HomeScreen = ({
   removeBookMarkedStory,
 }) => {
   const [refreshing, setRefreshing] = useState(false);
+  const [userLikedStories, setUserLikedStories] = useState(userReducer.likedStories);
 
   const onLoad = async () => {
+    setRefreshing(true);
     const allStories = await getAllPublicStories();
     if (allStories.status === 200) {
       saveAllStories(allStories.data);
@@ -40,14 +41,14 @@ const HomeScreen = ({
 
   useEffect(() => {
     onLoad();
-  }, []);
+  }, [userLikedStories]);
 
   const handleRefresh = () => {
     setRefreshing(true);
     return onLoad();
   };
 
-  const onStoryPress = (storyID) => {
+  const onStoryPress = (storyID, hasUserBookMarkedStory, hasUserLikedStory) => {
     const userID = userReducer.id;
 
     // Navigates to the Screens navigator then storyStack then to view Story
@@ -55,7 +56,7 @@ const HomeScreen = ({
       screen: 'storyStack',
       params: {
         screen: 'View Story',
-        params: {storyID, userID}
+        params: { storyID, userID, hasUserBookMarkedStory, hasUserLikedStory}
       },
     });
   };
@@ -64,7 +65,12 @@ const HomeScreen = ({
   const onBookmarkPress = async (hasUserBookMarkedStory, storyID) => {
     // If user is not logged in
     if (!userReducer.id) {
-      return navigation.navigate('Login');
+      return navigation.navigate('authNavigator', {
+        screen: 'authStack',
+        params: {
+          screen: 'Login'
+        }
+      });
     }
 
     // If already bookmarked
@@ -92,7 +98,7 @@ const HomeScreen = ({
     return (
       <>
         <TouchableOpacity
-          onPress={() => onStoryPress(item._id)}
+          onPress={() => onStoryPress(item._id, hasUserBookMarkedStory, hasUserLikedStory)}
           style={styles.storyCard}>
           <StoryCardComponent
             title={item.title}
