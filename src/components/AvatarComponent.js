@@ -22,7 +22,7 @@ const AvatarComponent = ({isRounded, size, iconName, source, showEditButton, onP
         showEditButton={showEditButton}
         source={ source ? {uri: source} : null}
         containerStyle={isSquare ? styles.squareContainer : styles.container}
-        onPress={handleOnPress}
+        onPress={onPress ? handleOnPress : null}
       />
     </View>
   );

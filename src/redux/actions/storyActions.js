@@ -1,7 +1,6 @@
 import { SAVE_STORY_DETAILS, SAVE_ALL_TAGS, RESET_STORY_REDUCER } from './allActions';
 
 export const saveStoryDetails = (storyData) => {
-  console.log(storyData);
   return {
     type: SAVE_STORY_DETAILS,
     payload: { storyData }

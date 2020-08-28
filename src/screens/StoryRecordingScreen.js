@@ -65,7 +65,7 @@ const StoryRecordingScreen = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialiseLoaded, setIsInitialiseLoaded] = useState(false);
 
-    // Gets the player state and sets local state. 
+  // Gets the player state and sets local state. 
   useTrackPlayerEvents(events, (event) => {
     console.log(event);
   });

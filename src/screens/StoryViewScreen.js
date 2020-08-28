@@ -27,20 +27,19 @@ import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 // Icon
 import IconComponent from './../components/IconComponent';
 
-
 const events = [
   TrackPlayerEvents.PLAYBACK_STATE
 ];
 
-const StoryViewScreen = ({ route, navigation, goBack, userReducer, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
+const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
+
   const {position, duration} = useTrackPlayerProgress();
   const [story, setStory] = useState(null);
   const [tags, setTags] = useState([]);
   const [storyLikes, setStoryLikes] = useState(0);
-  const [didLike, setDidLike] = useState(false);
-  const [didBookmark, setDidBookmark] = useState(false);
+  const [didLike, setDidLike] = useState(route.params.hasUserBookMarkedStory);
+  const [didBookmark, setDidBookmark] = useState(route.params.hasUserBookMarkedStory);
   const [audioState, setAudioState] = useState("NONE");
-
 
   // Gets the player state and sets local state. 
   useTrackPlayerEvents(events, (event) => {
@@ -48,21 +47,20 @@ const StoryViewScreen = ({ route, navigation, goBack, userReducer, removeLikedSt
   });
 
   const onLoad = async () => {
+    // IF story is in reducer grab item from the reducer
+    const storyData = allCollectionsReducer.stories.find(({ _id }) => _id === route.params.storyID);
 
     // If for some reason reducer is undefined resort to api call
-    if (!allCollectionsReducer.stories) {
-      const response = await getStoryByID(route.params.storyID);
-      if (response.status === 200) {
-        setStory(response.data);
-        setStoryLikes(response.data.likes)
-        setTags(response.data.tags)
+    if (!allCollectionsReducer.stories || !storyData) {
+      storyData = await getStoryByID(route.params.storyID);
+      if (storyData.status === 200) {
+        setStory(storyData.data);
+        setStoryLikes(storyData.data.likes)
+        setTags(storyData.data.tags)
       } else {
         console.log('error')
       }
-    };
-
-    // ELSE grab item from the reducer
-    const storyData = allCollectionsReducer.stories.find(({ _id }) => _id === route.params.storyID);
+    }
 
     // Sets local state
     setStory(storyData);
@@ -77,24 +75,11 @@ const StoryViewScreen = ({ route, navigation, goBack, userReducer, removeLikedSt
       artist: storyData.interviewer.username
     };
 
-
-
     // Removes any other tracks 
     await TrackPlayer.reset();
 
     // Loads track 
-    await TrackPlayer.add(track);
-    
-    // If user is not logged
-    if (route.params.userID) {
-      // Below checks if the user has already liked or bookmarked the story, if so it disables button
-      const hasUserLikedStory = userReducer.likedStories.includes(route.params.storyID);
-      const hasUserBookmarkedStory = userReducer.bookMarks.includes(route.params.storyID);
-
-      // Updates local states
-      setDidLike(hasUserLikedStory);
-      return setDidBookmark(hasUserBookmarkedStory);
-    };
+    return await TrackPlayer.add(track);
   };
 
   useEffect(() => {
@@ -121,20 +106,23 @@ const StoryViewScreen = ({ route, navigation, goBack, userReducer, removeLikedSt
 
   // Handle when user presses on heart button
   const onHeartPress = async () => {
-    
     // If user is not logged in
     if (!route.params.userID) {
-      return navigation.navigate("Login");
+      return navigation.navigate('authNavigator', {
+        screen: 'authStack',
+        params: {
+          screen: 'Login'
+        }
+      });
     };
 
     // Handles if the user has liked before if so user can dislike
     if (didLike) {
+
       // call first to allow update of UI quickly
       setStoryLikes(storyLikes - 1);
       setDidLike(false);
-      
       const response = await unLikeStory(route.params.storyID, route.params.userID);
-
       if (response.status === 200) {
         // Removes from reducer
         return removeLikedStory(route.params.storyID);
@@ -167,7 +155,12 @@ const StoryViewScreen = ({ route, navigation, goBack, userReducer, removeLikedSt
   const onBookmarkPress = async () => {
     // If user is not logged in
     if (!route.params.userID) {
-      return navigation.navigate("Login");
+      return navigation.navigate('authNavigator', {
+        screen: 'authStack',
+        params: {
+          screen: 'Login'
+        }
+      });
     };
 
     // If already bookmarked 
@@ -313,7 +306,6 @@ const StoryViewScreen = ({ route, navigation, goBack, userReducer, removeLikedSt
 
 function mapStateToProps(state) {
   return {
-    userReducer: state.userReducer,
     allCollectionsReducer: state.allCollectionsReducer
   };
 };

@@ -3,7 +3,7 @@ import {Button} from 'react-native-elements';
 
 import styles from '../styles/components/ButtonComponent';
 
-const ButtonComponent = ({buttonType, title, isLoading, onButtonPress, disabled, buttonSize}) => {
+const ButtonComponent = ({buttonType, title, isLoading, onButtonPress, disabled, buttonSize, icon}) => {
 
   const handleOnPress = () => {
     return onButtonPress();
@@ -12,6 +12,7 @@ const ButtonComponent = ({buttonType, title, isLoading, onButtonPress, disabled,
   return (
     <Button
       title={title}
+      icon={icon}
       type={buttonType ? buttonType : null}
       loading={isLoading ? true : false}
       buttonStyle={title === "Back" || title === "No" ? styles.backButton : styles.button}

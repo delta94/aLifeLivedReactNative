@@ -6,6 +6,7 @@ const allCollectionsDefaultState = {
       description: "",
       id: "",
       intervieweeName: "",
+      responseAudioFile: "",
       interviewer: {
         id: "",
         avatarURL: "",

@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import { View, Text, Keyboard, ScrollView, KeyboardAvoidingView} from 'react-native';
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { View, Text, ScrollView, KeyboardAvoidingView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 
@@ -8,11 +7,11 @@ import * as Animatable from 'react-native-animatable';
 import {storeToken} from './../helpers/asyncStorage';
 
 // API
-import {login} from './../api/postRequests/login';
+import { login } from './../api/postRequests/login';
 
 // Redux
 import {connect} from 'react-redux';
-import {userLoginSuccessful} from './../redux/actions/userActions';
+import { userLoginSuccessful, setUserStories } from './../redux/actions/userActions';
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -26,34 +25,33 @@ import ButtonClearComponent from './../components/ButtonClearComponent';
 import styles from './../styles/screens/LoginScreen';
 import { ICON_SIZE, COLOR } from '../styles/styleHelpers';
 
-const LoginScreen = (props) => {  
+const LoginScreen = ({ userLoginSuccessful, navigation, setUserStories }) => {  
   const [emailAddress, setEmailAddressValue] = useState('');
   const [password, setPasswordValue] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Direct navigation to homepage. 
-  const navigation = useNavigation();
-
   const onSubmit = async () => {
     setIsLoading(true);
-    const data = await login(emailAddress, password);
+    const response = await login(emailAddress, password);
 
-    if (data.status === 200) {
+    if (response.status === 200) {
       try {
-        const userData = data.data;
-        storeToken(userData.id);
-        props.userLoginSuccessful(userData);
-        setIsLoading(false);
-        return navigation.navigate('Home');
+        const userData = response.data;
+        const authToken = response.headers.authtoken;
+        storeToken(authToken);
+        userLoginSuccessful(userData.userData, authToken);
+        setUserStories(userData.userStories);
+        navigation.navigate('tabsNavigator', {screen: 'Home'})
+        return setIsLoading(false);
       } catch (error) {
         console.log(error);
-        setIsLoading(false);
+        return setIsLoading(false);
       };
     } else {
       setIsLoading(false)
-      console.log(data.errorMessage);
-      setErrorMessage(data.errorMessage);
+      console.log(response.errorMessage);
+      setErrorMessage(response.errorMessage);
     }
   };
   
@@ -69,7 +67,7 @@ const LoginScreen = (props) => {
             size={ICON_SIZE.iconSizeMedium}
             color={COLOR.grey}
             style={styles.icon}
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate('tabsNavigator', {screen: 'Home'})}
           />
         <ScrollView>
           <KeyboardAvoidingView behavior="padding">
@@ -112,6 +110,7 @@ const LoginScreen = (props) => {
 
             <ButtonClearComponent
               title="Don't have an account?"
+              buttonType="clear"
               onButtonPress={() => navigation.push('SignUp')}
             />
           </View>
@@ -123,7 +122,8 @@ const LoginScreen = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    userLoginSuccessful: (userData) => dispatch(userLoginSuccessful(userData))
+    userLoginSuccessful: (userData, authToken) => dispatch(userLoginSuccessful(userData, authToken)),
+    setUserStories: (userStories) => dispatch(setUserStories(userStories))
   };
 };
 

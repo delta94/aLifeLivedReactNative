@@ -52,8 +52,15 @@ const SearchScreen = ({ navigation, userReducer, addBookMarkedStory, removeBookM
   // When the user clicks on story card
   const onStoryPress = (storyID) => {
     const userID = userReducer.id
-    // Navigates to the StoryStack then to view Story
-    return navigation.navigate("View Story", { storyID, userID });
+
+    // Navigates to the Screens navigator then storyStack then to view Story
+    return navigation.navigate('screensNavigator', {
+      screen: 'storyStack',
+      params: {
+        screen: 'View Story',
+        params: { storyID, userID }
+      },
+    });
   };
 
   // Handle when user clicks on bookmark button
@@ -61,7 +68,12 @@ const SearchScreen = ({ navigation, userReducer, addBookMarkedStory, removeBookM
 
     // If user is not logged in
     if (!userReducer.id) {
-      return navigation.navigate("Login");
+      return navigation.navigate('authNavigator', {
+        screen: 'authStack',
+        params: {
+          screen: 'Login'
+        }
+      });
     };
 
     // If already bookmarked 
@@ -122,7 +134,7 @@ const SearchScreen = ({ navigation, userReducer, addBookMarkedStory, removeBookM
           <SearchBar
             placeholder="Search for users or stories"
             onChangeText={(search) => updateSearch(search)}
-            containerStyle={{ backgroundColor: 'none', borderBottomWidth: 0 }}
+            containerStyle={{ backgroundColor: 'none', borderBottomWidth: 0, borderTopWidth: 0 }}
             value={search}
             showLoading={isLoading}
             showCancel

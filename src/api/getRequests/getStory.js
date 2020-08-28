@@ -2,7 +2,7 @@ import {axiosGetWithAuth, axiosAPI} from './../axiosWithAuth';
 
 export const getStoryByID = async (id) => {
   try {
-    const response = await axiosGetWithAuth(`/story/${id}`)
+    const response = await axiosAPI(`/story/${id}`);
     return response;
   } catch (error) {
     return error;
