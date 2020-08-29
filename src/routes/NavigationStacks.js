@@ -17,7 +17,7 @@ import StoryViewScreen from './../screens/StoryViewScreen';
 import SearchScreen from './../screens/SearchScreen';
 
 // Constants 
-import { DEFAULT_HEADER_OPTION } from './helpers/headerOptions';
+import { DEFAULT_HEADER_OPTION, CREATE_STORY_HEADER } from './helpers/headerOptions';
 
 // Styles
 import { COLOR } from './../styles/styleHelpers';
@@ -73,10 +73,10 @@ export const ProfileStackScreen = (props) => {
   )
 };
 
-export const StoryStackScreen = () => (
-  <StoryStack.Navigator screenOptions={{ headerShown: false }}>
-    <StoryStack.Screen name="Create Story" component={StoryCreationScreen} initialParams={{ step: 0 }} options={{ cardStyle: { backgroundColor: COLOR.white } }} />
-    <StoryStack.Screen name="Record Story" component={StoryRecordingScreen} />
+export const StoryStackScreen = (props) => (
+  <StoryStack.Navigator screenOptions={{ headerShown: true }}>
+    <StoryStack.Screen name="Create Story" component={StoryCreationScreen} initialParams={{ step: 0 }} options={(props) => CREATE_STORY_HEADER(props)} />
+    <StoryStack.Screen name="Record Story" component={StoryRecordingScreen} options={{headerShown: false}}/>
   </StoryStack.Navigator>
 );
 

@@ -38,7 +38,7 @@ function TabsNavigator({userReducer, navigation}) {
     <Tabs.Navigator tabBarOptions={tabDefaultOptions} screenOptions={({ route }) => tabBarIcons(route)}>
       <Tabs.Screen name="Home" component={HomeStackScreen} />
       <Tabs.Screen name="Notifications" component={NotificationsStackScreen} listeners={() => ({ tabPress: event => handleNotLoggedIn(event) })}/>
-      <Tabs.Screen name="Create Story" component={StoryStackScreen} listeners={() => ({ tabPress: event => handleNotLoggedIn(event)})}/>
+      <Tabs.Screen name="Create Story" component={StoryStackScreen} options={{tabBarVisible: false}}listeners={() => ({ tabPress: event => handleNotLoggedIn(event)})}/>
       <Tabs.Screen name="Search" component={SearchStackScreen} />
       <Tabs.Screen name="Profile" component={ProfileStackScreen} listeners={() => ({ tabPress: event => handleNotLoggedIn(event)})} />
     </Tabs.Navigator>
