@@ -1,12 +1,13 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
 
 // Styles
-import { COLOR, FONT_SIZE, ICON_SIZE } from './../../styles/styleHelpers';
+import { COLOR, FONT_SIZE } from './../../styles/styleHelpers';
 
 // Component
 import HeaderDefaultComponent from '../../components/HeaderDefaultComponent';
-import IconComponent from './../../components/IconComponent';
+import HeaderProfileComponent from '../../components/HeaderProfileComponent';
+
+
 // DEFAULT HEADER
 export const DEFAULT_HEADER_OPTION = (props) => ({
   title: "A Life Lived",
@@ -40,4 +41,15 @@ export const CREATE_STORY_HEADER = () => ({
   headerStatusBarHeight: 80,
   cardStyle: { backgroundColor: COLOR.limeGreen }
 });
+
+export const PROFILE_HEADER = (props) => ({
+  headerTitleAlign: 'left',
+    headerStyle: {
+    backgroundColor: COLOR.limeGreen,
+      shadowOffset: { height: 0 },
+    height: 200
+  },
+  cardStyle: { backgroundColor: COLOR.limeGreen },
+  headerTitle: () => <HeaderProfileComponent {...props} />
+})
 
