@@ -38,7 +38,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
   // Below is all basic form things
   const [step, setStep] = useState(route.params.step);  
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Below is input states
   const [storyAbout, setStoryAbout] = useState("");
   const [storyDescription, setStoryDescription] = useState("");
@@ -51,8 +51,11 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
 
   // Below are array states
   const [selectedTags, setSelectedTags] = useState([]);
-
   const [questions, setQuestions] = useState(questionReducer.questions);
+
+  // Validation
+  const [storyAboutValidation, setStoryAboutValidation] = useState(null);
+  const [storyDescriptionValidation, setStoryDescriptionValidation] = useState(null);
 
   // Sets header option instead of having it in the screen..The other options set in headerOptions
   useLayoutEffect(() => {
@@ -183,14 +186,14 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
     }
 
     return audioSegments;
-  }
+  };
 
   const questionToAudioSegment = ( quest ) => {
     return {
       questionAudioFile: quest.audioFile,
       answerAudioChannel: quest.channelId
     }
-  }
+  };
 
   const handleOnClose = () => {
     resetStoryReducer();
@@ -199,13 +202,45 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
     return navigation.reset({ routes: [{ name: 'Home' }] });
   };
 
+  const handleDisableButton = () => {
+    switch (step) {
+      case 0:
+        if (storyAboutValidation || storyDescriptionValidation) {
+          return true;
+        } else if (!storyAbout || !storyDescription) {
+          return true;
+        } else {
+          return false;
+        }
+      case 1:
+        if (isStoryPublic === null) {
+          return true;
+        } else {
+          return false;
+        }
+      default:
+        break;
+    }
+
+  };
+
   const handleFormStage = () => {
     switch (step) {
       case 0:
         return (
           <CreateStoryComponent
+            storyAbout={storyAbout}
+            storyDescription={storyDescription}
             onChangeStoryAbout={(event) => {setStoryAbout(event)}}
             onChangeStoryDescription={(event) => {setStoryDescription(event)}}
+            onChangeStoryAboutValidation={(errorMessage) => setStoryAboutValidation(errorMessage)}
+            onChangeStoryDescriptionValidation={(errorMessage) => setStoryDescriptionValidation(errorMessage)}
+            validationErrorMessage={
+              {
+                storyAboutValidation: storyAboutValidation, 
+                storyDescriptionValidation: storyDescriptionValidation
+              }
+            }
           />
         )
       case 1: 
@@ -277,6 +312,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
             buttonSize="small"
             buttonType="solid"
             isLoading={isLoading}
+            disabled={handleDisableButton()}
             onButtonPress={handleOnNextButton}
           />
         </View>

@@ -17,7 +17,8 @@ const LargeTextInputComponent = ({
   inputValidation,
   autoCapitalize,
   multiline,
-  maxLength
+  maxLength,
+  value
 }) => {
   // NOTE: number of lines needs to be null or you can't see text on android
   const handleChange = (event) => {
@@ -40,6 +41,7 @@ const LargeTextInputComponent = ({
       disabled={disable}
       errorMessage={errorMessage}
       label={label}
+      value={value ? value : null}
       isFocused={isFocused}
       inputContainerStyle={styles.container}
       labelStyle={styles.labelStyles}
