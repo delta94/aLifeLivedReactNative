@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useLayoutEffect} from 'react';
 import {View, Text, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
 import {ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import {connect} from 'react-redux';
@@ -34,9 +34,9 @@ import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
 const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags, storyReducer, userReducer, questionReducer, resetStoryReducer, saveStoryDetails, saveNewStory}) => {  
   const orientation = useOrientation();
-  
+
   // Below is all basic form things
-  const [step, setStep] = useState(route.params.step);
+  const [step, setStep] = useState(route.params.step);  
   const [isLoading, setIsLoading] = useState(false);
   
   // Below is input states
@@ -54,6 +54,23 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
 
   const [questions, setQuestions] = useState(questionReducer.questions);
 
+  // Sets header option instead of having it in the screen..The other options set in headerOptions
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: step >= 4 ? 'Nearly done' : 'Create your story',
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => handleOnClose()}>
+          <IconComponent
+            name="times"
+            type="font-awesome-5"
+            size={ICON_SIZE.iconSizeMedium}
+            style={{ marginLeft: 20 }}
+            color={COLOR.grey}
+          />
+        </TouchableOpacity>
+      )
+    })
+  }, [])
 
   // Loads questions.
   const loadQuestions = async () => {
@@ -233,20 +250,6 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
 
   return (
     <View style={styles.mainContainer} onPress={Keyboard.dismiss}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => handleOnClose()}>
-          <IconComponent
-            name="times"
-            type="font-awesome-5"
-            size={ICON_SIZE.iconSizeMedium}
-            style={{alignSelf: 'flex-start'}}
-            color={COLOR.grey}
-          />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>
-          {step >= 3 ? "You're nearly done..." : 'Create Your Story'}
-        </Text>
-      </View>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.footer}>

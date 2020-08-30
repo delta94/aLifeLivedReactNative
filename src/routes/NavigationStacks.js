@@ -1,8 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-// Components
-import HeaderProfileComponent from './../components/HeaderProfileComponent';
+
 
 // Screens
 import HomeScreen from './../screens/HomeScreen';
@@ -17,7 +16,7 @@ import StoryViewScreen from './../screens/StoryViewScreen';
 import SearchScreen from './../screens/SearchScreen';
 
 // Constants 
-import { DEFAULT_HEADER_OPTION } from './helpers/headerOptions';
+import { DEFAULT_HEADER_OPTION, CREATE_STORY_HEADER, PROFILE_HEADER } from './helpers/headerOptions';
 
 // Styles
 import { COLOR } from './../styles/styleHelpers';
@@ -49,40 +48,53 @@ export const HomeStackScreen = () => (
 
 export const NotificationsStackScreen = () => (
   <NotificationsStack.Navigator>
-    <NotificationsStack.Screen name="Notifications" component={NotificationsScreen} />
+    <NotificationsStack.Screen 
+      name="Notifications" 
+      component={NotificationsScreen} 
+      options={({ navigation }) => DEFAULT_HEADER_OPTION(navigation)} 
+    />
   </NotificationsStack.Navigator>
 );
 
 export const ProfileStackScreen = (props) => {
   return (
-    <ProfileStack.Navigator
-      screenOptions={(route) => ({
-        headerTitleAlign: 'left',
-        headerStyle: {
-          backgroundColor: COLOR.limeGreen,
-          shadowOffset: { height: 0 },
-          height: 200
-        },
-        cardStyle: { backgroundColor: COLOR.limeGreen },
-        headerTitle: () => <HeaderProfileComponent {...props}/>,
-      })}
-    >
-      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
-      <ProfileStack.Screen name="Settings" component={SettingsScreen} options={{ headerLeft: null }} />
+    <ProfileStack.Navigator screenOptions={(route) => PROFILE_HEADER(route)}>
+      <ProfileStack.Screen 
+        name="Profile" 
+        component={ProfileScreen} 
+      />
+      <ProfileStack.Screen 
+        name="Settings" 
+        component={SettingsScreen} 
+        options={{ headerLeft: null }} 
+      />
     </ProfileStack.Navigator>
   )
 };
 
-export const StoryStackScreen = () => (
-  <StoryStack.Navigator screenOptions={{ headerShown: false }}>
-    <StoryStack.Screen name="Create Story" component={StoryCreationScreen} initialParams={{ step: 0 }} options={{ cardStyle: { backgroundColor: COLOR.white } }} />
-    <StoryStack.Screen name="Record Story" component={StoryRecordingScreen} />
+export const StoryStackScreen = (props) => (
+  <StoryStack.Navigator screenOptions={{ headerShown: true }}>
+    <StoryStack.Screen 
+      name="Create Story" 
+      component={StoryCreationScreen} 
+      initialParams={{ step: 0 }} 
+      options={(props) => CREATE_STORY_HEADER(props)} 
+    />
+    <StoryStack.Screen 
+      name="Record Story" 
+      component={StoryRecordingScreen} 
+      options={{headerShown: false}}
+    />
   </StoryStack.Navigator>
 );
 
 export const SearchStackScreen = () => (
   <SearchStack.Navigator>
-    <SearchStack.Screen name="Search" component={SearchScreen} options={({ navigation }) => DEFAULT_HEADER_OPTION(navigation)} />
+    <SearchStack.Screen 
+      name="Search" 
+      component={SearchScreen} 
+      options={({ navigation }) => DEFAULT_HEADER_OPTION(navigation)} 
+    />
   </SearchStack.Navigator>
 );
 
