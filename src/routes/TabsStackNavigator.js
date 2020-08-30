@@ -1,12 +1,21 @@
-import React from 'react';
+import React, {useState, useCallback} from 'react';
 import { connect } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'; 
+import {useFocusEffect} from '@react-navigation/native';
+
+// TrackPlayer
+import TrackPlayer from 'react-native-track-player';
+import trackPlayerServices from '../services/services';
+
+// API
+import {getUserByID, getUserStories} from './../api/getRequests/getUser';
 
 // Redux Actions
 import { setUserToken, setUserStories } from './../redux/actions/userActions';
 import { userLoginSuccessful } from './../redux/actions/userActions';
 
 // Helpers
+import { getToken } from './../helpers/asyncStorage';
 import { tabBarIcons } from './helpers/tabBarOptions';
 
 // Stacks
@@ -14,7 +23,47 @@ import { ProfileStackScreen, HomeStackScreen, NotificationsStackScreen, SearchSt
 
 const Tabs = createBottomTabNavigator();
 
-function TabsNavigator({userReducer, navigation}) {
+function TabsNavigator({
+  userReducer,
+  navigation,
+  userLoginSuccessful,
+  setUserToken,
+  setUserStories,
+}) {
+
+  // sets up track player
+  const trackPlayerOnLoad = async () => {
+    await TrackPlayer.setupPlayer({
+      iosCategoryMode: 'spokenAudio',
+      waitForBuffer: true,
+    }).then(() => {
+      console.log('Player is set up');
+    });
+
+    return TrackPlayer.registerPlaybackService(() => trackPlayerServices);
+  };
+
+  const onLoad = async () => {
+    // Function firing twice on load, need to only fire once.
+    try {
+      const encryptedToken = await getToken();
+      setUserToken(encryptedToken);
+      const userData = await getUserByID(encryptedToken);
+      const userStories = await getUserStories(encryptedToken);
+      const authToken = userData.headers.authtoken;
+      setUserStories(userStories.data);
+      return userLoginSuccessful(userData.data, authToken);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      trackPlayerOnLoad();
+      onLoad();
+    }, []),
+  );
 
   // The below handles the basic tab options
   const tabDefaultOptions = {
@@ -28,19 +77,34 @@ function TabsNavigator({userReducer, navigation}) {
       return navigation.navigate('authNavigator', {
         screen: 'authStack',
         params: {
-          screen: 'Login'
-        }
+          screen: 'Login',
+        },
       });
     }
   };
 
   return (
-    <Tabs.Navigator tabBarOptions={tabDefaultOptions} screenOptions={({ route }) => tabBarIcons(route)}>
+    <Tabs.Navigator
+      tabBarOptions={tabDefaultOptions}
+      screenOptions={({route}) => tabBarIcons(route)}>
       <Tabs.Screen name="Home" component={HomeStackScreen} />
-      <Tabs.Screen name="Notifications" component={NotificationsStackScreen} listeners={() => ({ tabPress: event => handleNotLoggedIn(event) })}/>
-      <Tabs.Screen name="Create Story" component={StoryStackScreen} options={{tabBarVisible: false}}listeners={() => ({ tabPress: event => handleNotLoggedIn(event)})}/>
+      <Tabs.Screen
+        name="Notifications"
+        component={NotificationsStackScreen}
+        listeners={() => ({tabPress: (event) => handleNotLoggedIn(event)})}
+      />
+      <Tabs.Screen
+        name="Create Story"
+        component={StoryStackScreen}
+        options={{tabBarVisible: false}}
+        listeners={() => ({tabPress: (event) => handleNotLoggedIn(event)})}
+      />
       <Tabs.Screen name="Search" component={SearchStackScreen} />
-      <Tabs.Screen name="Profile" component={ProfileStackScreen} listeners={() => ({ tabPress: event => handleNotLoggedIn(event)})} />
+      <Tabs.Screen
+        name="Profile"
+        component={ProfileStackScreen}
+        listeners={() => ({tabPress: (event) => handleNotLoggedIn(event)})}
+      />
     </Tabs.Navigator>
   );
 };
