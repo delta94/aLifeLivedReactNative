@@ -27,6 +27,7 @@ import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 // Icon
 import IconComponent from './../components/IconComponent';
 
+// NOTE:  Audio state for android is shown in number 1, 2, 3 - 1 idle/stopped,  
 const events = [
   TrackPlayerEvents.PLAYBACK_STATE
 ];
@@ -258,9 +259,9 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
             />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => audioState === "playing" ? onPause() : onPlay()}>
+          <TouchableOpacity onPress={() => audioState === "playing" || audioState === 3 ? onPause() : onPlay()}>
             <IconComponent
-              name={audioState === "playing" ? "pause" : "play"}
+              name={audioState === "playing" || audioState === 3 ? "pause" : "play"}
               type='font-awesome-5'
               size={ICON_SIZE.iconSizeXLarge}
               color={COLOR.grey}
