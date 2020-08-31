@@ -16,6 +16,8 @@
       tool or in PATHCommand failed: xcrun instruments -s
       xcrun: error: unable to find utility "instruments", not a developer 
       tool or in PATH` - If you encounter this issue on the build process try - https://medium.com/@randerson112358/setup-react-native-environment-for-ios-97bf7faadf77
+    - `RCTBridge required dispatch_sync to load RCTDevLoadingView. This may lead to deadlocks`
+      - https://stackoverflow.com/questions/62790300/rctbridge-require-dispatch-sync-to-load-rctdevloadingview - This helped by going into xCode, AppDelegate.m and adding the code.
 
 
 # Recording Screen Functionality
