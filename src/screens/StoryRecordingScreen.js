@@ -24,7 +24,6 @@ import StoryQuestionSectionComponent from './../components/StoryQuestionSectionC
 import StoryButtonsComponent from '../components/StoryButtonsComponent';
 
 // Icon
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import IconComponent from './../components/IconComponent';
 
 // Styles
