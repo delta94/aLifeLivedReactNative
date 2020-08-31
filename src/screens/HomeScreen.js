@@ -25,7 +25,7 @@ const HomeScreen = ({
   removeBookMarkedStory,
 }) => {
   const [refreshing, setRefreshing] = useState(false);
-  const [userLikedStories, setUserLikedStories] = useState(userReducer.likedStories);
+  const [userLikedStories] = useState(userReducer.likedStories);
 
   const onLoad = async () => {
     setRefreshing(true);
@@ -43,11 +43,13 @@ const HomeScreen = ({
     onLoad();
   }, [userLikedStories]);
 
+  // Handles when the user scrolls to the top of FlatList and refreshes
   const handleRefresh = () => {
     setRefreshing(true);
     return onLoad();
   };
 
+  // Handles when the user clicks a story
   const onStoryPress = (storyID, hasUserBookMarkedStory, hasUserLikedStory) => {
     const userID = userReducer.id;
 
@@ -87,6 +89,7 @@ const HomeScreen = ({
     }
   };
 
+  // Renders each story with the FlatList
   const renderStories = ({item}) => {
     const hasUserLikedStory = userReducer.likedStories
       ? userReducer.likedStories.includes(item._id)
@@ -117,6 +120,15 @@ const HomeScreen = ({
     );
   };
 
+  // Handle when there is no data to displaying 
+  const onNoData = () => {
+    return (
+      <View>
+        <Text style={styles.headerText}>This looks blank...try liking, bookmarking or creating amazing stories!</Text>
+      </View>
+    )
+  };
+  
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
@@ -129,6 +141,7 @@ const HomeScreen = ({
           keyExtractor={(item) => item._id}
           refreshing={refreshing}
           onRefresh={handleRefresh}
+          ListEmptyComponent={onNoData()}
         />
       </View>
     </View>

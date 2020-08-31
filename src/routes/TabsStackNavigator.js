@@ -33,18 +33,18 @@ function TabsNavigator({
 
   const [isPlayerSetup, setIsPlayerSetup] = useState(false);
 
-  // sets up track player
-  const trackPlayerOnLoad = async () => {
-    await TrackPlayer.setupPlayer({
-      iosCategoryMode: 'spokenAudio',
-      waitForBuffer: true,
-    }).then(() => {
-      console.log('Player is set up');
-    });
+  // // sets up track player
+  // const trackPlayerOnLoad = async () => {
+  //   await TrackPlayer.setupPlayer({
+  //     iosCategoryMode: 'spokenAudio',
+  //     waitForBuffer: true,
+  //   }).then(() => {
+  //     console.log('Player is set up');
+  //   });
 
-    TrackPlayer.registerPlaybackService(() => trackPlayerServices);
-    return setIsPlayerSetup(true);
-  };
+  //   TrackPlayer.registerPlaybackService(() => trackPlayerServices);
+  //   return setIsPlayerSetup(true);
+  // };
 
   const onLoad = async () => {
     // Function firing twice on load, need to only fire once.
@@ -63,9 +63,9 @@ function TabsNavigator({
 
   useFocusEffect (
     useCallback(() => {
-      if (!isPlayerSetup) {
-        trackPlayerOnLoad();
-      };
+      // if (!isPlayerSetup) {
+      //   trackPlayerOnLoad();
+      // };
       
       onLoad();
     }, []),
