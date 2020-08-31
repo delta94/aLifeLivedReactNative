@@ -7,7 +7,7 @@ import LargeTextInput from './LargeTextInputComponent';
 // Styles
 import styles from './../styles/components/CreateStoryTitleAndTags';
 
-const CreateStoryTitleAndTags = ({onChangeStoryTitle, allTags, onSelectedTags, selectedTags, onRemoveSelectedTag}) => {
+const CreateStoryTitleAndTags = ({ onChangeStoryTitle, allTags, onSelectedTags, selectedTags, onRemoveSelectedTag, onChangeStoryTitleValidation, validationErrorMessage}) => {
   // Displays the tags in a touchable opacity button
   const displayTags = () => {
     const tag = allTags.map((tag) => {
@@ -38,6 +38,8 @@ const CreateStoryTitleAndTags = ({onChangeStoryTitle, allTags, onSelectedTags, s
         maxLength={100}
         autoCapitalize="sentences"
         onChange={(event) => onChangeStoryTitle(event)}
+        inputValidation={(event) => !event ? onChangeStoryTitleValidation('This field is required') : onChangeStoryTitleValidation(null)}
+        errorMessage={validationErrorMessage.storyTitleValidation}
       />
 
       <Text style={styles.footerHeaderText}>Select some tags that best describe this story</Text>

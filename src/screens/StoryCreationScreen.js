@@ -1,6 +1,6 @@
 import React, {useState, useLayoutEffect} from 'react';
 import {View, Text, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
-import {ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {ScrollView, TouchableOpacity} from "react-native-gesture-handler";
 import {connect} from 'react-redux';
 
 // Helpers
@@ -38,7 +38,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
   // Below is all basic form things
   const [step, setStep] = useState(route.params.step);  
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Below is input states
   const [storyAbout, setStoryAbout] = useState("");
   const [storyDescription, setStoryDescription] = useState("");
@@ -51,8 +51,52 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
 
   // Below are array states
   const [selectedTags, setSelectedTags] = useState([]);
-
   const [questions, setQuestions] = useState(questionReducer.questions);
+
+  // Validation
+  const [storyAboutValidation, setStoryAboutValidation] = useState(null);
+  const [storyDescriptionValidation, setStoryDescriptionValidation] = useState(null);
+  const [intervieweeValidation, setIntervieweeValidation] = useState(null);
+  const [storyTitleValidation, setStoryTitleValidation] = useState(null);
+
+  // Validation and disable of the button
+  const handleDisableButton = () => {
+    switch (step) {
+      case 0:
+        if (storyAboutValidation || storyDescriptionValidation) {
+          return true;
+        } else if (!storyAbout || !storyDescription) {
+          return true;
+        } else {
+          return false;
+        }
+      case 1:
+        if (isStoryPublic === null) {
+          return true;
+        } else {
+          return false;
+        }
+      case 2: 
+        if (isSelfInterview === null) {
+          return true;
+        } else if (isSelfInterview === false && !interviewee) {
+          return true;
+        } else {
+          return false;
+        }
+      case 3: 
+        if (!storyTitle) {
+          return true;
+        } else if (!selectedTags.length) {
+          return true;
+        } else {
+          return false;
+        }
+      default:
+        break;
+    }
+
+  };
 
   // Sets header option instead of having it in the screen..The other options set in headerOptions
   useLayoutEffect(() => {
@@ -148,14 +192,17 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       saveNewStory(storyData);
 
       // Navigates to the story - Need to pass stack name first then screen. Due to View story being in sep stack.
+      const lastScreen = route.name;
       navigation.navigate('screensNavigator', {
         screen: 'storyStack',
         params: {
           screen: 'View Story',
-          params: {storyID}
+          params: { storyID, lastScreen}
         },
       });
 
+      // Ensures there is no more state when the user creates another story.
+      navigation.reset({ routes: [{ name: 'Create Story' }] });
       resetStoryReducer();
       return setIsLoading(false);
     } else {
@@ -183,14 +230,14 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
     }
 
     return audioSegments;
-  }
+  };
 
   const questionToAudioSegment = ( quest ) => {
     return {
       questionAudioFile: quest.audioFile,
       answerAudioChannel: quest.channelId
     }
-  }
+  };
 
   const handleOnClose = () => {
     resetStoryReducer();
@@ -204,8 +251,18 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       case 0:
         return (
           <CreateStoryComponent
+            storyAbout={storyAbout}
+            storyDescription={storyDescription}
             onChangeStoryAbout={(event) => {setStoryAbout(event)}}
             onChangeStoryDescription={(event) => {setStoryDescription(event)}}
+            onChangeStoryAboutValidation={(errorMessage) => setStoryAboutValidation(errorMessage)}
+            onChangeStoryDescriptionValidation={(errorMessage) => setStoryDescriptionValidation(errorMessage)}
+            validationErrorMessage={
+              {
+                storyAboutValidation: storyAboutValidation, 
+                storyDescriptionValidation: storyDescriptionValidation
+              }
+            }
           />
         )
       case 1: 
@@ -225,9 +282,12 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
             <Text style={styles.footerHeaderText}>Will you be interviewing yourself or someone else?</Text>
             <CreateStoryInterviewType
               isSelfInterview={isSelfInterview}
+              interviewee={interviewee}
               setIsSelfInterviewTrue={() => setIsSelfInterview(true)}
               setIsSelfInterviewFalse={() => setIsSelfInterview(false)}
               onIntervieweeNameChange={(event) => setIntervieweeName(event)}
+              onChangeIntervieweeValidation={(errorMessage) => setIntervieweeValidation(errorMessage)}
+              validationErrorMessage={{intervieweeValidation: intervieweeValidation}}
             />
           </View>
         )
@@ -240,6 +300,8 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
               onRemoveSelectedTag={(id) => setSelectedTags(selectedTags.filter(tag => tag != id))}
               allTags={storyReducer.allTags}
               selectedTags={selectedTags}
+              onChangeStoryTitleValidation={(errorMessage) => setStoryTitleValidation(errorMessage)}
+              validationErrorMessage={{ storyTitleValidation: storyTitleValidation }}
             />
           </View>
         )
@@ -277,6 +339,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
             buttonSize="small"
             buttonType="solid"
             isLoading={isLoading}
+            disabled={handleDisableButton()}
             onButtonPress={handleOnNextButton}
           />
         </View>

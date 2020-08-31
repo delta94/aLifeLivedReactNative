@@ -88,7 +88,8 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
 
   // When the user presses the cross button
   const handleOnClose = () => {
-    return navigation.goBack();
+    // This handles if the user is viewing this screen after the creation of their story. Redirects them to home instead of back into story creation.
+    route.params.lastScreen === 'Create Story' ? navigation.navigate('Home') : navigation.goBack();
   };
 
   // Displays the tags of story
@@ -179,7 +180,7 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
 
   // Handle when user clicks play
   const onPlay = async () => {
-    await TrackPlayer.play();
+    return await TrackPlayer.play();
   };
 
   // Handle when user clicks pause
