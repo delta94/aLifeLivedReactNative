@@ -16,23 +16,6 @@ const CreateStoryComponent = ({
   onChangeStoryAboutValidation,
   onChangeStoryDescriptionValidation,
 }) => {
-
-  const validateStoryAbout = (event) => {
-    if (!event) {
-      return onChangeStoryAboutValidation('This field is required');
-    } else {
-      return onChangeStoryAboutValidation(null);
-    }
-  };
-
-  const validateStoryDescription = (event) => {
-    if (!event) {
-      return onChangeStoryDescriptionValidation('This field is required');
-    } else {
-      return onChangeStoryDescriptionValidation(null);
-    }
-  };
-
   return (
     <View style={styles.mainContainer}>
       <LargeTextInput
@@ -43,7 +26,7 @@ const CreateStoryComponent = ({
         value={storyAbout}
         autoCapitalize="sentences"
         onChange={(event) => onChangeStoryAbout(event)}
-        inputValidation={(event) => validateStoryAbout(event)}
+        inputValidation={(event) => !event ? onChangeStoryAboutValidation('This field is required') : onChangeStoryAboutValidation(null)}
         errorMessage={validationErrorMessage.storyAboutValidation}
       />
 
@@ -55,7 +38,7 @@ const CreateStoryComponent = ({
         maxLength={100}
         autoCapitalize="sentences"
         onChange={(event) => onChangeStoryDescription(event)}
-        inputValidation={(event) => validateStoryDescription(event)}
+        inputValidation={(event) => !event ? onChangeStoryDescriptionValidation('This field is required') : onChangeStoryDescriptionValidation(null)}
         errorMessage={validationErrorMessage.storyDescriptionValidation}
       />
     </View>

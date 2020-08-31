@@ -31,6 +31,8 @@ function TabsNavigator({
   setUserStories,
 }) {
 
+  const [isPlayerSetup, setIsPlayerSetup] = useState(false);
+
   // sets up track player
   const trackPlayerOnLoad = async () => {
     await TrackPlayer.setupPlayer({
@@ -40,7 +42,8 @@ function TabsNavigator({
       console.log('Player is set up');
     });
 
-    return TrackPlayer.registerPlaybackService(() => trackPlayerServices);
+    TrackPlayer.registerPlaybackService(() => trackPlayerServices);
+    return setIsPlayerSetup(true);
   };
 
   const onLoad = async () => {
@@ -58,9 +61,12 @@ function TabsNavigator({
     }
   };
 
-  useFocusEffect(
+  useFocusEffect (
     useCallback(() => {
-      trackPlayerOnLoad();
+      if (!isPlayerSetup) {
+        trackPlayerOnLoad();
+      };
+      
       onLoad();
     }, []),
   );

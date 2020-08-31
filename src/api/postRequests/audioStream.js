@@ -1,7 +1,7 @@
 import {axiosAudioAPI} from './../axiosWithAuth';
 import {Buffer} from 'buffer';
-//import {AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
-const AUDIO_API_BASE_ROUTE = "https://a-life-lived-audio-server-stag.herokuapp.com"
+import {AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
+// const AUDIO_API_BASE_ROUTE = "https://a-life-lived-audio-server-stag.herokuapp.com"
 let channelId, chunkNum, chunkResponses, uploadChunkPromise, packets, preInitialisedChannel;
 
 const PACKETS_TO_CHUNK = 100; // chunk RAM size == 2kB x PACKETS_TO_CHUNK
