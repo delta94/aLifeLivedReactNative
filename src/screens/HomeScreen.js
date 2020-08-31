@@ -90,7 +90,8 @@ const HomeScreen = ({
   };
 
   // Renders each story with the FlatList
-  const renderStories = ({item}) => {
+  const renderStories = ({item, index}) => {
+
     const hasUserLikedStory = userReducer.likedStories
       ? userReducer.likedStories.includes(item._id)
       : false;
@@ -99,24 +100,21 @@ const HomeScreen = ({
       : false;
 
     return (
-      <>
-        <TouchableOpacity
-          onPress={() => onStoryPress(item._id, hasUserBookMarkedStory, hasUserLikedStory)}
-          style={styles.storyCard}>
-          <StoryCardComponent
-            title={item.title}
-            description={item.description}
-            tags={item.tags}
-            avatarURL={item.interviewer.avatarURL}
-            likes={item.likes}
-            hasUserLikedStory={hasUserLikedStory}
-            hasUserBookMarkedStory={hasUserBookMarkedStory}
-            onBookMarkPress={() =>
-              onBookmarkPress(hasUserBookMarkedStory, item._id)
-            }
-          />
-        </TouchableOpacity>
-      </>
+      <TouchableOpacity onPress={() => onStoryPress(item._id, hasUserBookMarkedStory, hasUserLikedStory)} style={styles.storyCard} id={index}>
+        <StoryCardComponent
+          title={item.title}
+          description={item.description}
+          tags={item.tags}
+          avatarURL={item.interviewer.avatarURL}
+          likes={item.likes}
+          hasUserLikedStory={hasUserLikedStory}
+          hasUserBookMarkedStory={hasUserBookMarkedStory}
+          onBookMarkPress={() =>
+            onBookmarkPress(hasUserBookMarkedStory, item._id)
+          }
+          id={item._id}
+        />
+      </TouchableOpacity>
     );
   };
 

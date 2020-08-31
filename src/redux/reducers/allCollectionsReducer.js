@@ -4,7 +4,7 @@ const allCollectionsDefaultState = {
   stories: [
     {
       description: "",
-      id: "",
+      _id: "",
       intervieweeName: "",
       responseAudioFile: "",
       interviewer: {
