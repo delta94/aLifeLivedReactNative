@@ -5,7 +5,6 @@ import {
   DECREMENT_QUESTION_INDEX,
   DECREMENT_SUB_QUESTION_INDEX,
   SET_SUB_QUESTION_ACTIVE_TRUE,
-  SAVE_SUB_QUESTION,
   RESET_SUB_QUESTION_INDEX,
   RESET_QUESTION_REDUCER_TO_ORIGINAL_STATE,
 } from './allActions';
@@ -14,13 +13,6 @@ export const saveAllQuestions = (questions) => {
   return {
     type: SAVE_ALL_QUESTION,
     payload: {questions}
-  }
-};
-
-export const saveSubQuestions = (subQuestions) => {
-  return {
-    type: SAVE_SUB_QUESTION,
-    payload: {subQuestions}
   }
 };
 

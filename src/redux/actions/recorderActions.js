@@ -1,4 +1,4 @@
-import { PLAYER_STATE, RESET_RECORDER_STATE} from './allActions';
+import { PLAYER_STATE, RESET_RECORDER_STATE } from './allActions';
 
 export const setPlayerState = (playerState) => {
   return {
@@ -12,4 +12,3 @@ export const resetRecorderState = () => {
     type: RESET_RECORDER_STATE
   }
 };
-

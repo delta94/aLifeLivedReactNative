@@ -1,0 +1,1 @@
+export const TOKEN_IDENTIFIER = 'A_LIFE_LIVED_TOKEN';

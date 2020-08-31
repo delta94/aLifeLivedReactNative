@@ -63,7 +63,6 @@ const SignUpScreen = (props) => {
 
     const imageResponseData = await imageUpload(formData);
     const avatarURL = imageResponseData.data;
-    
     const userData = {
       firstName: firstName,
       lastName: lastName,
@@ -71,26 +70,27 @@ const SignUpScreen = (props) => {
       username: username, 
       mobileNumber: mobileNumber,
       password: password,
-      avatarURL: avatarURL
+      avatarURL: avatarURL 
     };
 
-    const data = await signUp(userData);
+    const response = await signUp(userData);
     
-    if (data.status === 200) {
+    if (response.status === 200) {
       try {
-        const userData = data.data;
-        storeToken(userData.token);
-        props.userLoginSuccessful(userData);
-        setIsLoading(false);
-        // return navigation.navigate('Home');
+        const userData = response.data;
+        const authToken = response.headers.authtoken;
+        storeToken(authToken);
+        props.userLoginSuccessful(userData, authToken);
+        props.navigation.navigate('tabsNavigator', { screen: 'Home' })
+        return setIsLoading(false);
       } catch (error) {
         console.log(error);
         setIsLoading(false);
       }
     } else {
       setIsLoading(false);
-      console.log(data.errorMessage)
-      setErrorMessage(data.errorMessage);
+      console.log(response.errorMessage)
+      setErrorMessage(response.errorMessage);
     }
   };
 
@@ -307,6 +307,7 @@ const SignUpScreen = (props) => {
 
                 <ButtonClearComponent
                   title="Already have an account?"
+                  buttonType="clear"
                   onButtonPress={() => navigation.push('Login')}
                 />
               </View>
@@ -319,7 +320,7 @@ const SignUpScreen = (props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    userLoginSuccessful: (userData) => dispatch(userLoginSuccessful(userData)),
+    userLoginSuccessful: (userData, authToken) => dispatch(userLoginSuccessful(userData, authToken)),
   };
 };
 

@@ -1,22 +1,25 @@
-import React, {useState} from 'react';
+import React, {useState, useLayoutEffect} from 'react';
 import {View, Text, Keyboard, KeyboardAvoidingView, Platform} from 'react-native';
-import {ScrollView } from "react-native-gesture-handler";
+import {ScrollView, TouchableOpacity} from "react-native-gesture-handler";
 import {connect} from 'react-redux';
 
 // Helpers
 import { useOrientation } from './../helpers/orientation';
 
 // Actions
-import { saveAllQuestions } from './../redux/actions/questionActions';
+import { saveAllQuestions, setSubQuestionActiveFalse } from './../redux/actions/questionActions';
 import { saveAllTags, resetStoryReducer, saveStoryDetails } from './../redux/actions/storyActions';
+import { saveNewStory } from './../redux/actions/allCollections';
 
 // API
 import { getAllQuestions } from './../api/getRequests/getQuestions';
 import { getAllTags } from './../api/getRequests/getTags';
 import {createStory} from './../api/postRequests/createStory';
 
+import {finaliseStoryStreams, terminateChannels} from './../api/postRequests/audioStream';
+
 // Icon
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import IconComponent from './../components/IconComponent';
 
 // Components
 import CreateStoryComponent from './../components/CreateStoryComponent';
@@ -29,27 +32,89 @@ import ButtonComponent from './../components/ButtonComponent';
 import styles from './../styles/screens/StoryCreationScreen';
 import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 
-const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags, storyReducer, userReducer, resetStoryReducer, saveStoryDetails}) => {  
+const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags, storyReducer, userReducer, questionReducer, resetStoryReducer, saveStoryDetails, saveNewStory}) => {  
   const orientation = useOrientation();
-  
+
   // Below is all basic form things
-  const [step, setStep] = useState(route.params.step);
+  const [step, setStep] = useState(route.params.step);  
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Below is input states
   const [storyAbout, setStoryAbout] = useState("");
   const [storyDescription, setStoryDescription] = useState("");
   const [interviewee, setIntervieweeName] = useState("");
   const [storyTitle, setStoryTitle] = useState("");
 
-  
-
   // Below are boolean states
-  const [isStoryPrivate, setIsStoryPrivate] = useState(null);
+  const [isStoryPublic, setIsStoryPublic] = useState(null);
   const [isSelfInterview, setIsSelfInterview] = useState(null);
 
   // Below are array states
   const [selectedTags, setSelectedTags] = useState([]);
+  const [questions, setQuestions] = useState(questionReducer.questions);
+
+  // Validation
+  const [storyAboutValidation, setStoryAboutValidation] = useState(null);
+  const [storyDescriptionValidation, setStoryDescriptionValidation] = useState(null);
+  const [intervieweeValidation, setIntervieweeValidation] = useState(null);
+  const [storyTitleValidation, setStoryTitleValidation] = useState(null);
+
+  // Validation and disable of the button
+  const handleDisableButton = () => {
+    switch (step) {
+      case 0:
+        if (storyAboutValidation || storyDescriptionValidation) {
+          return true;
+        } else if (!storyAbout || !storyDescription) {
+          return true;
+        } else {
+          return false;
+        }
+      case 1:
+        if (isStoryPublic === null) {
+          return true;
+        } else {
+          return false;
+        }
+      case 2: 
+        if (isSelfInterview === null) {
+          return true;
+        } else if (isSelfInterview === false && !interviewee) {
+          return true;
+        } else {
+          return false;
+        }
+      case 3: 
+        if (!storyTitle) {
+          return true;
+        } else if (!selectedTags.length) {
+          return true;
+        } else {
+          return false;
+        }
+      default:
+        break;
+    }
+
+  };
+
+  // Sets header option instead of having it in the screen..The other options set in headerOptions
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: step >= 4 ? 'Nearly done' : 'Create your story',
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => handleOnClose()}>
+          <IconComponent
+            name="times"
+            type="font-awesome-5"
+            size={ICON_SIZE.iconSizeMedium}
+            style={{ marginLeft: 20 }}
+            color={COLOR.grey}
+          />
+        </TouchableOpacity>
+      )
+    })
+  }, [])
 
   // Loads questions.
   const loadQuestions = async () => {
@@ -60,6 +125,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
     if (response.status === 200) {
       try {
         saveAllQuestions(response.data);
+        setQuestions(response.data);
         setIsLoading(true);
       } catch (error) {
         setIsLoading(false);
@@ -87,39 +153,96 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
     return setIsLoading(false);
   };
 
-  console.log(storyReducer);
   // Handles when the user hits next
   const handleOnNextButton = async () => {
     if (step === 2) {
       await loadQuestions();
       navigation.navigate('Record Story');
       // Increase step because user returns here to create story at the end of recording questions. 
-      setStep(step + 1);
-      return setIsLoading(false);
+      setIsLoading(false);
+      return setStep(step + 1);
     } else if (step >= 3) {
+      setIsLoading(true);
+      // Gets data to send to server
       const userID = userReducer.id;
-      const responses = storyReducer.responses;
-      const storyData = {
+      //const responses = storyReducer.responses;
+      let storyData = {
         about: storyAbout,
-        description: storyDescription, 
+        description: storyDescription,
         interviewee: interviewee,
-        title: storyTitle,
-        isPublic: isStoryPrivate,
+        title: storyTitle ? storyTitle : "left blank",
+        isPublic: isStoryPublic,
         isSelfInterview: isSelfInterview,
         selectedTags: selectedTags,
         interviewer: userID,
-        responses: responses
       };
 
+      // Saves story data to redux 
       saveStoryDetails(storyData);
-      await createStory(storyData);
+      const storyID = await createStory(storyData);
+
+      // unpack audio response and call finaliseStoryStreams
+      const storySegments = collocateStorySegments();
+      if (storySegments.length > 0) {
+        storyData = await finaliseStoryStreams(storySegments, storyID);
+        console.log('got updated story object ', storyData);
+      }
+
+      // save to the all collections reducer
+      saveNewStory(storyData);
+
+      // Navigates to the story - Need to pass stack name first then screen. Due to View story being in sep stack.
+      const lastScreen = route.name;
+      navigation.navigate('screensNavigator', {
+        screen: 'storyStack',
+        params: {
+          screen: 'View Story',
+          params: { storyID, lastScreen}
+        },
+      });
+
+      // Ensures there is no more state when the user creates another story.
+      navigation.reset({ routes: [{ name: 'Create Story' }] });
+      resetStoryReducer();
+      return setIsLoading(false);
     } else {
       return setStep(step + 1)
     }
   };
 
+  // steps through the questions objects
+  // create a reference object identifying
+  // the sequence of audio that needs to be
+  // compiled (by the audio server) for the
+  // finalised story post
+  const collocateStorySegments = () => {
+    const audioSegments = [];
+    let question, subquestion;
+    for (question of questions) {
+      if (question.response === 'AUDIO') {
+        audioSegments.push(questionToAudioSegment(question));
+      }
+      for (subquestion of question.subQuestions) {
+        if (subquestion.response === 'AUDIO') {
+          audioSegments.push(questionToAudioSegment(subquestion));
+        }
+      }
+    }
+
+    return audioSegments;
+  };
+
+  const questionToAudioSegment = ( quest ) => {
+    return {
+      questionAudioFile: quest.audioFile,
+      answerAudioChannel: quest.channelId
+    }
+  };
+
   const handleOnClose = () => {
     resetStoryReducer();
+    terminateChannels(questions);
+    // Resets the stack screen location so you don't appear in that screen when you return to stack
     return navigation.reset({ routes: [{ name: 'Home' }] });
   };
 
@@ -128,8 +251,18 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       case 0:
         return (
           <CreateStoryComponent
+            storyAbout={storyAbout}
+            storyDescription={storyDescription}
             onChangeStoryAbout={(event) => {setStoryAbout(event)}}
             onChangeStoryDescription={(event) => {setStoryDescription(event)}}
+            onChangeStoryAboutValidation={(errorMessage) => setStoryAboutValidation(errorMessage)}
+            onChangeStoryDescriptionValidation={(errorMessage) => setStoryDescriptionValidation(errorMessage)}
+            validationErrorMessage={
+              {
+                storyAboutValidation: storyAboutValidation, 
+                storyDescriptionValidation: storyDescriptionValidation
+              }
+            }
           />
         )
       case 1: 
@@ -137,9 +270,9 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
           <View>
             <Text style={styles.footerHeaderText}>Do you wish to make your story private or public?</Text>
             <CreateStoryPrivacyComponent
-              isStoryPrivate={isStoryPrivate}
-              setStoryPrivate={() => setIsStoryPrivate(true)}
-              setStoryPublic={() => setIsStoryPrivate(false)}
+              isStoryPrivate={isStoryPublic}
+              setStoryPrivate={() => setIsStoryPublic(false)}
+              setStoryPublic={() => setIsStoryPublic(true)}
             />
           </View>
         )
@@ -149,9 +282,12 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
             <Text style={styles.footerHeaderText}>Will you be interviewing yourself or someone else?</Text>
             <CreateStoryInterviewType
               isSelfInterview={isSelfInterview}
+              interviewee={interviewee}
               setIsSelfInterviewTrue={() => setIsSelfInterview(true)}
               setIsSelfInterviewFalse={() => setIsSelfInterview(false)}
               onIntervieweeNameChange={(event) => setIntervieweeName(event)}
+              onChangeIntervieweeValidation={(errorMessage) => setIntervieweeValidation(errorMessage)}
+              validationErrorMessage={{intervieweeValidation: intervieweeValidation}}
             />
           </View>
         )
@@ -164,6 +300,8 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
               onRemoveSelectedTag={(id) => setSelectedTags(selectedTags.filter(tag => tag != id))}
               allTags={storyReducer.allTags}
               selectedTags={selectedTags}
+              onChangeStoryTitleValidation={(errorMessage) => setStoryTitleValidation(errorMessage)}
+              validationErrorMessage={{ storyTitleValidation: storyTitleValidation }}
             />
           </View>
         )
@@ -174,17 +312,9 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
 
   return (
     <View style={styles.mainContainer} onPress={Keyboard.dismiss}>
-      <View style={styles.headerContainer}>
-        <AntDesign
-          name="close"
-          size={ICON_SIZE.iconSizeMedium}
-          color={COLOR.grey}
-          style={styles.icon}
-          onPress={() => handleOnClose()}
-        />
-        <Text style={styles.headerText}>{step >= 3 ? "You're nearly done..." : "Create Your Story"}</Text>
-      </View>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? "padding" : "height"} style={styles.footer}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.footer}>
         <View style={styles.footer}>
           <ScrollView keyboardShouldPersistTaps="handled">
             <View style={styles.contentContainer}>{handleFormStage()}</View>
@@ -205,10 +335,11 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
           )}
 
           <ButtonComponent
-            title={step >= 3 ? "Finish" : "Next"}
+            title={step >= 3 ? 'Finish' : 'Next'}
             buttonSize="small"
             buttonType="solid"
             isLoading={isLoading}
+            disabled={handleDisableButton()}
             onButtonPress={handleOnNextButton}
           />
         </View>
@@ -223,14 +354,16 @@ const mapDispatchToProps = (dispatch) => {
     saveAllQuestions: (questions) => dispatch(saveAllQuestions(questions)),
     saveAllTags: (data) => dispatch(saveAllTags(data)),
     resetStoryReducer: () => dispatch(resetStoryReducer()),
-    saveStoryDetails: (storyData) => dispatch(saveStoryDetails(storyData))
+    saveStoryDetails: (storyData) => dispatch(saveStoryDetails(storyData)),
+    saveNewStory: (storyData) => dispatch(saveNewStory(storyData))
   }
 };
 
 function mapStateToProps (state) {
   return {
     storyReducer: state.storyReducer,
-    userReducer: state.userReducer
+    userReducer: state.userReducer,
+    questionReducer: state.questionReducer
   }
 };
 

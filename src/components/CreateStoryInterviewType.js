@@ -7,7 +7,10 @@ import TextInputComponent from './TextInputComponent';
 // Styles
 import styles from './../styles/components/CreateStoryInterviewType';
 
-const CreateStoryInterviewType = ({isSelfInterview, setIsSelfInterviewTrue, setIsSelfInterviewFalse, onIntervieweeNameChange}) => {
+const CreateStoryInterviewType = ({ isSelfInterview, setIsSelfInterviewTrue, setIsSelfInterviewFalse, onIntervieweeNameChange, interviewee, onChangeIntervieweeValidation, validationErrorMessage}) => {
+
+
+
   return (
     <View>
       <TouchableOpacity style={isSelfInterview === false || isSelfInterview === null ? styles.touchableOpacityButton : styles.touchableOpacityButtonActive} onPress={setIsSelfInterviewTrue}>
@@ -23,10 +26,13 @@ const CreateStoryInterviewType = ({isSelfInterview, setIsSelfInterviewTrue, setI
       {isSelfInterview === false ? (
         <TextInputComponent
           label="Who will you be interviewing?"
+          value={interviewee}
           placeholder="Enter in interviewers name"
           iconName="user"
           iconType="font-awesome"
           onChange={(event) => onIntervieweeNameChange(event)}
+          inputValidation={(event) => !event ? onChangeIntervieweeValidation('This field is required') : onChangeIntervieweeValidation(null)}
+          errorMessage={validationErrorMessage.intervieweeValidation}
         />
       ) : null}
     </View>

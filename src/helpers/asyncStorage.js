@@ -19,3 +19,11 @@ export const getToken = async () => {
     return error;
   }
 };
+
+export const removeToken = async () => {
+  try {
+    await AsyncStorage.removeItem("A_LIFE_LIVED_TOKEN"); 
+  } catch (error) {
+    return console.log(error); 
+  }
+};
