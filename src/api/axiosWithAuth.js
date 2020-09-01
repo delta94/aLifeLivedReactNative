@@ -4,6 +4,7 @@ import {
   BACKEND_BASE_ROUTE, AUDIO_API_BASE_ROUTE
 } from 'react-native-dotenv';
 import {TOKEN_IDENTIFIER} from './../appConstants';
+import {Platform} from 'react-native';
 
 let authToken;
 

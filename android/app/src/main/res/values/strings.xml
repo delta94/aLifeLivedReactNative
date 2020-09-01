@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">aLifeLived</string>
+    <string name="CodePushDeploymentKey" moduleConfig="true" translatable="false">3abTnXZc9iCf6Kb8LyGLr9dZvebonw8U0BoAF</string>
 </resources>
