@@ -181,7 +181,8 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
 
   // Handle when user clicks play
   const onPlay = async () => {
-    return await TrackPlayer.play();
+    await TrackPlayer.play();
+    console.log(await TrackPlayer.getQueue());
   };
 
   // Handle when user clicks pause
