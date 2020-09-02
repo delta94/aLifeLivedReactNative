@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import {View, Text, FlatList, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList, TouchableOpacity, NativeModules} from 'react-native';
 
 // Actions
 import { saveAllStories } from './../redux/actions/allCollections';
@@ -24,6 +24,7 @@ const HomeScreen = ({
   addBookMarkedStory,
   removeBookMarkedStory,
 }) => {
+  const env = NativeModules.RNConfig.env;
   const [refreshing, setRefreshing] = useState(false);
   const [userLikedStories] = useState(userReducer.likedStories);
 
@@ -91,7 +92,6 @@ const HomeScreen = ({
 
   // Renders each story with the FlatList
   const renderStories = ({item, index}) => {
-
     const hasUserLikedStory = userReducer.likedStories
       ? userReducer.likedStories.includes(item._id)
       : false;
@@ -129,6 +129,7 @@ const HomeScreen = ({
   
   return (
     <View style={styles.container}>
+      <Text>{env}</Text>
       <View style={styles.contentContainer}>
         <FlatList
           ListHeaderComponent={() => {

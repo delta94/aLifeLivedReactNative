@@ -1,6 +1,6 @@
 import {axiosAudioAPI} from './../axiosWithAuth';
 import {Buffer} from 'buffer';
-import {AUDIO_API_BASE_ROUTE} from 'react-native-dotenv';
+import { AUDIO_SERVER_ROUTE_TEST } from 'react-native-dotenv';
 // const AUDIO_API_BASE_ROUTE = "https://a-life-lived-audio-server-stag.herokuapp.com"
 let channelId, chunkNum, chunkResponses, uploadChunkPromise, packets, preInitialisedChannel;
 
@@ -173,9 +173,9 @@ export const terminateChannels = async ( questions ) => {
 
 // url mapping is determined by the structure of the audio server
 export const channelIdToUrl = ( channelId ) => {
-  return `${AUDIO_API_BASE_ROUTE}/channels/${channelId}/${channelId}.wav`;
+  return `${AUDIO_SERVER_ROUTE_TEST}/channels/${channelId}/${channelId}.wav`;
 }
 
 export const audioFileIdToUrl = ( audioFileId ) => {
-  return `${AUDIO_API_BASE_ROUTE}/audio/${audioFileId}.mp3`;
+  return `${AUDIO_SERVER_ROUTE_TEST}/audio/${audioFileId}.mp3`;
 }
