@@ -175,6 +175,20 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    flavorDimensions "env"
+    productFlavors {
+        dev {
+            resValue "string", "app_name", "aLifeLived Dev"
+            applicationIdSuffix ".dev"
+        }
+        staging {
+            resValue "string", "app_name", "aLifeLived Staging"
+            applicationIdSuffix ".staging"
+        }
+        prod {
+            resValue "string", "app_name", "aLifeLived"
+        }
+    }
 
     packagingOptions {
         pickFirst "lib/armeabi-v7a/libc++_shared.so"
