@@ -1,5 +1,7 @@
 platform :ios, '10.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+# Removes uuid warnings
+install! 'cocoapods', :deterministic_uuids => false 
 
 project 'aLifeLived', {
   'debug' => :debug,

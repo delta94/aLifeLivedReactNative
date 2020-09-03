@@ -1,4 +1,8 @@
-#!/bin/bash
-cd ${APPCENTER_SOURCE_DIRECTORY}
-echo “BACKEND_BASE_ROUTE_TEST=${BACKEND_BASE_ROUTE_TEST}” > .env
-echo “AUDIO_SERVER_ROUTE_TEST=${AUDIO_SERVER_ROUTE_TEST}” >> .env
+#!/usr/bin/env bash
+# Creates an .env from ENV variables for use with react-native-config
+ENV_WHITELIST=${ENV_WHITELIST:-"^RN_"}
+printf "Creating an .env file with the following whitelist:\n"
+printf "%s\n" $ENV_WHITELIST
+set | egrep -e $ENV_WHITELIST | sed 's/^RN_//g' > .env
+printf "\n.env created with contents:\n\n"
+cat .env
