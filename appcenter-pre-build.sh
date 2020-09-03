@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Updating Info.plist
-PLIST=$BUILD_REPOSITORY_LOCALPATH/MyApp/iOS/Info.plist
+PLIST=$BUILD_REPOSITORY_LOCALPATH/aLifeLived/iOS/Info.plist
 
 /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString 1.0.${APPCENTER_BUILD_ID}" $PLIST
 
