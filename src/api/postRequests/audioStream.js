@@ -173,9 +173,9 @@ export const terminateChannels = async ( questions ) => {
 
 // url mapping is determined by the structure of the audio server
 export const channelIdToUrl = ( channelId ) => {
-  return `${Config.AUDIO_SERVER_ROUTE_TEST}/channels/${channelId}/${channelId}.wav`;
+  return `${Config.AUDIO_API_BASE_ROUTE}/channels/${channelId}/${channelId}.wav`;
 }
 
 export const audioFileIdToUrl = ( audioFileId ) => {
-  return `${Config.AUDIO_SERVER_ROUTE_TEST}/audio/${audioFileId}.mp3`;
+  return `${Config.AUDIO_API_BASE_ROUTE}/audio/${audioFileId}.mp3`;
 }
