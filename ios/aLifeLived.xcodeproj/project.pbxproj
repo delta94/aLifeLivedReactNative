@@ -49,18 +49,25 @@
 		00E356F21AD99517003FC87E /* aLifeLivedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = aLifeLivedTests.m; sourceTree = "<group>"; };
 		05FECE35DAA18F057A67C5CF /* Pods-aLifeLived-aLifeLivedTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-aLifeLivedTests.release.xcconfig"; path = "Target Support Files/Pods-aLifeLived-aLifeLivedTests/Pods-aLifeLived-aLifeLivedTests.release.xcconfig"; sourceTree = "<group>"; };
 		10D5C0CE9D924395AD9A214F /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* A Life Lived Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "A Life Lived Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		11726FFED330A52716A11C11 /* Pods-aLifeLived.debugdev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived.debugdev.xcconfig"; path = "Target Support Files/Pods-aLifeLived/Pods-aLifeLived.debugdev.xcconfig"; sourceTree = "<group>"; };
+		11C2E3FE441982E49296AD13 /* Pods-aLifeLived.releaseprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived.releaseprod.xcconfig"; path = "Target Support Files/Pods-aLifeLived/Pods-aLifeLived.releaseprod.xcconfig"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* A Life Lived.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "A Life Lived.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = aLifeLived/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = aLifeLived/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = aLifeLived/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = aLifeLived/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = aLifeLived/main.m; sourceTree = "<group>"; };
+		14C5DCC9A560B3EA038FD82E /* Pods-aLifeLived.debugprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived.debugprod.xcconfig"; path = "Target Support Files/Pods-aLifeLived/Pods-aLifeLived.debugprod.xcconfig"; sourceTree = "<group>"; };
 		2B7ECD1D801B41D3924FEA7F /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* aLifeLived-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "aLifeLived-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* aLifeLived-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "aLifeLived-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3142DCC0BE3EAC68EEA381D2 /* Pods-aLifeLived-tvOSTests.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOSTests.staging.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOSTests/Pods-aLifeLived-tvOSTests.staging.xcconfig"; sourceTree = "<group>"; };
+		36D0B5E2085F6AC95244F686 /* Pods-aLifeLived-tvOS.releaseprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOS.releaseprod.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOS/Pods-aLifeLived-tvOS.releaseprod.xcconfig"; sourceTree = "<group>"; };
 		38EC1111DC66447BA2ED27B1 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		3F2409C9FBE87EE692E24C02 /* Pods-aLifeLived-tvOS.debugstaging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOS.debugstaging.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOS/Pods-aLifeLived-tvOS.debugstaging.xcconfig"; sourceTree = "<group>"; };
+		465B90DCF34D97BF7ACE6601 /* Pods-aLifeLived-aLifeLivedTests.debugdev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-aLifeLivedTests.debugdev.xcconfig"; path = "Target Support Files/Pods-aLifeLived-aLifeLivedTests/Pods-aLifeLived-aLifeLivedTests.debugdev.xcconfig"; sourceTree = "<group>"; };
+		4ED1B9AE31E3CE62ABFD56FE /* Pods-aLifeLived-aLifeLivedTests.releaseprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-aLifeLivedTests.releaseprod.xcconfig"; path = "Target Support Files/Pods-aLifeLived-aLifeLivedTests/Pods-aLifeLived-aLifeLivedTests.releaseprod.xcconfig"; sourceTree = "<group>"; };
 		4F56321AA27A46E1B7DADF76 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		5363BAEB6BDF4447B1A77427 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		54C1D867A32742EDB065D010 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
@@ -70,31 +77,48 @@
 		58FCE81D24BEFC8500D77DC3 /* recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = recording.swift; sourceTree = "<group>"; };
 		58FCE82024BEFE9400D77DC3 /* aLifeLived-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "aLifeLived-Bridging-Header.h"; sourceTree = "<group>"; };
 		58FCE82124BEFF4400D77DC3 /* recording.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = recording.m; sourceTree = "<group>"; };
+		5AE96D0D8D376A9273EBD8B3 /* Pods-aLifeLived-tvOSTests.debugdev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOSTests.debugdev.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOSTests/Pods-aLifeLived-tvOSTests.debugdev.xcconfig"; sourceTree = "<group>"; };
 		6F4FDBB479DE582D07333AD0 /* libPods-aLifeLived-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aLifeLived-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		764C516235028FF49B850A07 /* Pods-aLifeLived-aLifeLivedTests.releasedev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-aLifeLivedTests.releasedev.xcconfig"; path = "Target Support Files/Pods-aLifeLived-aLifeLivedTests/Pods-aLifeLived-aLifeLivedTests.releasedev.xcconfig"; sourceTree = "<group>"; };
 		7656A56AC5734027B840323D /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		7B9BBDAAC6B2E2258DE2EAB0 /* Pods-aLifeLived.releasedev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived.releasedev.xcconfig"; path = "Target Support Files/Pods-aLifeLived/Pods-aLifeLived.releasedev.xcconfig"; sourceTree = "<group>"; };
+		7CBA504D87BE20C82C520CD9 /* Pods-aLifeLived-tvOS.debugprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOS.debugprod.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOS/Pods-aLifeLived-tvOS.debugprod.xcconfig"; sourceTree = "<group>"; };
 		7DA8251F900242BAAED83D7D /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		816C24344D03454199B73A12 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
+		86DB00DCDB8388F62F4F0570 /* Pods-aLifeLived-tvOS.debugdev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOS.debugdev.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOS/Pods-aLifeLived-tvOS.debugdev.xcconfig"; sourceTree = "<group>"; };
+		8C4322BF3A0977B2E2389908 /* Pods-aLifeLived.releasestaging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived.releasestaging.xcconfig"; path = "Target Support Files/Pods-aLifeLived/Pods-aLifeLived.releasestaging.xcconfig"; sourceTree = "<group>"; };
 		8D822E9CF66D47A690D1C68A /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		90881621F5F84646B239E78C /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		99EEB1AB842F6FFF6CB7FEDE /* Pods-aLifeLived-tvOSTests.releasestaging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOSTests.releasestaging.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOSTests/Pods-aLifeLived-tvOSTests.releasestaging.xcconfig"; sourceTree = "<group>"; };
 		9FC4C81C13384CCFAA0F0563 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		A45DFE5C78CD78D20332C8C2 /* Pods-aLifeLived-aLifeLivedTests.debugprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-aLifeLivedTests.debugprod.xcconfig"; path = "Target Support Files/Pods-aLifeLived-aLifeLivedTests/Pods-aLifeLived-aLifeLivedTests.debugprod.xcconfig"; sourceTree = "<group>"; };
 		B06DDDCE52D03F95FC0FC7BA /* libPods-aLifeLived-aLifeLivedTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aLifeLived-aLifeLivedTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B310CD55175F216095274C29 /* Pods-aLifeLived-tvOSTests.releasedev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOSTests.releasedev.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOSTests/Pods-aLifeLived-tvOSTests.releasedev.xcconfig"; sourceTree = "<group>"; };
 		B92071C2616EFAA2EE19DA64 /* Pods-aLifeLived-aLifeLivedTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-aLifeLivedTests.debug.xcconfig"; path = "Target Support Files/Pods-aLifeLived-aLifeLivedTests/Pods-aLifeLived-aLifeLivedTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B9C1FE5A5B8CAF495755A975 /* Pods-aLifeLived-aLifeLivedTests.debugstaging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-aLifeLivedTests.debugstaging.xcconfig"; path = "Target Support Files/Pods-aLifeLived-aLifeLivedTests/Pods-aLifeLived-aLifeLivedTests.debugstaging.xcconfig"; sourceTree = "<group>"; };
 		BE9A4D4D9B1B74D65E097351 /* libPods-aLifeLived.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aLifeLived.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1D0F4A877EA8E0410577BBB /* Pods-aLifeLived-aLifeLivedTests.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-aLifeLivedTests.staging.xcconfig"; path = "Target Support Files/Pods-aLifeLived-aLifeLivedTests/Pods-aLifeLived-aLifeLivedTests.staging.xcconfig"; sourceTree = "<group>"; };
 		C58FFC178EEB509DA0E83AE3 /* Pods-aLifeLived-tvOS.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOS.staging.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOS/Pods-aLifeLived-tvOS.staging.xcconfig"; sourceTree = "<group>"; };
 		C683120A819C47FC870B949F /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
+		CB03843A8B112E6BCC49E4B4 /* Pods-aLifeLived-tvOS.releasedev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOS.releasedev.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOS/Pods-aLifeLived-tvOS.releasedev.xcconfig"; sourceTree = "<group>"; };
+		CB0DE129D818BA56D3A27802 /* Pods-aLifeLived-aLifeLivedTests.releasestaging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-aLifeLivedTests.releasestaging.xcconfig"; path = "Target Support Files/Pods-aLifeLived-aLifeLivedTests/Pods-aLifeLived-aLifeLivedTests.releasestaging.xcconfig"; sourceTree = "<group>"; };
+		CEA863E7FD820D97C88FE1DC /* Pods-aLifeLived.debugstaging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived.debugstaging.xcconfig"; path = "Target Support Files/Pods-aLifeLived/Pods-aLifeLived.debugstaging.xcconfig"; sourceTree = "<group>"; };
 		D907A86CAC4CCFA310D1E57F /* Pods-aLifeLived-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOSTests/Pods-aLifeLived-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		DA3D67771AF65239659EF5C7 /* Pods-aLifeLived.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived.staging.xcconfig"; path = "Target Support Files/Pods-aLifeLived/Pods-aLifeLived.staging.xcconfig"; sourceTree = "<group>"; };
 		DABDAB4B5A6340B48B0EC611 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		DD63720103875A4FD2F966FB /* Pods-aLifeLived.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived.debug.xcconfig"; path = "Target Support Files/Pods-aLifeLived/Pods-aLifeLived.debug.xcconfig"; sourceTree = "<group>"; };
 		E561E797A95D9BCF4F9D2B68 /* libPods-aLifeLived-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aLifeLived-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7223FD41B9142B8CC3BDD52 /* Pods-aLifeLived-tvOSTests.debugprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOSTests.debugprod.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOSTests/Pods-aLifeLived-tvOSTests.debugprod.xcconfig"; sourceTree = "<group>"; };
 		E783AF93A5A72D5805FCA57A /* Pods-aLifeLived-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOS.release.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOS/Pods-aLifeLived-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		E8E4859EDDEA539DF6397224 /* Pods-aLifeLived-tvOSTests.releaseprod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOSTests.releaseprod.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOSTests/Pods-aLifeLived-tvOSTests.releaseprod.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EF077952B5CD4FBFA004D425 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		EF4B3057A2E5426CA219D742 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		F8680372CD02A35954D25DB8 /* Pods-aLifeLived-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOSTests/Pods-aLifeLived-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F88FF90462FC80EF61DC208A /* Pods-aLifeLived-tvOSTests.debugstaging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOSTests.debugstaging.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOSTests/Pods-aLifeLived-tvOSTests.debugstaging.xcconfig"; sourceTree = "<group>"; };
 		F94368012DC3FE726D74A8FB /* Pods-aLifeLived-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOS/Pods-aLifeLived-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		F9CD4E4B682274A536299BD3 /* Pods-aLifeLived-tvOS.releasestaging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOS.releasestaging.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOS/Pods-aLifeLived-tvOS.releasestaging.xcconfig"; sourceTree = "<group>"; };
 		FDA89E85BADF900DF2115461 /* Pods-aLifeLived.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived.release.xcconfig"; path = "Target Support Files/Pods-aLifeLived/Pods-aLifeLived.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -210,7 +234,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* A Life Lived Dev.app */,
+				13B07F961A680F5B00A75B9A /* A Life Lived.app */,
 				00E356EE1AD99517003FC87E /* aLifeLivedTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* aLifeLived-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* aLifeLived-tvOSTests.xctest */,
@@ -256,6 +280,30 @@
 				C1D0F4A877EA8E0410577BBB /* Pods-aLifeLived-aLifeLivedTests.staging.xcconfig */,
 				C58FFC178EEB509DA0E83AE3 /* Pods-aLifeLived-tvOS.staging.xcconfig */,
 				3142DCC0BE3EAC68EEA381D2 /* Pods-aLifeLived-tvOSTests.staging.xcconfig */,
+				14C5DCC9A560B3EA038FD82E /* Pods-aLifeLived.debugprod.xcconfig */,
+				CEA863E7FD820D97C88FE1DC /* Pods-aLifeLived.debugstaging.xcconfig */,
+				11726FFED330A52716A11C11 /* Pods-aLifeLived.debugdev.xcconfig */,
+				7B9BBDAAC6B2E2258DE2EAB0 /* Pods-aLifeLived.releasedev.xcconfig */,
+				8C4322BF3A0977B2E2389908 /* Pods-aLifeLived.releasestaging.xcconfig */,
+				11C2E3FE441982E49296AD13 /* Pods-aLifeLived.releaseprod.xcconfig */,
+				A45DFE5C78CD78D20332C8C2 /* Pods-aLifeLived-aLifeLivedTests.debugprod.xcconfig */,
+				B9C1FE5A5B8CAF495755A975 /* Pods-aLifeLived-aLifeLivedTests.debugstaging.xcconfig */,
+				465B90DCF34D97BF7ACE6601 /* Pods-aLifeLived-aLifeLivedTests.debugdev.xcconfig */,
+				764C516235028FF49B850A07 /* Pods-aLifeLived-aLifeLivedTests.releasedev.xcconfig */,
+				CB0DE129D818BA56D3A27802 /* Pods-aLifeLived-aLifeLivedTests.releasestaging.xcconfig */,
+				4ED1B9AE31E3CE62ABFD56FE /* Pods-aLifeLived-aLifeLivedTests.releaseprod.xcconfig */,
+				7CBA504D87BE20C82C520CD9 /* Pods-aLifeLived-tvOS.debugprod.xcconfig */,
+				3F2409C9FBE87EE692E24C02 /* Pods-aLifeLived-tvOS.debugstaging.xcconfig */,
+				86DB00DCDB8388F62F4F0570 /* Pods-aLifeLived-tvOS.debugdev.xcconfig */,
+				CB03843A8B112E6BCC49E4B4 /* Pods-aLifeLived-tvOS.releasedev.xcconfig */,
+				F9CD4E4B682274A536299BD3 /* Pods-aLifeLived-tvOS.releasestaging.xcconfig */,
+				36D0B5E2085F6AC95244F686 /* Pods-aLifeLived-tvOS.releaseprod.xcconfig */,
+				E7223FD41B9142B8CC3BDD52 /* Pods-aLifeLived-tvOSTests.debugprod.xcconfig */,
+				F88FF90462FC80EF61DC208A /* Pods-aLifeLived-tvOSTests.debugstaging.xcconfig */,
+				5AE96D0D8D376A9273EBD8B3 /* Pods-aLifeLived-tvOSTests.debugdev.xcconfig */,
+				B310CD55175F216095274C29 /* Pods-aLifeLived-tvOSTests.releasedev.xcconfig */,
+				99EEB1AB842F6FFF6CB7FEDE /* Pods-aLifeLived-tvOSTests.releasestaging.xcconfig */,
+				E8E4859EDDEA539DF6397224 /* Pods-aLifeLived-tvOSTests.releaseprod.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -301,7 +349,7 @@
 			);
 			name = aLifeLived;
 			productName = aLifeLived;
-			productReference = 13B07F961A680F5B00A75B9A /* A Life Lived Dev.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* A Life Lived.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* aLifeLived-tvOS */ = {
@@ -744,9 +792,9 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		00E356F61AD99517003FC87E /* Debug */ = {
+		00E356F61AD99517003FC87E /* DebugProd */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B92071C2616EFAA2EE19DA64 /* Pods-aLifeLived-aLifeLivedTests.debug.xcconfig */;
+			baseConfigurationReference = A45DFE5C78CD78D20332C8C2 /* Pods-aLifeLived-aLifeLivedTests.debugprod.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -766,11 +814,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived.app/aLifeLived";
 			};
-			name = Debug;
+			name = DebugProd;
 		};
-		00E356F71AD99517003FC87E /* Release */ = {
+		00E356F71AD99517003FC87E /* ReleaseStaging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 05FECE35DAA18F057A67C5CF /* Pods-aLifeLived-aLifeLivedTests.release.xcconfig */;
+			baseConfigurationReference = CB0DE129D818BA56D3A27802 /* Pods-aLifeLived-aLifeLivedTests.releasestaging.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -787,11 +835,11 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived.app/aLifeLived";
 			};
-			name = Release;
+			name = ReleaseStaging;
 		};
-		13B07F941A680F5B00A75B9A /* Debug */ = {
+		13B07F941A680F5B00A75B9A /* DebugProd */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DD63720103875A4FD2F966FB /* Pods-aLifeLived.debug.xcconfig */;
+			baseConfigurationReference = 14C5DCC9A560B3EA038FD82E /* Pods-aLifeLived.debugprod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -801,38 +849,11 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"FB_SONARKIT_ENABLED=1",
-					"DEV=1",
 				);
 				INFOPLIST_FILE = aLifeLived/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.alifelived.alifelived-react.dev";
-				PRODUCT_NAME = "A Life Lived Dev";
-				SWIFT_INSTALL_OBJC_HEADER = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "aLifeLived-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Debug;
-		};
-		13B07F951A680F5B00A75B9A /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = FDA89E85BADF900DF2115461 /* Pods-aLifeLived.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K2UC8H8Q2V;
-				INFOPLIST_FILE = aLifeLived/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -842,194 +863,24 @@
 				PRODUCT_NAME = "A Life Lived";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "aLifeLived-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = Release;
+			name = DebugProd;
 		};
-		2D02E4971E0B4A5E006451C7 /* Debug */ = {
+		13B07F951A680F5B00A75B9A /* ReleaseStaging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F94368012DC3FE726D74A8FB /* Pods-aLifeLived-tvOS.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "aLifeLived-tvOS/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
-			};
-			name = Debug;
-		};
-		2D02E4981E0B4A5E006451C7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E783AF93A5A72D5805FCA57A /* Pods-aLifeLived-tvOS.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "aLifeLived-tvOS/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.2;
-			};
-			name = Release;
-		};
-		2D02E4991E0B4A5E006451C7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F8680372CD02A35954D25DB8 /* Pods-aLifeLived-tvOSTests.debug.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_TESTABILITY = YES;
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "aLifeLived-tvOSTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived-tvOS.app/aLifeLived-tvOS";
-				TVOS_DEPLOYMENT_TARGET = 10.1;
-			};
-			name = Debug;
-		};
-		2D02E49A1E0B4A5E006451C7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = D907A86CAC4CCFA310D1E57F /* Pods-aLifeLived-tvOSTests.release.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "aLifeLived-tvOSTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-ObjC",
-					"-lc++",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOSTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived-tvOS.app/aLifeLived-tvOS";
-				TVOS_DEPLOYMENT_TARGET = 10.1;
-			};
-			name = Release;
-		};
-		58E0B8E524FE648F00000492 /* Staging */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
-					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
-					"\"$(inherited)\"",
-				);
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
-			};
-			name = Staging;
-		};
-		58E0B8E624FE648F00000492 /* Staging */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = DA3D67771AF65239659EF5C7 /* Pods-aLifeLived.staging.xcconfig */;
+			baseConfigurationReference = 8C4322BF3A0977B2E2389908 /* Pods-aLifeLived.releasestaging.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K2UC8H8Q2V;
-				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"FB_SONARKIT_ENABLED=1",
+					"COCOAPODS=1",
 					"STAGING=1",
 				);
 				INFOPLIST_FILE = aLifeLived/Info.plist;
@@ -1044,40 +895,15 @@
 				PRODUCT_NAME = "A Life Lived Staging";
 				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "aLifeLived-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = Staging;
+			name = ReleaseStaging;
 		};
-		58E0B8E724FE648F00000492 /* Staging */ = {
+		2D02E4971E0B4A5E006451C7 /* DebugProd */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C1D0F4A877EA8E0410577BBB /* Pods-aLifeLived-aLifeLivedTests.staging.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = aLifeLivedTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived.app/aLifeLived";
-			};
-			name = Staging;
-		};
-		58E0B8E824FE648F00000492 /* Staging */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = C58FFC178EEB509DA0E83AE3 /* Pods-aLifeLived-tvOS.staging.xcconfig */;
+			baseConfigurationReference = 7CBA504D87BE20C82C520CD9 /* Pods-aLifeLived-tvOS.debugprod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1101,11 +927,39 @@
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.2;
 			};
-			name = Staging;
+			name = DebugProd;
 		};
-		58E0B8E924FE648F00000492 /* Staging */ = {
+		2D02E4981E0B4A5E006451C7 /* ReleaseStaging */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3142DCC0BE3EAC68EEA381D2 /* Pods-aLifeLived-tvOSTests.staging.xcconfig */;
+			baseConfigurationReference = F9CD4E4B682274A536299BD3 /* Pods-aLifeLived-tvOS.releasestaging.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "aLifeLived-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+			};
+			name = ReleaseStaging;
+		};
+		2D02E4991E0B4A5E006451C7 /* DebugProd */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E7223FD41B9142B8CC3BDD52 /* Pods-aLifeLived-tvOSTests.debugprod.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1128,9 +982,36 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived-tvOS.app/aLifeLived-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
-			name = Staging;
+			name = DebugProd;
 		};
-		83CBBA201A601CBA00E9B192 /* Debug */ = {
+		2D02E49A1E0B4A5E006451C7 /* ReleaseStaging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 99EEB1AB842F6FFF6CB7FEDE /* Pods-aLifeLived-tvOSTests.releasestaging.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "aLifeLived-tvOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived-tvOS.app/aLifeLived-tvOS";
+				TVOS_DEPLOYMENT_TARGET = 10.1;
+			};
+			name = ReleaseStaging;
+		};
+		58D08E6E2500931A00F2F6C2 /* DebugDev */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1185,12 +1066,298 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 			};
-			name = Debug;
+			name = DebugDev;
 		};
-		83CBBA211A601CBA00E9B192 /* Release */ = {
+		58D08E6F2500931A00F2F6C2 /* DebugDev */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 11726FFED330A52716A11C11 /* Pods-aLifeLived.debugdev.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K2UC8H8Q2V;
+				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"FB_SONARKIT_ENABLED=1",
+					"DEV=1",
+				);
+				INFOPLIST_FILE = aLifeLived/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alifelived.alifelived-react.dev";
+				PRODUCT_NAME = "A Life Lived Dev";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "aLifeLived-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = DebugDev;
+		};
+		58D08E702500931A00F2F6C2 /* DebugDev */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 465B90DCF34D97BF7ACE6601 /* Pods-aLifeLived-aLifeLivedTests.debugdev.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = aLifeLivedTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived.app/aLifeLived";
+			};
+			name = DebugDev;
+		};
+		58D08E712500931A00F2F6C2 /* DebugDev */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 86DB00DCDB8388F62F4F0570 /* Pods-aLifeLived-tvOS.debugdev.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "aLifeLived-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+			};
+			name = DebugDev;
+		};
+		58D08E722500931A00F2F6C2 /* DebugDev */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5AE96D0D8D376A9273EBD8B3 /* Pods-aLifeLived-tvOSTests.debugdev.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "aLifeLived-tvOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived-tvOS.app/aLifeLived-tvOS";
+				TVOS_DEPLOYMENT_TARGET = 10.1;
+			};
+			name = DebugDev;
+		};
+		58D08E732500932200F2F6C2 /* DebugStaging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+			};
+			name = DebugStaging;
+		};
+		58D08E742500932200F2F6C2 /* DebugStaging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CEA863E7FD820D97C88FE1DC /* Pods-aLifeLived.debugstaging.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K2UC8H8Q2V;
+				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"FB_SONARKIT_ENABLED=1",
+					"STAGING=1",
+				);
+				INFOPLIST_FILE = aLifeLived/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alifelived.alifelived-react.staging";
+				PRODUCT_NAME = "A Life Lived Staging";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "aLifeLived-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = DebugStaging;
+		};
+		58D08E752500932200F2F6C2 /* DebugStaging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B9C1FE5A5B8CAF495755A975 /* Pods-aLifeLived-aLifeLivedTests.debugstaging.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = aLifeLivedTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived.app/aLifeLived";
+			};
+			name = DebugStaging;
+		};
+		58D08E762500932200F2F6C2 /* DebugStaging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3F2409C9FBE87EE692E24C02 /* Pods-aLifeLived-tvOS.debugstaging.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "aLifeLived-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+			};
+			name = DebugStaging;
+		};
+		58D08E772500932200F2F6C2 /* DebugStaging */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F88FF90462FC80EF61DC208A /* Pods-aLifeLived-tvOSTests.debugstaging.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "aLifeLived-tvOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived-tvOS.app/aLifeLived-tvOS";
+				TVOS_DEPLOYMENT_TARGET = 10.1;
+			};
+			name = DebugStaging;
+		};
+		58D08E782500934100F2F6C2 /* ReleaseProd */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -1238,11 +1405,402 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = ReleaseProd;
+		};
+		58D08E792500934100F2F6C2 /* ReleaseProd */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 11C2E3FE441982E49296AD13 /* Pods-aLifeLived.releaseprod.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K2UC8H8Q2V;
+				INFOPLIST_FILE = aLifeLived/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alifelived.alifelived-react";
+				PRODUCT_NAME = "A Life Lived";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "aLifeLived-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = ReleaseProd;
+		};
+		58D08E7A2500934200F2F6C2 /* ReleaseProd */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4ED1B9AE31E3CE62ABFD56FE /* Pods-aLifeLived-aLifeLivedTests.releaseprod.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COPY_PHASE_STRIP = NO;
+				INFOPLIST_FILE = aLifeLivedTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived.app/aLifeLived";
+			};
+			name = ReleaseProd;
+		};
+		58D08E7B2500934200F2F6C2 /* ReleaseProd */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 36D0B5E2085F6AC95244F686 /* Pods-aLifeLived-tvOS.releaseprod.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "aLifeLived-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+			};
+			name = ReleaseProd;
+		};
+		58D08E7C2500934200F2F6C2 /* ReleaseProd */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8E4859EDDEA539DF6397224 /* Pods-aLifeLived-tvOSTests.releaseprod.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "aLifeLived-tvOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived-tvOS.app/aLifeLived-tvOS";
+				TVOS_DEPLOYMENT_TARGET = 10.1;
+			};
+			name = ReleaseProd;
+		};
+		58E0B8E524FE648F00000492 /* ReleaseDev */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+			};
+			name = ReleaseDev;
+		};
+		58E0B8E624FE648F00000492 /* ReleaseDev */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7B9BBDAAC6B2E2258DE2EAB0 /* Pods-aLifeLived.releasedev.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K2UC8H8Q2V;
+				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"COCOAPODS=1",
+					"COCOAPODS=1",
+					"DEV=1",
+				);
+				INFOPLIST_FILE = aLifeLived/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alifelived.alifelived-react.dev";
+				PRODUCT_NAME = "A Life Lived Dev";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "aLifeLived-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = ReleaseDev;
+		};
+		58E0B8E724FE648F00000492 /* ReleaseDev */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 764C516235028FF49B850A07 /* Pods-aLifeLived-aLifeLivedTests.releasedev.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = aLifeLivedTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived.app/aLifeLived";
+			};
+			name = ReleaseDev;
+		};
+		58E0B8E824FE648F00000492 /* ReleaseDev */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CB03843A8B112E6BCC49E4B4 /* Pods-aLifeLived-tvOS.releasedev.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "aLifeLived-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+			};
+			name = ReleaseDev;
+		};
+		58E0B8E924FE648F00000492 /* ReleaseDev */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B310CD55175F216095274C29 /* Pods-aLifeLived-tvOSTests.releasedev.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "aLifeLived-tvOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.aLifeLived-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/aLifeLived-tvOS.app/aLifeLived-tvOS";
+				TVOS_DEPLOYMENT_TARGET = 10.1;
+			};
+			name = ReleaseDev;
+		};
+		83CBBA201A601CBA00E9B192 /* DebugProd */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+			};
+			name = DebugProd;
+		};
+		83CBBA211A601CBA00E9B192 /* ReleaseStaging */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = ReleaseStaging;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1250,52 +1808,67 @@
 		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "aLifeLivedTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				00E356F61AD99517003FC87E /* Debug */,
-				58E0B8E724FE648F00000492 /* Staging */,
-				00E356F71AD99517003FC87E /* Release */,
+				00E356F61AD99517003FC87E /* DebugProd */,
+				58D08E752500932200F2F6C2 /* DebugStaging */,
+				58D08E702500931A00F2F6C2 /* DebugDev */,
+				58E0B8E724FE648F00000492 /* ReleaseDev */,
+				00E356F71AD99517003FC87E /* ReleaseStaging */,
+				58D08E7A2500934200F2F6C2 /* ReleaseProd */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = ReleaseDev;
 		};
 		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "aLifeLived" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				13B07F941A680F5B00A75B9A /* Debug */,
-				58E0B8E624FE648F00000492 /* Staging */,
-				13B07F951A680F5B00A75B9A /* Release */,
+				13B07F941A680F5B00A75B9A /* DebugProd */,
+				58D08E742500932200F2F6C2 /* DebugStaging */,
+				58D08E6F2500931A00F2F6C2 /* DebugDev */,
+				58E0B8E624FE648F00000492 /* ReleaseDev */,
+				13B07F951A680F5B00A75B9A /* ReleaseStaging */,
+				58D08E792500934100F2F6C2 /* ReleaseProd */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = ReleaseDev;
 		};
 		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "aLifeLived-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2D02E4971E0B4A5E006451C7 /* Debug */,
-				58E0B8E824FE648F00000492 /* Staging */,
-				2D02E4981E0B4A5E006451C7 /* Release */,
+				2D02E4971E0B4A5E006451C7 /* DebugProd */,
+				58D08E762500932200F2F6C2 /* DebugStaging */,
+				58D08E712500931A00F2F6C2 /* DebugDev */,
+				58E0B8E824FE648F00000492 /* ReleaseDev */,
+				2D02E4981E0B4A5E006451C7 /* ReleaseStaging */,
+				58D08E7B2500934200F2F6C2 /* ReleaseProd */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = ReleaseDev;
 		};
 		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "aLifeLived-tvOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2D02E4991E0B4A5E006451C7 /* Debug */,
-				58E0B8E924FE648F00000492 /* Staging */,
-				2D02E49A1E0B4A5E006451C7 /* Release */,
+				2D02E4991E0B4A5E006451C7 /* DebugProd */,
+				58D08E772500932200F2F6C2 /* DebugStaging */,
+				58D08E722500931A00F2F6C2 /* DebugDev */,
+				58E0B8E924FE648F00000492 /* ReleaseDev */,
+				2D02E49A1E0B4A5E006451C7 /* ReleaseStaging */,
+				58D08E7C2500934200F2F6C2 /* ReleaseProd */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = ReleaseDev;
 		};
 		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "aLifeLived" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				83CBBA201A601CBA00E9B192 /* Debug */,
-				58E0B8E524FE648F00000492 /* Staging */,
-				83CBBA211A601CBA00E9B192 /* Release */,
+				83CBBA201A601CBA00E9B192 /* DebugProd */,
+				58D08E732500932200F2F6C2 /* DebugStaging */,
+				58D08E6E2500931A00F2F6C2 /* DebugDev */,
+				58E0B8E524FE648F00000492 /* ReleaseDev */,
+				83CBBA211A601CBA00E9B192 /* ReleaseStaging */,
+				58D08E782500934100F2F6C2 /* ReleaseProd */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = ReleaseDev;
 		};
 /* End XCConfigurationList section */
 	};
