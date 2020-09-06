@@ -6,7 +6,6 @@ import {Platform} from 'react-native';
 
 let authToken;
 
-console.log("MAXXXX", Config.BACKEND_BASE_ROUTE);
 const axiosAPI = axios.create({
   baseURL: Config.BACKEND_BASE_ROUTE,
 });

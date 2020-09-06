@@ -34,8 +34,9 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    marginLeft: 15,
     marginTop: 20,
+    alignSelf: 'flex-start',
+    marginLeft: 20
   },
 
   header: {
