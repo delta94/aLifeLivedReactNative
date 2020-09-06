@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import ImagePicker from 'react-native-image-picker';
-import {View, Text, ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {View, Text, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
 // API
@@ -16,7 +15,7 @@ import {userLoginSuccessful} from './../redux/actions/userActions';
 import {storeToken} from './../helpers/asyncStorage';
 
 // Icon
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import IconComponent from './../components/IconComponent';
 
 // Components
 import TextInputComponent from './../components/TextInputComponent';
@@ -32,9 +31,6 @@ const SignUpScreen = (props) => {
 
   // Loading state
   const [isLoading, setIsLoading] = useState(false);
-
-  // Direct navigation to homepage. 
-  const navigation = useNavigation();
 
   // Input Values
   const [imageObject, setImageObject] = useState(null);
@@ -202,15 +198,14 @@ const SignUpScreen = (props) => {
           <KeyboardAvoidingView behavior="padding" style={{flex: 1}}>
             <ScrollView>
               <View style={styles.iconContainer}>
-                <View style={styles.crossIcon}>
-                  <AntDesign
-                    name="close"
+              <TouchableOpacity style={styles.icon} onPress={() => props.navigation.navigate('tabsNavigator', { screen: 'Home' })}>
+                  <IconComponent
+                    name="times"
+                    type="font-awesome-5"
                     size={ICON_SIZE.iconSizeMedium}
                     color={COLOR.grey}
-                    style={styles.icon}
-                    onPress={() => navigation.navigate('Home')}
                   />
-                </View>
+                </TouchableOpacity>
                 <View style={styles.avatarContainer}>
                   <AvatarComponent
                     style={styles.avatarIcon}
@@ -308,7 +303,7 @@ const SignUpScreen = (props) => {
                 <ButtonClearComponent
                   title="Already have an account?"
                   buttonType="clear"
-                  onButtonPress={() => navigation.push('Login')}
+                  onButtonPress={() => props.navigation.push('Login')}
                 />
               </View>
             </ScrollView>

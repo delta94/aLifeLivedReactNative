@@ -135,7 +135,7 @@ const HomeScreen = ({
   return (
     <View style={styles.container}>
       <Text>{Config.HELLO}</Text>
-      <Text>{env}</Text>
+      <Text>{Config.BACKEND_BASE_ROUTE}</Text>
       <View style={styles.contentContainer}>
         <FlatList
           ListHeaderComponent={() => {
