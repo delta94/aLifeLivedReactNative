@@ -1011,7 +1011,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"FB_SONARKIT_ENABLED=1",
-					"STAGING=1",
+					"BETA=1",
 				);
 				INFOPLIST_FILE = aLifeLived/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1185,8 +1185,7 @@
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"FB_SONARKIT_ENABLED=1",
-					"STAGING=1",
+					"BETA=1",
 				);
 				INFOPLIST_FILE = aLifeLived/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1361,7 +1360,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					"FB_SONARKIT_ENABLED=1",
-					"STAGING=1",
+					"DEV=1",
 				);
 				INFOPLIST_FILE = aLifeLived/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1535,8 +1534,7 @@
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
-					"FB_SONARKIT_ENABLED=1",
-					"STAGING=1",
+					"DEV=1",
 				);
 				INFOPLIST_FILE = aLifeLived/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1708,11 +1706,7 @@
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = K2UC8H8Q2V;
 				ENABLE_BITCODE = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"FB_SONARKIT_ENABLED=1",
-					"STAGING=1",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "COCOAPODS=1";
 				INFOPLIST_FILE = aLifeLived/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
