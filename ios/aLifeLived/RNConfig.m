@@ -12,10 +12,14 @@
 
 - (NSDictionary *)constantsToExport
 {
-  #if DEBUG
+  #if DEV
     NSString *env = @"dev";
     NSString *baseUrl = @"http://192.168.1.47:8080";
     NSString *audioBaseUrl =@"http://192.168.1.47:4000";
+  #elif BETA
+    NSString *env = @"beta";
+    NSString *baseUrl = @"https://a-life-lived-staging.herokuapp.com";
+    NSString *audioBaseUrl = @"https://a-life-lived-audio-server-stag.herokuapp.com";
   #else
     NSString *env = @"prod";
     NSString *baseUrl = @"https://a-life-lived-live.herokuapp.com";
