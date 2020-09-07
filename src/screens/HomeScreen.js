@@ -25,7 +25,6 @@ const HomeScreen = ({
   addBookMarkedStory,
   removeBookMarkedStory,
 }) => {
-  const env = NativeModules.RNConfig.env;
   const [refreshing, setRefreshing] = useState(false);
   const [userLikedStories] = useState(userReducer.likedStories);
 
