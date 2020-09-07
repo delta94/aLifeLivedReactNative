@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {View, Text, FlatList, TouchableOpacity, NativeModules} from 'react-native';
 import Config from "react-native-config";
+
 // Actions
 import { saveAllStories } from './../redux/actions/allCollections';
 import { addBookMarkedStory, removeBookMarkedStory } from './../redux/actions/userActions';
@@ -24,14 +25,8 @@ const HomeScreen = ({
   addBookMarkedStory,
   removeBookMarkedStory,
 }) => {
-  const env = NativeModules.RNConfig.env;
-  const ProdChecker = NativeModules.ProdChecker;
   const [refreshing, setRefreshing] = useState(false);
   const [userLikedStories] = useState(userReducer.likedStories);
-
-  ProdChecker.isTestflight().then(val => {
-      console.log("HELLO", val);
-  });
 
   const onLoad = async () => {
     setRefreshing(true);
