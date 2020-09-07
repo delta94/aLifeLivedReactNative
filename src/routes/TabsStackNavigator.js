@@ -51,6 +51,12 @@ function TabsNavigator({
     // Function firing twice on load, need to only fire once.
     try {
       const encryptedToken = await getToken();
+
+      // If no token then don't call backend. 
+      if (!encryptedToken) {
+        return;
+      };
+
       setUserToken(encryptedToken);
       const userData = await getUserByID(encryptedToken);
       const userStories = await getUserStories(encryptedToken);
