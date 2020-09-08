@@ -10,13 +10,13 @@ import codePush from 'react-native-code-push';
 import Config from "react-native-config";
 
 const codePushKeys = Platform.select({
-  ios: {KEY: Config.CODE_PUSH_IOS_KEY},
-  android: {KEY: Config.CODE_PUSH_ANDROID_KEY}
+  ios: Config.CODE_PUSH_IOS_KEY,
+  android: Config.CODE_PUSH_ANDROID_KEY
 });
 
 // Defines what keys are used for what env
 const CodePushifiedApp = codePush({
-  deploymentKey: codePushKeys.KEY,
+  deploymentKey: codePushKeys,
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
   installMode: codePush.InstallMode.ON_NEXT_RESUME
 })(App);

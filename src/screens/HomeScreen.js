@@ -35,7 +35,7 @@ const HomeScreen = ({
       saveAllStories(allStories.data);
       return setRefreshing(false);
     } else {
-      console.log('ERROR');
+      console.log('HOME SCREEN ERROR');
       return setRefreshing(false);
     }
   };
