@@ -20,7 +20,6 @@
 		55D2FE6D5C567398C8A5B05B /* libPods-aLifeLived-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F4FDBB479DE582D07333AD0 /* libPods-aLifeLived-tvOSTests.a */; };
 		5827D8D225020CCF007B33F0 /* ProdChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5827D8D125020CCF007B33F0 /* ProdChecker.m */; };
 		5867F2492506FD8600EBEF17 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5867F2482506FD8600EBEF17 /* File.swift */; };
-		586F00CB25074B2900192A18 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 586F00CA25074B2900192A18 /* main.jsbundle */; };
 		58E0B8EC24FE687F00000492 /* RNConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 58E0B8EB24FE687F00000492 /* RNConfig.m */; };
 		745B2AA30F9D9A3CF73FF51C /* libPods-aLifeLived.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9A4D4D9B1B74D65E097351 /* libPods-aLifeLived.a */; };
 		948BBE9B3A9C74341ED0368B /* libPods-aLifeLived-aLifeLivedTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B06DDDCE52D03F95FC0FC7BA /* libPods-aLifeLived-aLifeLivedTests.a */; };
@@ -519,7 +518,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				586F00CB25074B2900192A18 /* main.jsbundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -568,7 +566,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		3E7E717772DCBA39597F411B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
