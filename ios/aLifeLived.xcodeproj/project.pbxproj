@@ -20,6 +20,7 @@
 		55D2FE6D5C567398C8A5B05B /* libPods-aLifeLived-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F4FDBB479DE582D07333AD0 /* libPods-aLifeLived-tvOSTests.a */; };
 		5827D8D225020CCF007B33F0 /* ProdChecker.m in Sources */ = {isa = PBXBuildFile; fileRef = 5827D8D125020CCF007B33F0 /* ProdChecker.m */; };
 		5867F2492506FD8600EBEF17 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5867F2482506FD8600EBEF17 /* File.swift */; };
+		586F00CB25074B2900192A18 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 586F00CA25074B2900192A18 /* main.jsbundle */; };
 		58E0B8EC24FE687F00000492 /* RNConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 58E0B8EB24FE687F00000492 /* RNConfig.m */; };
 		745B2AA30F9D9A3CF73FF51C /* libPods-aLifeLived.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9A4D4D9B1B74D65E097351 /* libPods-aLifeLived.a */; };
 		948BBE9B3A9C74341ED0368B /* libPods-aLifeLived-aLifeLivedTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B06DDDCE52D03F95FC0FC7BA /* libPods-aLifeLived-aLifeLivedTests.a */; };
@@ -85,6 +86,7 @@
 		5827D8D025020C9B007B33F0 /* ProdChecker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProdChecker.h; sourceTree = "<group>"; };
 		5827D8D125020CCF007B33F0 /* ProdChecker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProdChecker.m; sourceTree = "<group>"; };
 		5867F2482506FD8600EBEF17 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		586F00CA25074B2900192A18 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		58E0B8EA24FE687F00000492 /* RNConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNConfig.h; path = aLifeLived/RNConfig.h; sourceTree = "<group>"; };
 		58E0B8EB24FE687F00000492 /* RNConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RNConfig.m; path = aLifeLived/RNConfig.m; sourceTree = "<group>"; };
 		58FCE82024BEFE9400D77DC3 /* aLifeLived-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "aLifeLived-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 		13B07FAE1A68108700A75B9A /* aLifeLived */ = {
 			isa = PBXGroup;
 			children = (
+				586F00CA25074B2900192A18 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -516,6 +519,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				586F00CB25074B2900192A18 /* main.jsbundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -1248,7 +1252,6 @@
 				INFOPLIST_FILE = aLifeLived/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MARKETING_VERSION = 1.0;
-				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-DFB_SONARKIT_ENABLED=1",
@@ -1438,7 +1441,7 @@
 				INFOPLIST_FILE = aLifeLived/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MARKETING_VERSION = 1.0;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-DFB_SONARKIT_ENABLED=1",
@@ -1628,7 +1631,7 @@
 				INFOPLIST_FILE = aLifeLived/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MARKETING_VERSION = 1.0;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-DFB_SONARKIT_ENABLED=1",
@@ -1818,7 +1821,7 @@
 				INFOPLIST_FILE = aLifeLived/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MARKETING_VERSION = 1.0;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = (
 					"$(inherited)",
 					"-DFB_SONARKIT_ENABLED=1",
