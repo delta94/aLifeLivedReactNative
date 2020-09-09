@@ -10,21 +10,15 @@ import codePush from 'react-native-code-push';
 import Config from "react-native-config";
 
 const codePushKeys = Platform.select({
-  ios: {
-    STAGING: Config.CODE_PUSH_STAGING_IOS_KEY,
-    PRODUCTION: Config.CODE_PUSH_PRODUCTION_IOS_KEY
-  },
-  android: {
-    STAGING: Config.CODE_PUSH_STAGING_ANDROID_KEY,
-    PRODUCTION: Config.CODE_PUSH_PRODUCTION_ANDROID_KEY
-  }
+  ios: Config.CODE_PUSH_IOS_KEY,
+  android: Config.CODE_PUSH_ANDROID_KEY
 })
 
-const isBetaUser = true;
+
 
 // Defines what keys are used for what env
 const CodePushifiedApp = codePush({
-  deploymentKey: isBetaUser ? codePushKeys.STAGING : codePushKeys.PRODUCTION,
+  deploymentKey: codePushKeys,
   checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
   installMode: codePush.InstallMode.ON_NEXT_RESUME
 })(App);
