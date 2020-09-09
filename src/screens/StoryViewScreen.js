@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 import TrackPlayer, {
   useTrackPlayerEvents,
   TrackPlayerEvents,
-  useTrackPlayerProgress, 
+  useTrackPlayerProgress,
+  STATE_BUFFERING,
 } from 'react-native-track-player';
 
 // API
@@ -29,23 +30,32 @@ import IconComponent from './../components/IconComponent';
 
 // NOTE:  Audio state for android is shown in number 1, 2, 3 - 1 idle/stopped,  
 const events = [
-  TrackPlayerEvents.PLAYBACK_STATE
+  TrackPlayerEvents.PLAYBACK_STATE,
 ];
 
 const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
 
-  const {position, duration} = useTrackPlayerProgress();
+  const {position, bufferedPosition, duration} = useTrackPlayerProgress();
   const [story, setStory] = useState(null);
   const [tags, setTags] = useState([]);
   const [storyLikes, setStoryLikes] = useState(0);
   const [didLike, setDidLike] = useState(route.params.hasUserBookMarkedStory);
   const [didBookmark, setDidBookmark] = useState(route.params.hasUserBookMarkedStory);
   const [audioState, setAudioState] = useState("NONE");
+  const [isAudioLoading, setIsAudioLoading] = useState(true);
 
   // Gets the player state and sets local state. 
   useTrackPlayerEvents(events, (event) => {
+    if (event.state === STATE_BUFFERING) {
+      setIsAudioLoading(true);
+      console.log('MAX');
+    } else if (event.state != STATE_BUFFERING) {
+      setIsAudioLoading(false);
+    };
+
     return setAudioState(event.state);
   });
+
 
   const onLoad = async () => {
     // IF story is in reducer grab item from the reducer
@@ -207,15 +217,14 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
   return (
     <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => handleOnClose()}>
-          <IconComponent
-            name="times"
-            type='font-awesome-5'
-            size={ICON_SIZE.iconSizeMedium}
-            style={{alignSelf: 'flex-start'}}
-            color={COLOR.grey}
-          />
-        </TouchableOpacity>
+        <IconComponent
+          name="times"
+          onPress={() => handleOnClose()}
+          type='font-awesome-5'
+          size={ICON_SIZE.iconSizeMedium}
+          style={{alignSelf: 'flex-start'}}
+          color={COLOR.grey}
+        />
 
         <View style={styles.header}>
           <AvatarComponent
@@ -251,56 +260,58 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
           <SliderComponent maxValue={duration} currentPosition={position} />
         </View>
         <View style={styles.audioControllerContainer}>
-          <TouchableOpacity onPress={() => onRewind()}>
-            <IconComponent
-              name="backward"
-              type='font-awesome-5'
-              size={ICON_SIZE.iconSizeXLarge}
-              color={COLOR.grey}
-            />
-          </TouchableOpacity>
+          <IconComponent
+            name="backward"
+            onPress={() => onRewind()}
+            type='font-awesome-5'
+            size={ICON_SIZE.iconSizeXLarge}
+            color={isAudioLoading ? COLOR.lightGrey : COLOR.grey}
+            disabled={isAudioLoading}
+            disabledStyle={{ backgroundColor: null }}
+          />
 
-          <TouchableOpacity onPress={() => audioState === "playing" || audioState === 3 ? onPause() : onPlay()}>
-            <IconComponent
-              name={audioState === "playing" || audioState === 3 ? "pause" : "play"}
-              type='font-awesome-5'
-              size={ICON_SIZE.iconSizeXLarge}
-              color={COLOR.grey}
-            />
-          </TouchableOpacity>
+          <IconComponent
+            onPress={() => audioState === "playing" || audioState === 3 ? onPause() : onPlay()}
+            name={audioState === "playing" || audioState === 3 ? "pause" : "play"}
+            type='font-awesome-5'
+            size={ICON_SIZE.iconSizeXLarge}
+            color={isAudioLoading ? COLOR.lightGrey : COLOR.grey}
+            disabled={isAudioLoading}
+            disabledStyle={{ backgroundColor: null }}
+          />
 
-          <TouchableOpacity onPress={() => onFastForward()}>
-            <IconComponent
-              name="forward"
-              type='font-awesome-5'
-              size={ICON_SIZE.iconSizeXLarge}
-              color={COLOR.grey}
-            />
-          </TouchableOpacity>
+          <IconComponent
+            name="forward"
+            type='font-awesome-5'
+            onPress={() => onFastForward()}
+            size={ICON_SIZE.iconSizeXLarge}
+            color={isAudioLoading ? COLOR.lightGrey : COLOR.grey}
+            disabled={isAudioLoading}
+            disabledStyle={{ backgroundColor: null }}
+          />
         </View>
 
         <View style={styles.bookMarkContainer}>
-          <TouchableOpacity onPress={() => onHeartPress()}>
-            <IconComponent
-              name="heart"
-              solid={didLike}
-              type='font-awesome-5'
-              size={ICON_SIZE.iconSizeLarge}
-              disabledStyle={{backgroundColor: null}}
-              color={COLOR.red}
-              
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => onBookmarkPress()}>
-            <IconComponent
-              name="bookmark"
-              type='font-awesome-5'
-              size={ICON_SIZE.iconSizeLarge}
-              disabledStyle={{ backgroundColor: null }}
-              solid={didBookmark}
-              color={COLOR.grey}
-            />
-          </TouchableOpacity>
+          <IconComponent
+            name="heart"
+            onPress={() => onHeartPress()}
+            solid={didLike}
+            type='font-awesome-5'
+            size={ICON_SIZE.iconSizeLarge}
+            disabledStyle={{backgroundColor: null}}
+            color={COLOR.red}
+            
+          />
+
+          <IconComponent
+            name="bookmark"
+            type='font-awesome-5'
+            onPress={() => onBookmarkPress()}
+            size={ICON_SIZE.iconSizeLarge}
+            disabledStyle={{ backgroundColor: null }}
+            solid={didBookmark}
+            color={COLOR.grey}
+          />
         </View>
       </View>
     </View>
