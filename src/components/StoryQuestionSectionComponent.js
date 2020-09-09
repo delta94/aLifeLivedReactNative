@@ -52,7 +52,7 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioFileId, ques
               size={ICON_SIZE.iconSizeLarge}
               color={COLOR.white}
             />
-            <Text> Play question </Text>
+            <Text style={{color: COLOR.grey}}> Play question and recorded audio </Text>
           </TouchableOpacity>
         );
       case "PLAYING":

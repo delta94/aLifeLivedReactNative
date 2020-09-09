@@ -64,7 +64,7 @@ const StoryRecordingScreen = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialiseLoaded, setIsInitialiseLoaded] = useState(false);
 
-  // Gets the player state and sets local state. 
+  // Gets the player state and sets local state. Possible good way to handle state in future 
   useTrackPlayerEvents(events, (event) => {
     console.log(event);
   });
@@ -93,7 +93,7 @@ const StoryRecordingScreen = ({
     if (currentQuestion().response === 'AUDIO') {
       // IF there is a recording it will play the recording after the question. As if it was the real thing
       tracks.push(channelIdToTrack(currentQuestion().channelId));
-    }
+    };
     await TrackPlayer.reset();
     await TrackPlayer.add(tracks);
   }
