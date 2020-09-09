@@ -8,7 +8,7 @@
     "android-staging": "react-native run-android --variant stagingDebug",
     "iPhone8": "react-native run-ios --simulator=iPhone 8",
     "iosDevice": "node node_modules/react-native/local-cli/cli.js run-ios --device \"iPad\"",
-    "iPadDevice": "node_modules/react-native/local-cli/cli.js run-ios --device \"iPad\"",
+    "iPadDevice": "node node_modules/react-native/local-cli/cli.js run-ios --device \"iPad\"",
     "xCode": "xed ios",
     "ios": "react-native run-ios",
     "start": "react-native start",
