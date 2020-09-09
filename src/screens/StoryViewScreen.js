@@ -42,14 +42,13 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
   const [didLike, setDidLike] = useState(route.params.hasUserBookMarkedStory);
   const [didBookmark, setDidBookmark] = useState(route.params.hasUserBookMarkedStory);
   const [audioState, setAudioState] = useState("NONE");
-  const [isAudioLoading, setIsAudioLoading] = useState(true);
+  const [isAudioLoading, setIsAudioLoading] = useState(false);
 
   // Gets the player state and sets local state. 
   useTrackPlayerEvents(events, (event) => {
     if (event.state === STATE_BUFFERING) {
       setIsAudioLoading(true);
-      console.log('MAX');
-    } else if (event.state != STATE_BUFFERING) {
+    } else {
       setIsAudioLoading(false);
     };
 
