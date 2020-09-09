@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {View, Text, FlatList, TouchableOpacity, NativeModules} from 'react-native';
 import Config from "react-native-config";
+
 // Actions
 import { saveAllStories } from './../redux/actions/allCollections';
 import { addBookMarkedStory, removeBookMarkedStory } from './../redux/actions/userActions';
@@ -24,7 +25,6 @@ const HomeScreen = ({
   addBookMarkedStory,
   removeBookMarkedStory,
 }) => {
-  const env = NativeModules.RNConfig.env;
   const [refreshing, setRefreshing] = useState(false);
   const [userLikedStories] = useState(userReducer.likedStories);
 
@@ -35,7 +35,7 @@ const HomeScreen = ({
       saveAllStories(allStories.data);
       return setRefreshing(false);
     } else {
-      console.log('ERROR');
+      console.log('HOME SCREEN ERROR');
       return setRefreshing(false);
     }
   };
@@ -129,7 +129,6 @@ const HomeScreen = ({
   
   return (
     <View style={styles.container}>
-      <Text>{env}</Text>
       <Text>{Config.BACKEND_BASE_ROUTE}</Text>
       <View style={styles.contentContainer}>
         <FlatList

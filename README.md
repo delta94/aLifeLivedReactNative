@@ -18,6 +18,34 @@
       tool or in PATH` - If you encounter this issue on the build process try - https://medium.com/@randerson112358/setup-react-native-environment-for-ios-97bf7faadf77
     - `RCTBridge required dispatch_sync to load RCTDevLoadingView. This may lead to deadlocks`
       - https://stackoverflow.com/questions/62790300/rctbridge-require-dispatch-sync-to-load-rctdevloadingview - This helped by going into xCode, AppDelegate.m and adding the code.
+    - If you encounter the following error `Use of undeclared identifier 'FlipperClient'` or `Use of undeclared identifier 'Client'` 
+      - Paste this code into Pod File - https://www.gitmemory.com/issue/facebook/react-native/28406/604792832 - NOTE: This may lead to another build error.
+      ```
+        # Post Install processing for Flipper
+        def flipper_post_install(installer)
+          installer.pods_project.targets.each do |target|
+            if target.name == 'YogaKit'
+              target.build_configurations.each do |config|
+                config.build_settings['SWIFT_VERSION'] = '4.1'
+              end
+            end
+          end
+          file_name = Dir.glob("*.xcodeproj")[0]
+          app_project = Xcodeproj::Project.open(file_name)
+          app_project.native_targets.each do |target|
+            target.build_configurations.each do |config|
+              cflags = config.build_settings['OTHER_CFLAGS'] || '$(inherited) '
+              unless cflags.include? '-DFB_SONARKIT_ENABLED=1'
+                puts 'Adding -DFB_SONARKIT_ENABLED=1 in OTHER_CFLAGS...'
+                cflags << '-DFB_SONARKIT_ENABLED=1'
+              end
+              config.build_settings['OTHER_CFLAGS'] = cflags
+            end
+            app_project.save
+          end
+          installer.pods_project.save
+        end
+      ```
 
 
 # Recording Screen Functionality

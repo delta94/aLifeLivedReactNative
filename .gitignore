@@ -1,6 +1,7 @@
+.env
+.env.dev
 .env.staging
 .env.production
-.env
 
 # OSX
 #
@@ -24,6 +25,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+
 
 # Android/IntelliJ
 #
@@ -62,3 +64,4 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+/ios/assets/

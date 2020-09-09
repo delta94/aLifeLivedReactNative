@@ -20,6 +20,7 @@ import { tabBarIcons } from './helpers/tabBarOptions';
 
 // Stacks
 import { ProfileStackScreen, HomeStackScreen, NotificationsStackScreen, SearchStackScreen, StoryStackScreen } from './NavigationStacks';
+import { COLOR } from '../styles/styleHelpers';
 
 const Tabs = createBottomTabNavigator();
 
@@ -50,6 +51,12 @@ function TabsNavigator({
     // Function firing twice on load, need to only fire once.
     try {
       const encryptedToken = await getToken();
+
+      // If no token then don't call backend. 
+      if (!encryptedToken) {
+        return;
+      };
+
       setUserToken(encryptedToken);
       const userData = await getUserByID(encryptedToken);
       const userStories = await getUserStories(encryptedToken);
@@ -73,7 +80,8 @@ function TabsNavigator({
 
   // The below handles the basic tab options
   const tabDefaultOptions = {
-    showLabel: false,
+    showLabel: true,
+    activeTintColor: COLOR.limeGreen,
     tabBarVisible: false,
   };
 
