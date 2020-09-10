@@ -58,8 +58,9 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
 
   const onLoad = async () => {
     // IF story is in reducer grab item from the reducer
-    const storyData = allCollectionsReducer.stories.find(({ _id }) => _id === route.params.storyID);
+    const storyData = allCollectionsReducer.stories.find(({ id }) => id === route.params.storyID);
 
+    
     // If for some reason reducer is undefined resort to api call
     if (!allCollectionsReducer.stories || !storyData) {
       storyData = await getStoryByID(route.params.storyID);
@@ -77,9 +78,10 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
     setStoryLikes(storyData.likes);
     setTags(storyData.tags);
 
+
     // Audio player track
     const track = {
-      id: storyData._id,
+      id: storyData.id,
       url: audioFileIdToUrl(storyData.responseAudioFile),
       title: storyData.title,
       artist: storyData.interviewer.username
@@ -104,9 +106,10 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
 
   // Displays the tags of story
   const displayTags = () => {
+    console.log(tags);
     const tag = tags.map((tag) => {
       return (
-        <View style={styles.tagContainer} key={tag._id}>
+        <View style={styles.tagContainer} key={tag.id}>
           <Text style={styles.tagText}>{story === null ? '' : tag.title}</Text>
         </View>
       )

@@ -57,9 +57,8 @@ const LoginScreen = ({ userLoginSuccessful, navigation, setUserStories }) => {
   
   return (
     <View style={styles.mainContainer}>
-      
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}> A Life Lived </Text>
+        <Text style={styles.headerText}>A Life Lived</Text>
       </View>
         <Animatable.View animation="fadeInUpBig" style={styles.footer}>
           <AntDesign
@@ -73,8 +72,8 @@ const LoginScreen = ({ userLoginSuccessful, navigation, setUserStories }) => {
           <KeyboardAvoidingView behavior="padding">
             <View style={styles.textInputContainer}>       
               <View style={styles.textContainer}>
-                <Text style={styles.header}> HELLO </Text>
-                <Text> Sign in to your account</Text>
+                <Text style={styles.header}>HELLO</Text>
+                <Text>Sign in to your account</Text>
               </View>
             
               <TextInputComponent
@@ -98,7 +97,7 @@ const LoginScreen = ({ userLoginSuccessful, navigation, setUserStories }) => {
           </KeyboardAvoidingView>
           <View style={styles.buttonContainer}>
             {errorMessage ? (
-              <Text style={styles.errorMessage}> {errorMessage} </Text>
+              <Text style={styles.errorMessage}>{errorMessage}</Text>
             ) : null}
             <ButtonComponent
               title="Login"

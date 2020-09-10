@@ -93,14 +93,15 @@ const HomeScreen = ({
   // Renders each story with the FlatList
   const renderStories = ({item, index}) => {
     const hasUserLikedStory = userReducer.likedStories
-      ? userReducer.likedStories.includes(item._id)
+      ? userReducer.likedStories.includes(item.id)
       : false;
     const hasUserBookMarkedStory = userReducer.bookMarks
-      ? userReducer.bookMarks.includes(item._id)
+      ? userReducer.bookMarks.includes(item.id)
       : false;
 
+      console.log("MAX", item.tags);
     return (
-      <TouchableOpacity onPress={() => onStoryPress(item._id, hasUserBookMarkedStory, hasUserLikedStory)} style={styles.storyCard} id={index}>
+      <TouchableOpacity onPress={() => onStoryPress(item.id, hasUserBookMarkedStory, hasUserLikedStory)} style={styles.storyCard} id={index}>
         <StoryCardComponent
           title={item.title}
           description={item.description}
@@ -110,9 +111,9 @@ const HomeScreen = ({
           hasUserLikedStory={hasUserLikedStory}
           hasUserBookMarkedStory={hasUserBookMarkedStory}
           onBookMarkPress={() =>
-            onBookmarkPress(hasUserBookMarkedStory, item._id)
+            onBookmarkPress(hasUserBookMarkedStory, item.id)
           }
-          id={item._id}
+          id={item.id}
         />
       </TouchableOpacity>
     );
@@ -138,7 +139,7 @@ const HomeScreen = ({
           }}
           data={allCollectionsReducer.stories}
           renderItem={renderStories}
-          keyExtractor={(item) => item._id}
+          keyExtractor={(item) => item.id}
           refreshing={refreshing}
           onRefresh={handleRefresh}
           ListEmptyComponent={onNoData()}
