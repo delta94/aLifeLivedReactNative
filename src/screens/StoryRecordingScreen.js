@@ -30,7 +30,7 @@ import IconComponent from './../components/IconComponent';
 import styles from './../styles/screens/StoryRecordingScreen';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
-const events = [TrackPlayerEvents.PLAYBACK_STATE];
+const events = [TrackPlayerEvents.PLAYBACK_STATE, TrackPlayerEvents.PLAYBACK_QUEUE_ENDED];
 
 const StoryRecordingScreen = ({
   // Question Reducer
@@ -64,9 +64,15 @@ const StoryRecordingScreen = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialiseLoaded, setIsInitialiseLoaded] = useState(false);
 
+  const { position, bufferedPosition, duration } = useTrackPlayerProgress();
   // Gets the player state and sets local state. Possible good way to handle state in future 
   useTrackPlayerEvents(events, (event) => {
-    console.log(event);
+
+    console.log(events);
+    if (event.type === TrackPlayerEvents.PLAYBACK_QUEUE_ENDED && playerState != "IDLE") {
+      console.log("MAX");
+      setPlayerState("IDLE")
+    } ;
   });
 
   // Questions state
@@ -165,8 +171,10 @@ const StoryRecordingScreen = ({
   // Play audio
   const playAudio = async () => {
     await TrackPlayer.play();
+    console.log(await TrackPlayer.getQueue());
     return setPlayerState('PLAYING');
   };
+
   // Start recording
   const onRecordStart = async () => {
     // grab a channel if none exists
@@ -199,6 +207,10 @@ const StoryRecordingScreen = ({
 
   // Handles the back button out of subQuestions
   const onBackButton = async () => {
+
+    // This prevents previous audio from playing when the user presses back. 
+    setIsInitialiseLoaded(false);
+
     // if index is less than or equal to 0 then turn subQuestion active off and reset index
     if (subQuestionIndex <= 0) {
       setSubQuestionActive(false);
