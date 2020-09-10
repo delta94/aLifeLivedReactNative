@@ -119,15 +119,15 @@ const StoryRecordingScreen = ({
 
   const setQuestionResponse = (response) => {
     currentQuestion().response = response;
-  }
+  };
 
   const setQuestionChannel = (chanId) => {
     currentQuestion().channelId = chanId;
-  }
+  };
 
   const setQuestionAudioDuration = () => {
     currentQuestion().audioDuration = timerSeconds;
-  }
+  };
 
   const currentMatchedSubQuestions = () => {
     try {
@@ -141,7 +141,7 @@ const StoryRecordingScreen = ({
     catch (err) {
       return [];
     }
-  }
+  };
 
 
   // Loads questions.
@@ -162,13 +162,11 @@ const StoryRecordingScreen = ({
   const pauseAudio = async () => {
     await TrackPlayer.pause();
     await setCurrentPlaybackTracks();
-    // return setPlayerState('ready');
   };
   
   // Play audio
   const playAudio = async () => {
     await TrackPlayer.play();
-    // return setPlayerState('PLAYING');
   };
 
   // Start recording
@@ -319,7 +317,6 @@ const StoryRecordingScreen = ({
 
   // This controls loads the questions.
   useEffect(() => {
-    console.log("MAX", isInitialiseLoaded);
     if (isInitialiseLoaded === false) {
       onLoad();
     };
