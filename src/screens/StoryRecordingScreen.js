@@ -87,8 +87,7 @@ const StoryRecordingScreen = ({
     }
     else
       return questions[questionIndex];
-  }
-
+  };
 
   const setCurrentPlaybackTracks = async () => {
     const questionTrack = audioFileIdToTrack(currentQuestion().audioFile);
@@ -99,7 +98,7 @@ const StoryRecordingScreen = ({
     };
     await TrackPlayer.reset();
     await TrackPlayer.add(tracks);
-  }
+  };
 
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [recordedURL, setRecordedURL] = useState('');
@@ -143,7 +142,6 @@ const StoryRecordingScreen = ({
     }
   };
 
-
   // Loads questions.
   const onLoad = async () => {
     setIsInitialiseLoaded(false);
@@ -155,7 +153,6 @@ const StoryRecordingScreen = ({
 
     await AudioRecord.init(options);
     await setCurrentPlaybackTracks();
-    
   };
 
   // Pause Audio
