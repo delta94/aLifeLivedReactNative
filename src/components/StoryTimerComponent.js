@@ -25,7 +25,7 @@ const StoryTimerComponent = ({timerSeconds, recordingStatus}) => {
     <View style={styles.mainContainer}>
       <Text>{getMinutes()}:{getSeconds()}</Text>
       <View style={styles.statusContainer}>
-        {recordingStatus === "RECORDING" ? <Animatable.View animation="fadeIn" iterationCount={"infinite"}><View style={styles.recordingSymbol}></View></Animatable.View> : null}
+        {recordingStatus === "recording" ? <Animatable.View animation="fadeIn" iterationCount={"infinite"}><View style={styles.recordingSymbol}></View></Animatable.View> : null}
         <Text>{recordingStatus}</Text>
       </View>
     </View>

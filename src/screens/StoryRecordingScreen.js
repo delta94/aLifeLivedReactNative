@@ -64,15 +64,12 @@ const StoryRecordingScreen = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialiseLoaded, setIsInitialiseLoaded] = useState(false);
 
-  const { position, bufferedPosition, duration } = useTrackPlayerProgress();
   // Gets the player state and sets local state. Possible good way to handle state in future 
-  useTrackPlayerEvents(events, (event) => {
-
-    console.log(events);
-    if (event.type === TrackPlayerEvents.PLAYBACK_QUEUE_ENDED && playerState != "IDLE") {
-      console.log("MAX");
-      setPlayerState("IDLE")
-    } ;
+  useTrackPlayerEvents(events, async (event) => {
+    if (event.type === TrackPlayerEvents.PLAYBACK_QUEUE_ENDED) {
+      setCurrentPlaybackTracks();
+    }
+    return setPlayerState(event.state);
   });
 
   // Questions state
@@ -110,7 +107,7 @@ const StoryRecordingScreen = ({
 
   // timer use effect
   useEffect(() => {
-    if (playerState === 'RECORDING') {
+    if (playerState === 'recording') {
       const interval = setInterval(() => {
         setTimerSeconds(timerSeconds + 1);
       }, 1000);
@@ -149,30 +146,29 @@ const StoryRecordingScreen = ({
 
   // Loads questions.
   const onLoad = async () => {
-    initialiseAudioStream();
     setIsInitialiseLoaded(false);
+    initialiseAudioStream();
+    setIsInitialiseLoaded(true);
     Platform.OS === 'android' ? await PermissionsAndroid.requestMultiple([
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
     ]): null;
 
     await AudioRecord.init(options);
     await setCurrentPlaybackTracks();
-    setIsInitialiseLoaded(true);
-
+    
   };
 
   // Pause Audio
   const pauseAudio = async () => {
-    await TrackPlayer.stop();
+    await TrackPlayer.pause();
     await setCurrentPlaybackTracks();
-    return setPlayerState('IDLE');
+    // return setPlayerState('ready');
   };
   
   // Play audio
   const playAudio = async () => {
     await TrackPlayer.play();
-    console.log(await TrackPlayer.getQueue());
-    return setPlayerState('PLAYING');
+    // return setPlayerState('PLAYING');
   };
 
   // Start recording
@@ -190,13 +186,13 @@ const StoryRecordingScreen = ({
     });
 
     setSkipOption(false);
-    return setPlayerState('RECORDING');
+    return setPlayerState('recording');
   };
 
   // When user hits the pause.
   const onRecordPause = async () => {
     await AudioRecord.stop();
-    setPlayerState("PAUSED");
+    setPlayerState("paused");
     setQuestionResponse('AUDIO');
     setQuestionAudioDuration();
     const onFinalQuestion = (questionIndex === questions.length - 1);
@@ -249,13 +245,13 @@ const StoryRecordingScreen = ({
       // Reset states to original 
       setSubQuestionActive(false);
       setSkipOption(true);
-      setPlayerState('IDLE');
+      setPlayerState('ready');
       resetSubQuestionIndex();
       incrementQuestionIndex();
 
       // If sub question is not the last one
     } else if (subQuestionActive && subQuestionIndex !== subQuestions.length - 1) {
-      setPlayerState('IDLE');
+      setPlayerState('ready');
       setSkipOption(true);
       incrementSubQuestionIndex();
     };
@@ -277,7 +273,7 @@ const StoryRecordingScreen = ({
       // Reset states to original 
       setSubQuestionActive(false);
       setSkipOption(true);
-      setPlayerState('IDLE');
+      setPlayerState('ready');
       resetSubQuestionIndex();
       incrementQuestionIndex();
     };
@@ -323,6 +319,7 @@ const StoryRecordingScreen = ({
 
   // This controls loads the questions.
   useEffect(() => {
+    console.log("MAX", isInitialiseLoaded);
     if (isInitialiseLoaded === false) {
       onLoad();
     };
