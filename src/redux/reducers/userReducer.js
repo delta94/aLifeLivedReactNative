@@ -46,8 +46,8 @@ const userReducer = (state = userDefaultState, action) => {
         lastName: lastName,
         username: username,
         avatarURL: avatarURL,
-        bookMarks: bookMarks,
-        likedStories: likedStories
+        bookMarks: bookMarks.map(bookMark => bookMark.id),
+        likedStories: likedStories.map(likedStory => likedStory.id)
       };
 
     case SET_USER_TOKEN:  

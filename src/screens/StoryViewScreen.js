@@ -105,7 +105,6 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
 
   // Displays the tags of story
   const displayTags = () => {
-    console.log(tags);
     const tag = tags.map((tag) => {
       return (
         <View style={styles.tagContainer} key={tag.id}>

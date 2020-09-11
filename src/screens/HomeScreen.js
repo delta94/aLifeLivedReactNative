@@ -85,16 +85,19 @@ const HomeScreen = ({
         : console.log('ERROR');
     } else {
       const response = await bookMarkStory(storyID, userReducer.id);
+      console.log("HE MAN", response.data);
+      console.log("MAX", storyID);
       response.status === 200
-        ? addBookMarkedStory(storyID)
+        ? addBookMarkedStory({id: storyID})
         : console.log('ERROR');
     }
   };
 
   // Renders each story with the FlatList
   const renderStories = ({item, index}) => {
-    const hasUserLikedStory = userReducer.likedStories.some(index => index.id.includes(item.id));
-    const hasUserBookMarkedStory = userReducer.bookMarks.some(index => index.id.includes(item.id));
+    console.log("FUCK ME WORK", userReducer.likedStories);
+    const hasUserLikedStory = userReducer.likedStories.includes(item.id);
+    const hasUserBookMarkedStory = userReducer.bookMarks.includes(item.id);
     
     return (
       <TouchableOpacity onPress={() => onStoryPress(item.id, hasUserBookMarkedStory, hasUserLikedStory)} style={styles.storyCard} id={index}>
