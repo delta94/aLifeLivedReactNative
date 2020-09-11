@@ -29,7 +29,6 @@ const userReducer = (state = userDefaultState, action) => {
   switch (action.type) {
     case USER_LOGIN_SUCCESSFUL:
       const userData = action.payload.userData;
-      const encryptedToken = action.payload.authToken;
       const emailAddress = userData.emailAddress;
       const firstName = userData.firstName;
       const lastName = userData.lastName;
@@ -40,7 +39,6 @@ const userReducer = (state = userDefaultState, action) => {
 
       return {
         ...state,
-        id: encryptedToken,
         loggedIn: true,
         emailAddress: emailAddress,
         isAdmin: false,
@@ -77,6 +75,7 @@ const userReducer = (state = userDefaultState, action) => {
       };
 
     case ADD_BOOKMARKED_STORY:
+      console.log(action.payload);
       return {
         ...state,
         bookMarks: state.bookMarks.concat(action.payload)

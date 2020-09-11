@@ -76,6 +76,7 @@ const HomeScreen = ({
       });
     }
 
+    // Need to handle if there is an error here: If so shouldn't bookmark
     // If already bookmarked
     if (hasUserBookMarkedStory) {
       const response = await unBookMarkStory(storyID, userReducer.id);
@@ -92,14 +93,11 @@ const HomeScreen = ({
 
   // Renders each story with the FlatList
   const renderStories = ({item, index}) => {
-    const hasUserLikedStory = userReducer.likedStories
-      ? userReducer.likedStories.includes(item.id)
-      : false;
-    const hasUserBookMarkedStory = userReducer.bookMarks
-      ? userReducer.bookMarks.includes(item.id)
-      : false;
+    const hasUserLikedStory = userReducer.likedStories.some(index => index.id.includes(item.id))
+    const hasUserBookMarkedStory = userReducer.bookMarks.some(index => index.id.includes(item.id))
 
-      console.log("MAX", item.tags);
+    console.log("MAX", userReducer.likedStories);
+    console.log(item.id);
     return (
       <TouchableOpacity onPress={() => onStoryPress(item.id, hasUserBookMarkedStory, hasUserLikedStory)} style={styles.storyCard} id={index}>
         <StoryCardComponent
