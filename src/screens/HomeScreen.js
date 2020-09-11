@@ -27,6 +27,7 @@ const HomeScreen = ({
   const env = NativeModules.RNConfig.env;
   const [refreshing, setRefreshing] = useState(false);
   const [userLikedStories] = useState(userReducer.likedStories);
+  const [userBookmarkedStories] = useState(userReducer.bookMarks);
 
   const onLoad = async () => {
     setRefreshing(true);
@@ -42,7 +43,7 @@ const HomeScreen = ({
 
   useEffect(() => {
     onLoad();
-  }, [userLikedStories]);
+  }, [userLikedStories, userBookmarkedStories]);
 
   // Handles when the user scrolls to the top of FlatList and refreshes
   const handleRefresh = () => {
@@ -85,8 +86,6 @@ const HomeScreen = ({
         : console.log('ERROR');
     } else {
       const response = await bookMarkStory(storyID, userReducer.id);
-      console.log("HE MAN", response.data);
-      console.log("MAX", storyID);
       response.status === 200
         ? addBookMarkedStory({id: storyID})
         : console.log('ERROR');
@@ -95,7 +94,6 @@ const HomeScreen = ({
 
   // Renders each story with the FlatList
   const renderStories = ({item, index}) => {
-    console.log("FUCK ME WORK", userReducer.likedStories);
     const hasUserLikedStory = userReducer.likedStories.includes(item.id);
     const hasUserBookMarkedStory = userReducer.bookMarks.includes(item.id);
     

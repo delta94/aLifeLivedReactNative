@@ -75,7 +75,6 @@ const userReducer = (state = userDefaultState, action) => {
       };
 
     case ADD_BOOKMARKED_STORY:
-      console.log(action.payload);
       return {
         ...state,
         bookMarks: state.bookMarks.concat(action.payload)

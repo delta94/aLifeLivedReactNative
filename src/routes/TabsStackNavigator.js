@@ -59,7 +59,6 @@ function TabsNavigator({
       setUserToken(encryptedToken);
       
       const userData = await getUserByID(encryptedToken);
-      console.log(userData.data);
       const userStories = await getUserStories(encryptedToken);
       setUserStories(userStories.data);
       return userLoginSuccessful(userData.data);
