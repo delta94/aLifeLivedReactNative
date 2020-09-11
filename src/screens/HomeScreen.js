@@ -27,7 +27,6 @@ const HomeScreen = ({
   const env = NativeModules.RNConfig.env;
   const [refreshing, setRefreshing] = useState(false);
   const [userLikedStories] = useState(userReducer.likedStories);
-  const [userBookmarkedStories] = useState(userReducer.bookMarks);
 
   const onLoad = async () => {
     setRefreshing(true);
@@ -43,7 +42,7 @@ const HomeScreen = ({
 
   useEffect(() => {
     onLoad();
-  }, [userLikedStories, userBookmarkedStories]);
+  }, [userLikedStories]);
 
   // Handles when the user scrolls to the top of FlatList and refreshes
   const handleRefresh = () => {
