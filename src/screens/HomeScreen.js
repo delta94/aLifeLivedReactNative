@@ -93,11 +93,9 @@ const HomeScreen = ({
 
   // Renders each story with the FlatList
   const renderStories = ({item, index}) => {
-    const hasUserLikedStory = userReducer.likedStories.some(index => index.id.includes(item.id))
-    const hasUserBookMarkedStory = userReducer.bookMarks.some(index => index.id.includes(item.id))
-
-    console.log("MAX", userReducer.likedStories);
-    console.log(item.id);
+    const hasUserLikedStory = userReducer.likedStories.some(index => index.id.includes(item.id));
+    const hasUserBookMarkedStory = userReducer.bookMarks.some(index => index.id.includes(item.id));
+    
     return (
       <TouchableOpacity onPress={() => onStoryPress(item.id, hasUserBookMarkedStory, hasUserLikedStory)} style={styles.storyCard} id={index}>
         <StoryCardComponent

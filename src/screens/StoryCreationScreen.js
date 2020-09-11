@@ -122,6 +122,7 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
     const response = await getAllQuestions();
     const responseTag = await getAllTags();
 
+    console.log(response.data);
     if (response.status === 200) {
       try {
         saveAllQuestions(response.data);

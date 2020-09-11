@@ -22,6 +22,7 @@ const StoryButtonsComponent = ({
   handleOnSkip
 }) => {
 
+  console.log(isYesOrNo, 'OMG HEL');
   // The below handles what text will display on the button
   const onNextButtonText = () => {
     if (questionIndex === questions.length - 1) {
@@ -48,7 +49,7 @@ const StoryButtonsComponent = ({
               buttonSize="small"
               onButtonPress={() => onBackButton()}
               disabled={
-                playerState === 'playing' || playerState === 'RECORDING'
+                playerState === 'playing' || playerState === 'recording'
                   ? true
                   : false
               }
@@ -59,7 +60,7 @@ const StoryButtonsComponent = ({
             buttonSize="small"
             onButtonPress={() => handleEndOfQuestions()}
             disabled={
-              playerState === 'playing' || playerState === 'RECORDING'
+              playerState === 'playing' || playerState === 'recording'
                 ? true
                 : false
             }

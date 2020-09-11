@@ -103,6 +103,7 @@ const StoryRecordingScreen = ({
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [recordedURL, setRecordedURL] = useState('');
   const playerState = recorderReducer.playerState;
+  console.log(questionIndex, "HELLO THERE");
 
   // timer use effect
   useEffect(() => {
@@ -254,6 +255,8 @@ const StoryRecordingScreen = ({
     return setIsInitialiseLoaded(false);
   };
 
+  console.log(questions[questionIndex], "FUCK THISS");
+
   // The below handles the on skip
   const handleOnSkip = async () => {
     setQuestionResponse('SKIP');
@@ -327,7 +330,6 @@ const StoryRecordingScreen = ({
   
   }, [playerState, questionIndex, subQuestionIndex]);
 
-
   return (
     <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
@@ -353,7 +355,7 @@ const StoryRecordingScreen = ({
       <View style={styles.questionContainer}>
         <StoryQuestionSectionComponent
           questionTitle={questions[questionIndex].title}
-          questionAudioFileId={questions[questionIndex].isYesOrNo && subQuestionActive === false ? null : questions[questionIndex].audioFile}
+          questionAudioFileId={questions[questionIndex].isYesOrNo && subQuestionActive === false ? null : questions[questionIndex]}
           subQuestion={subQuestionActive ? subQuestions[subQuestionIndex] : null}
           subQuestionActive={subQuestionActive}
           questionID={questions[questionIndex].id}

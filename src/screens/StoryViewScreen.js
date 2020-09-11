@@ -30,8 +30,7 @@ import IconComponent from './../components/IconComponent';
 
 // NOTE:  Audio state for android is shown in number 1, 2, 3 - 1 idle/stopped,  
 const events = [
-  TrackPlayerEvents.PLAYBACK_STATE,
-];
+  TrackPlayerEvents.PLAYBACK_STATE];
 
 const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
 
@@ -120,6 +119,7 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
 
   // Handle when user presses on heart button
   const onHeartPress = async () => {
+
     // If user is not logged in
     if (!route.params.userID) {
       return navigation.navigate('authNavigator', {
@@ -132,7 +132,6 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
 
     // Handles if the user has liked before if so user can dislike
     if (didLike) {
-
       // call first to allow update of UI quickly
       setStoryLikes(storyLikes - 1);
       setDidLike(false);
@@ -194,7 +193,6 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
   // Handle when user clicks play
   const onPlay = async () => {
     await TrackPlayer.play();
-    console.log(await TrackPlayer.getQueue());
   };
 
   // Handle when user clicks pause
