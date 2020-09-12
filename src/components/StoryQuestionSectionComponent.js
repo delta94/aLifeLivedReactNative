@@ -28,12 +28,12 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioFileId, ques
     // TODO: Fix warning
     const track = {
       id: subQuestionActive ? subQuestion.id : questionID,
-      url: !questionAudioFileId.audioFile ? "undefined" : audioFileIdToUrl(subQuestionActive ? subQuestion.audioFile.id : questionAudioFileId.audioFile.id),
+      url: audioFileIdToUrl(subQuestionActive ? subQuestion.audioFile.id : questionAudioFileId.audioFile.id),
       title: subQuestionActive ? subQuestion.title : questionTitle,
       artist: subQuestionActive ? subQuestion.title : questionTitle,
     };
     
-
+    console.log(track);
     switch (playerState) {
       case "ready":
         case "idle":

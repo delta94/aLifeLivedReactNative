@@ -179,7 +179,7 @@ export const channelIdToUrl = ( channelId ) => {
 export const audioFileIdToUrl = ( audioFileId ) => {
   // If question is a yes or no then don't run url
   if (!audioFileId) {
-    return;
+    return `${Config.AUDIO_API_BASE_ROUTE}/audio/noAudioFile.mp3`;
   };
 
   return `${Config.AUDIO_API_BASE_ROUTE}/audio/${audioFileId.id}.mp3`;

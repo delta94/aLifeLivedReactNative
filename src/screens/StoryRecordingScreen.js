@@ -364,7 +364,6 @@ const StoryRecordingScreen = ({
           pauseAudio={() => pauseAudio()}
           questionAudioPlaying={(isAudioPlaying) => setPlayerState(isAudioPlaying)}
         />
-
       </View>
 
       <View style={styles.footer}>
