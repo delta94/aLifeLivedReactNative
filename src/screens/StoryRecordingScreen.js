@@ -103,7 +103,6 @@ const StoryRecordingScreen = ({
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [recordedURL, setRecordedURL] = useState('');
   const playerState = recorderReducer.playerState;
-  console.log(questionIndex, "HELLO THERE");
 
   // timer use effect
   useEffect(() => {
@@ -254,8 +253,6 @@ const StoryRecordingScreen = ({
 
     return setIsInitialiseLoaded(false);
   };
-
-  console.log(questions[questionIndex], "FUCK THISS");
 
   // The below handles the on skip
   const handleOnSkip = async () => {

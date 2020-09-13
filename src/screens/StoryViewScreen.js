@@ -77,7 +77,6 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
     setStoryLikes(storyData.likes);
     setTags(storyData.tags);
 
-
     // Audio player track
     const track = {
       id: storyData.id,

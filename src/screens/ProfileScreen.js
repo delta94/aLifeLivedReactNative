@@ -40,7 +40,7 @@ const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUser
 
         // Sets the data display to show all the users liked stories. 
         const likedStories = userReducer.likedStories.map((likedStory) => {
-          const filteredStory = allCollectionsReducer.stories.filter(story => story._id === likedStory);
+          const filteredStory = allCollectionsReducer.stories.filter(story => story.id === likedStory);
           return filteredStory[0];
         });
 
@@ -58,10 +58,10 @@ const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUser
         // Sets the data display to show all the users bookmarked stories. 
         userReducer.bookMarks.map((bookmarkedStory) => {
           // If for some reason the story has been deleted or undefined then it doesn't push
-          if (!allCollectionsReducer.stories.filter(story => story._id === bookmarkedStory).length) {
+          if (!allCollectionsReducer.stories.filter(story => story.id === bookmarkedStory).length) {
             return;
           } else {
-            return bookmarkedStories.push(allCollectionsReducer.stories.filter(story => story._id === bookmarkedStory)[0]);
+            return bookmarkedStories.push(allCollectionsReducer.stories.filter(story => story.id === bookmarkedStory)[0]);
           };
         });
 
@@ -138,12 +138,12 @@ const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUser
   };
 
   const renderStories = ({ item }) => {
-    const hasUserLikedStory = userReducer.likedStories ? userReducer.likedStories.includes(item._id) : false;
-    const hasUserBookMarkedStory = userReducer.bookMarks ? userReducer.bookMarks.includes(item._id) : false;
+    const hasUserLikedStory = userReducer.likedStories ? userReducer.likedStories.includes(item.id) : false;
+    const hasUserBookMarkedStory = userReducer.bookMarks ? userReducer.bookMarks.includes(item.id) : false;
 
     return (
       <>
-        <TouchableOpacity onPress={() => onStoryPress(item._id)} style={styles.storyCard}>
+        <TouchableOpacity onPress={() => onStoryPress(item.id)} style={styles.storyCard}>
           <StoryCardComponent
             title={item.title}
             description={item.description}
@@ -152,7 +152,7 @@ const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUser
             likes={item.likes}
             hasUserLikedStory={hasUserLikedStory}
             hasUserBookMarkedStory={hasUserBookMarkedStory}
-            onBookMarkPress={() => onBookmarkPress(hasUserBookMarkedStory, item._id)}
+            onBookMarkPress={() => onBookmarkPress(hasUserBookMarkedStory, item.id)}
           />
         </TouchableOpacity>
       </>
@@ -197,7 +197,7 @@ const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUser
         <FlatList
           data={data}
           renderItem={renderStories}
-          keyExtractor={(item) => item._id}
+          keyExtractor={(item) => item.id}
           refreshing={refreshing}
           onRefresh={handleRefresh}
           ListEmptyComponent={onNoData()}

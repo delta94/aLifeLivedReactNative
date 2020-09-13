@@ -22,7 +22,6 @@ const StoryButtonsComponent = ({
   handleOnSkip
 }) => {
 
-  console.log(isYesOrNo, 'OMG HEL');
   // The below handles what text will display on the button
   const onNextButtonText = () => {
     if (questionIndex === questions.length - 1) {
