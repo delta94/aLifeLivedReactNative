@@ -73,6 +73,8 @@ const ProfileScreen = ({ userReducer, allCollectionsReducer, navigation, setUser
           return setData([]);
         };
 
+        console.log("MAX", userReducer.userStories[0]);
+
         setData(userReducer.userStories);
         break;
       default:

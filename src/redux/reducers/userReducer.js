@@ -37,6 +37,8 @@ const userReducer = (state = userDefaultState, action) => {
       const likedStories = userData.likedStories;
       const username = userData.username;
 
+      console.log('hi max', bookMarks, "AND", action.payload.userData);
+
       return {
         ...state,
         loggedIn: true,
@@ -46,8 +48,8 @@ const userReducer = (state = userDefaultState, action) => {
         lastName: lastName,
         username: username,
         avatarURL: avatarURL,
-        bookMarks: bookMarks.map(bookMark => bookMark.id),
-        likedStories: likedStories.map(likedStory => likedStory.id)
+        bookMarks: bookMarks ? bookMarks.map(bookMark => bookMark.id) : [],
+        likedStories: likedStories ? likedStories.map(likedStory => likedStory.id) : []
       };
 
     case SET_USER_TOKEN:  

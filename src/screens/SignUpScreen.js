@@ -70,7 +70,7 @@ const SignUpScreen = (props) => {
       username: username, 
       mobileNumber: mobileNumber,
       password: password,
-      avatarURL: avatarURL 
+      avatarURL: avatarURL,
     };
 
     const response = await signUp(userData);
