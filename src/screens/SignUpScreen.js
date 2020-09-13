@@ -10,7 +10,7 @@ import {imageUpload} from './../api/postRequests/imageUpload';
 
 // Redux
 import {connect} from 'react-redux';
-import {userLoginSuccessful} from './../redux/actions/userActions';
+import { userLoginSuccessful, setUserToken } from './../redux/actions/userActions';
 
 // Async Storage
 import {storeToken} from './../helpers/asyncStorage';
@@ -70,23 +70,28 @@ const SignUpScreen = (props) => {
       username: username, 
       mobileNumber: mobileNumber,
       password: password,
-      avatarURL: avatarURL 
+      avatarURL: avatarURL,
     };
 
     const response = await signUp(userData);
-    
+
     if (response.status === 200) {
-      try {
-        const userData = response.data;
-        const authToken = response.headers.authtoken;
-        storeToken(authToken);
-        props.userLoginSuccessful(userData, authToken);
-        props.navigation.navigate('tabsNavigator', { screen: 'Home' })
-        return setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-        setIsLoading(false);
-      }
+      // Get user data and auth token
+      const userData = response.data;
+      const authToken = response.headers.authtoken;
+
+      // Store token to async 
+      storeToken(authToken);
+
+      // Sets user token in reducer
+      setUserToken(authToken);
+
+      // Saves userData to reducer
+      props.userLoginSuccessful(userData, authToken);
+
+      // Navigates to home
+      props.navigation.navigate('tabsNavigator', { screen: 'Home' })
+      return setIsLoading(false);
     } else {
       setIsLoading(false);
       console.log(response.errorMessage)
@@ -321,6 +326,7 @@ const SignUpScreen = (props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     userLoginSuccessful: (userData, authToken) => dispatch(userLoginSuccessful(userData, authToken)),
+    setUserToken: (encryptedToken) => dispatch(setUserToken(encryptedToken)),
   };
 };
 

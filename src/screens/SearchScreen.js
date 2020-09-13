@@ -88,14 +88,14 @@ const SearchScreen = ({ navigation, userReducer, addBookMarkedStory, removeBookM
 
   // Renders user and story cards
   const renderResults = ({item, section}) => {
-    const hasUserLikedStory = userReducer.likedStories ? userReducer.likedStories.includes(item._id) : false;
-    const hasUserBookMarkedStory = userReducer.bookMarks ? userReducer.bookMarks.includes(item._id) : false;
+    const hasUserLikedStory = userReducer.likedStories ? userReducer.likedStories.includes(item.id) : false;
+    const hasUserBookMarkedStory = userReducer.bookMarks ? userReducer.bookMarks.includes(item.id) : false;
 
     switch (section.title) {
       case "Users":
         return (
           <>
-            <TouchableOpacity onPress={() => onUserPress(item._id)} style={styles.card}>
+            <TouchableOpacity onPress={() => onUserPress(item.id)} style={styles.card}>
               <UserCardComponent
                 firstName={item.firstName}
                 lastName={item.lastName}
@@ -108,7 +108,7 @@ const SearchScreen = ({ navigation, userReducer, addBookMarkedStory, removeBookM
       case "Stories": 
         return (
           <>
-            <TouchableOpacity onPress={() => onStoryPress(item._id)} style={styles.card}>
+            <TouchableOpacity onPress={() => onStoryPress(item.id)} style={styles.card}>
               <StoryCardComponent
                 title={item.title}
                 description={item.description}
@@ -117,7 +117,7 @@ const SearchScreen = ({ navigation, userReducer, addBookMarkedStory, removeBookM
                 likes={item.likes}
                 hasUserLikedStory={hasUserLikedStory}
                 hasUserBookMarkedStory={hasUserBookMarkedStory}
-                onBookMarkPress={() => onBookmarkPress(hasUserBookMarkedStory, item._id)}
+                onBookMarkPress={() => onBookmarkPress(hasUserBookMarkedStory, item.id)}
               />
             </TouchableOpacity>
           </>
@@ -156,7 +156,7 @@ const SearchScreen = ({ navigation, userReducer, addBookMarkedStory, removeBookM
               )
           
             )}
-            keyExtractor={(item) => item._id}
+            keyExtractor={(item) => item.id}
             keyboardShouldPersistTaps='always'
             stickySectionHeadersEnabled={false}
           />

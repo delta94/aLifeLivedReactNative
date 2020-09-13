@@ -30,8 +30,7 @@ import IconComponent from './../components/IconComponent';
 
 // NOTE:  Audio state for android is shown in number 1, 2, 3 - 1 idle/stopped,  
 const events = [
-  TrackPlayerEvents.PLAYBACK_STATE,
-];
+  TrackPlayerEvents.PLAYBACK_STATE];
 
 const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
 
@@ -42,14 +41,13 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
   const [didLike, setDidLike] = useState(route.params.hasUserBookMarkedStory);
   const [didBookmark, setDidBookmark] = useState(route.params.hasUserBookMarkedStory);
   const [audioState, setAudioState] = useState("NONE");
-  const [isAudioLoading, setIsAudioLoading] = useState(true);
+  const [isAudioLoading, setIsAudioLoading] = useState(false);
 
   // Gets the player state and sets local state. 
   useTrackPlayerEvents(events, (event) => {
     if (event.state === STATE_BUFFERING) {
       setIsAudioLoading(true);
-      console.log('MAX');
-    } else if (event.state != STATE_BUFFERING) {
+    } else {
       setIsAudioLoading(false);
     };
 
@@ -59,8 +57,9 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
 
   const onLoad = async () => {
     // IF story is in reducer grab item from the reducer
-    const storyData = allCollectionsReducer.stories.find(({ _id }) => _id === route.params.storyID);
+    const storyData = allCollectionsReducer.stories.find(({ id }) => id === route.params.storyID);
 
+    
     // If for some reason reducer is undefined resort to api call
     if (!allCollectionsReducer.stories || !storyData) {
       storyData = await getStoryByID(route.params.storyID);
@@ -80,7 +79,7 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
 
     // Audio player track
     const track = {
-      id: storyData._id,
+      id: storyData.id,
       url: audioFileIdToUrl(storyData.responseAudioFile),
       title: storyData.title,
       artist: storyData.interviewer.username
@@ -107,7 +106,7 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
   const displayTags = () => {
     const tag = tags.map((tag) => {
       return (
-        <View style={styles.tagContainer} key={tag._id}>
+        <View style={styles.tagContainer} key={tag.id}>
           <Text style={styles.tagText}>{story === null ? '' : tag.title}</Text>
         </View>
       )
@@ -118,6 +117,7 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
 
   // Handle when user presses on heart button
   const onHeartPress = async () => {
+
     // If user is not logged in
     if (!route.params.userID) {
       return navigation.navigate('authNavigator', {
@@ -130,7 +130,6 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
 
     // Handles if the user has liked before if so user can dislike
     if (didLike) {
-
       // call first to allow update of UI quickly
       setStoryLikes(storyLikes - 1);
       setDidLike(false);
@@ -192,7 +191,6 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
   // Handle when user clicks play
   const onPlay = async () => {
     await TrackPlayer.play();
-    console.log(await TrackPlayer.getQueue());
   };
 
   // Handle when user clicks pause

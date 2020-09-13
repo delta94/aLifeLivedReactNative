@@ -18,7 +18,7 @@ export const resetStoryReducer = () => {
   return {
     type: RESET_STORY_REDUCER,
   }
-}
+};
 
 
 

@@ -30,7 +30,7 @@ import IconComponent from './../components/IconComponent';
 import styles from './../styles/screens/StoryRecordingScreen';
 import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 
-const events = [TrackPlayerEvents.PLAYBACK_STATE];
+const events = [TrackPlayerEvents.PLAYBACK_STATE, TrackPlayerEvents.PLAYBACK_QUEUE_ENDED];
 
 const StoryRecordingScreen = ({
   // Question Reducer
@@ -64,9 +64,12 @@ const StoryRecordingScreen = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialiseLoaded, setIsInitialiseLoaded] = useState(false);
 
-  // Gets the player state and sets local state. 
-  useTrackPlayerEvents(events, (event) => {
-    console.log(event);
+  // Gets the player state and sets local state. Possible good way to handle state in future 
+  useTrackPlayerEvents(events, async (event) => {
+    if (event.type === TrackPlayerEvents.PLAYBACK_QUEUE_ENDED) {
+      setCurrentPlaybackTracks();
+    }
+    return setPlayerState(event.state);
   });
 
   // Questions state
@@ -84,8 +87,7 @@ const StoryRecordingScreen = ({
     }
     else
       return questions[questionIndex];
-  }
-
+  };
 
   const setCurrentPlaybackTracks = async () => {
     const questionTrack = audioFileIdToTrack(currentQuestion().audioFile);
@@ -93,10 +95,10 @@ const StoryRecordingScreen = ({
     if (currentQuestion().response === 'AUDIO') {
       // IF there is a recording it will play the recording after the question. As if it was the real thing
       tracks.push(channelIdToTrack(currentQuestion().channelId));
-    }
+    };
     await TrackPlayer.reset();
     await TrackPlayer.add(tracks);
-  }
+  };
 
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [recordedURL, setRecordedURL] = useState('');
@@ -104,7 +106,7 @@ const StoryRecordingScreen = ({
 
   // timer use effect
   useEffect(() => {
-    if (playerState === 'RECORDING') {
+    if (playerState === 'recording') {
       const interval = setInterval(() => {
         setTimerSeconds(timerSeconds + 1);
       }, 1000);
@@ -116,15 +118,15 @@ const StoryRecordingScreen = ({
 
   const setQuestionResponse = (response) => {
     currentQuestion().response = response;
-  }
+  };
 
   const setQuestionChannel = (chanId) => {
     currentQuestion().channelId = chanId;
-  }
+  };
 
   const setQuestionAudioDuration = () => {
     currentQuestion().audioDuration = timerSeconds;
-  }
+  };
 
   const currentMatchedSubQuestions = () => {
     try {
@@ -138,35 +140,32 @@ const StoryRecordingScreen = ({
     catch (err) {
       return [];
     }
-  }
-
+  };
 
   // Loads questions.
   const onLoad = async () => {
-    initialiseAudioStream();
     setIsInitialiseLoaded(false);
+    initialiseAudioStream();
+    setIsInitialiseLoaded(true);
     Platform.OS === 'android' ? await PermissionsAndroid.requestMultiple([
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
     ]): null;
 
     await AudioRecord.init(options);
     await setCurrentPlaybackTracks();
-    setIsInitialiseLoaded(true);
-
   };
 
   // Pause Audio
   const pauseAudio = async () => {
-    await TrackPlayer.stop();
+    await TrackPlayer.pause();
     await setCurrentPlaybackTracks();
-    return setPlayerState('IDLE');
   };
   
   // Play audio
   const playAudio = async () => {
     await TrackPlayer.play();
-    return setPlayerState('PLAYING');
   };
+
   // Start recording
   const onRecordStart = async () => {
     // grab a channel if none exists
@@ -182,13 +181,13 @@ const StoryRecordingScreen = ({
     });
 
     setSkipOption(false);
-    return setPlayerState('RECORDING');
+    return setPlayerState('recording');
   };
 
   // When user hits the pause.
   const onRecordPause = async () => {
     await AudioRecord.stop();
-    setPlayerState("PAUSED");
+    setPlayerState("paused");
     setQuestionResponse('AUDIO');
     setQuestionAudioDuration();
     const onFinalQuestion = (questionIndex === questions.length - 1);
@@ -199,6 +198,10 @@ const StoryRecordingScreen = ({
 
   // Handles the back button out of subQuestions
   const onBackButton = async () => {
+
+    // This prevents previous audio from playing when the user presses back. 
+    setIsInitialiseLoaded(false);
+
     // if index is less than or equal to 0 then turn subQuestion active off and reset index
     if (subQuestionIndex <= 0) {
       setSubQuestionActive(false);
@@ -237,13 +240,13 @@ const StoryRecordingScreen = ({
       // Reset states to original 
       setSubQuestionActive(false);
       setSkipOption(true);
-      setPlayerState('IDLE');
+      setPlayerState('ready');
       resetSubQuestionIndex();
       incrementQuestionIndex();
 
       // If sub question is not the last one
     } else if (subQuestionActive && subQuestionIndex !== subQuestions.length - 1) {
-      setPlayerState('IDLE');
+      setPlayerState('ready');
       setSkipOption(true);
       incrementSubQuestionIndex();
     };
@@ -265,7 +268,7 @@ const StoryRecordingScreen = ({
       // Reset states to original 
       setSubQuestionActive(false);
       setSkipOption(true);
-      setPlayerState('IDLE');
+      setPlayerState('ready');
       resetSubQuestionIndex();
       incrementQuestionIndex();
     };
@@ -324,7 +327,6 @@ const StoryRecordingScreen = ({
   
   }, [playerState, questionIndex, subQuestionIndex]);
 
-
   return (
     <View style={styles.mainContainer}>
       <View style={styles.headerContainer}>
@@ -350,7 +352,7 @@ const StoryRecordingScreen = ({
       <View style={styles.questionContainer}>
         <StoryQuestionSectionComponent
           questionTitle={questions[questionIndex].title}
-          questionAudioFileId={questions[questionIndex].isYesOrNo && subQuestionActive === false ? null : questions[questionIndex].audioFile}
+          questionAudioFileId={questions[questionIndex].isYesOrNo && subQuestionActive === false ? null : questions[questionIndex]}
           subQuestion={subQuestionActive ? subQuestions[subQuestionIndex] : null}
           subQuestionActive={subQuestionActive}
           questionID={questions[questionIndex].id}
@@ -359,7 +361,6 @@ const StoryRecordingScreen = ({
           pauseAudio={() => pauseAudio()}
           questionAudioPlaying={(isAudioPlaying) => setPlayerState(isAudioPlaying)}
         />
-
       </View>
 
       <View style={styles.footer}>

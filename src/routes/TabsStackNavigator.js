@@ -50,18 +50,18 @@ function TabsNavigator({
     // Function firing twice on load, need to only fire once.
     try {
       const encryptedToken = await getToken();
-
       // If no token then don't call backend. 
       if (!encryptedToken) {
         return;
       };
 
+      // Sets token in reducer from saved token in device.
       setUserToken(encryptedToken);
+      
       const userData = await getUserByID(encryptedToken);
       const userStories = await getUserStories(encryptedToken);
-      const authToken = userData.headers.authtoken;
       setUserStories(userStories.data);
-      return userLoginSuccessful(userData.data, authToken);
+      return userLoginSuccessful(userData.data);
     } catch (error) {
       console.log(error);
     }

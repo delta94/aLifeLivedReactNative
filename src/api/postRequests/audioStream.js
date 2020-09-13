@@ -138,6 +138,7 @@ export const finaliseStoryStreams = async ( storyStreams, storyId ) => {
       storyStreams
     });
     
+    console.log("DATA", result.data);
     return result.data;
   } catch (error) {
       console.log(error);
@@ -177,5 +178,11 @@ export const channelIdToUrl = ( channelId ) => {
 }
 
 export const audioFileIdToUrl = ( audioFileId ) => {
-  return `${Config.AUDIO_API_BASE_ROUTE}/audio/${audioFileId}.mp3`;
+  console.log(audioFileId);
+  // If question is a yes or no then don't run url
+  if (!audioFileId) {
+    return `${Config.AUDIO_API_BASE_ROUTE}/audio/noAudioFile.mp3`;
+  };
+
+  return `${Config.AUDIO_API_BASE_ROUTE}/audio/${audioFileId.s3key}.mp3`;
 }
