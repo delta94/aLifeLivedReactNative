@@ -13,7 +13,6 @@ import { COLOR, ICON_SIZE } from './../styles/styleHelpers';
 const HeaderProfileComponent = ({route, navigation, userReducer}) => {
   // The below handles the display. If there is no params then it will display the user reducer as it assumes that its the own user viewing, else if there is params it assumes the user is viewing another profile.
   const userData = route.params ? route.params : userReducer;
-  console.log(userData);
   return (
     <View style={styles.container}>
       <View style={styles.avatarAndTextContainer}>

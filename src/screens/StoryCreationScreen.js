@@ -179,29 +179,41 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
 
       // Saves story data to redux 
       saveStoryDetails(storyData);
-      const storyID = await createStory(storyData);
+      const responseData = await createStory(storyData);
+      const storyID = responseData.id;
 
       // unpack audio response and call finaliseStoryStreams
       const storySegments = collocateStorySegments();
-
-      console.log("STORYSTEEM", storySegments);
       
       if (storySegments.length > 0) {
-        storyData = await finaliseStoryStreams(storySegments, storyID);
+        storyData = await finaliseStoryStreams(storySegments, responseData.id);
         console.log('got updated story object ', storyData);
       }
 
-      // save to the all collections reducer
-      saveNewStory(storyData);
+      let finalStoryObject = {
+        description: responseData.description,
+        id: responseData.id,
+        interviewee: responseData.interviewee,
+        interviewer: responseData.interviewer,
+        isPublic: responseData.isPublic,
+        isSelfInterview: responseData.isSelfInterview,
+        likes: responseData.likes,
+        responseAudioFile: storyData.responseAudioFile,
+        storyImageURL: responseData.storyImageURL,
+        tags: responseData.tags, 
+        title: responseData.title
+      };
 
-      console.log(storyData, 'HELLO THERE');
+      // save to the all collections reducer
+      saveNewStory(finalStoryObject);
+
       // Navigates to the story - Need to pass stack name first then screen. Due to View story being in sep stack.
       const lastScreen = route.name;
       navigation.navigate('screensNavigator', {
         screen: 'storyStack',
         params: {
           screen: 'View Story',
-          params: { storyID, lastScreen}
+          params: {storyID, lastScreen},
         },
       });
 

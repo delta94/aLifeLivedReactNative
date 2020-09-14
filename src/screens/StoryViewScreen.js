@@ -29,8 +29,7 @@ import { ICON_SIZE, COLOR } from './../styles/styleHelpers';
 import IconComponent from './../components/IconComponent';
 
 // NOTE:  Audio state for android is shown in number 1, 2, 3 - 1 idle/stopped,  
-const events = [
-  TrackPlayerEvents.PLAYBACK_STATE];
+const events = [TrackPlayerEvents.PLAYBACK_STATE];
 
 const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, addBookMarkedStory, removeBookMarkedStory, allCollectionsReducer}) => {
 
@@ -57,9 +56,7 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
 
   const onLoad = async () => {
     // IF story is in reducer grab item from the reducer
-    const storyData = allCollectionsReducer.stories.find(({ id }) => id === route.params.storyID);
-
-    
+    let storyData = allCollectionsReducer.stories.find(({ id }) => id === route.params.storyID);
     // If for some reason reducer is undefined resort to api call
     if (!allCollectionsReducer.stories || !storyData) {
       storyData = await getStoryByID(route.params.storyID);
@@ -229,7 +226,7 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
             isRounded={true}
             size="large"
             iconName="user"
-            source={story === null ? '' : story.interviewer.avatarURL}
+            source={!story ? '' : story.interviewer.avatarURL}
           />
 
           <View style={styles.headerTextContainer}>
