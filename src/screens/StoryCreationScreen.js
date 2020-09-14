@@ -183,8 +183,6 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
 
       // unpack audio response and call finaliseStoryStreams
       const storySegments = collocateStorySegments();
-
-      console.log("STORYSTEEM", storySegments);
       
       if (storySegments.length > 0) {
         storyData = await finaliseStoryStreams(storySegments, storyID);
@@ -194,7 +192,6 @@ const StoryCreationScreen = ({ route, navigation, saveAllQuestions, saveAllTags,
       // save to the all collections reducer
       saveNewStory(storyData);
 
-      console.log(storyData, 'HELLO THERE');
       // Navigates to the story - Need to pass stack name first then screen. Due to View story being in sep stack.
       const lastScreen = route.name;
       navigation.navigate('screensNavigator', {

@@ -178,7 +178,6 @@ export const channelIdToUrl = ( channelId ) => {
 }
 
 export const audioFileIdToUrl = ( audioFileId ) => {
-  console.log(audioFileId);
   // If question is a yes or no then don't run url
   if (!audioFileId) {
     return `${Config.AUDIO_API_BASE_ROUTE}/audio/noAudioFile.mp3`;

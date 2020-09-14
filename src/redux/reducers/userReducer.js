@@ -37,8 +37,6 @@ const userReducer = (state = userDefaultState, action) => {
       const likedStories = userData.likedStories;
       const username = userData.username;
 
-      console.log('hi max', bookMarks, "AND", action.payload.userData);
-
       return {
         ...state,
         loggedIn: true,

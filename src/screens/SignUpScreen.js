@@ -43,7 +43,7 @@ const SignUpScreen = (props) => {
   const [lastName, setLastName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [username, setUsername] = useState("");
-  const [mobileNumber, setMobileNumber] = useState(0);
+  const [mobileNumber, setMobileNumber] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 

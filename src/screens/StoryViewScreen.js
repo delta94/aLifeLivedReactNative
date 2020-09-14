@@ -59,7 +59,6 @@ const StoryViewScreen = ({ route, navigation, removeLikedStory, addLikedStory, a
     // IF story is in reducer grab item from the reducer
     const storyData = allCollectionsReducer.stories.find(({ id }) => id === route.params.storyID);
 
-    
     // If for some reason reducer is undefined resort to api call
     if (!allCollectionsReducer.stories || !storyData) {
       storyData = await getStoryByID(route.params.storyID);

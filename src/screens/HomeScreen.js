@@ -33,7 +33,6 @@ const HomeScreen = ({
     const allStories = await getAllPublicStories();
     if (allStories.status === 200) {
       saveAllStories(allStories.data);
-      console.log("MAX", allStories.data[0]);
       return setRefreshing(false);
     } else {
       console.log('ERROR');
