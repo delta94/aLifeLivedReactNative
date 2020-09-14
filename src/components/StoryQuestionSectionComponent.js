@@ -16,13 +16,6 @@ import styles from './../styles/components/StoryQuestionSectionComponent';
 
 const StoryQuestionSectionComponent = ({questionTitle, questionAudioFileId, questionID, playerState, playAudio, pauseAudio, subQuestionActive, subQuestion}) => {
 
-  const track = {
-    id: subQuestionActive ? subQuestion.id : questionID,
-    url: audioFileIdToUrl(subQuestionActive ? subQuestion.audioFile : questionAudioFileId),
-    title: subQuestionActive ? subQuestion.title : questionTitle,
-    artist: subQuestionActive ? subQuestion.title : questionTitle,
-  };
-
   const handleTextDisplay = () => {
     if (!subQuestion) {
       return questionTitle
@@ -32,8 +25,19 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioFileId, ques
   };
 
   const handlePlayPauseButton = () => {
+    // TODO: Fix warning
+    const track = {
+      id: subQuestionActive ? subQuestion.id : questionID,
+      url: audioFileIdToUrl(subQuestionActive ? subQuestion.audioFile : questionAudioFileId.audioFile),
+      title: subQuestionActive ? subQuestion.title : questionTitle,
+      artist: subQuestionActive ? subQuestion.title : questionTitle,
+    };
+    
     switch (playerState) {
-      case "IDLE":
+      case "ready":
+        case "idle":
+          case "loading":
+            case "buffering":
         return (
           <TouchableOpacity onPress={() => playAudio(track)} style={styles.touchableOpacityContainer}>
             <MaterialCommunityIcons
@@ -41,10 +45,10 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioFileId, ques
               size={ICON_SIZE.iconSizeLarge}
               color={COLOR.white}
             />
-            <Text> Listen to question </Text>
+            <Text>Play question and recorded audio</Text>
           </TouchableOpacity>
         );
-      case "PAUSED":
+      case "paused":
         return (
           <TouchableOpacity onPress={() => playAudio(track)} style={styles.touchableOpacityContainer}>
             <MaterialCommunityIcons
@@ -52,10 +56,10 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioFileId, ques
               size={ICON_SIZE.iconSizeLarge}
               color={COLOR.white}
             />
-            <Text> Play question </Text>
+            <Text style={{color: COLOR.grey}}>Play question and recorded audio</Text>
           </TouchableOpacity>
         );
-      case "PLAYING":
+      case "playing":
         return (
           <TouchableOpacity onPress={() => pauseAudio()} style={styles.touchableOpacityContainer}>
             <MaterialCommunityIcons
@@ -63,7 +67,7 @@ const StoryQuestionSectionComponent = ({questionTitle, questionAudioFileId, ques
               size={ICON_SIZE.iconSizeLarge}
               color={COLOR.white}
             />
-            <Text> Stop question </Text>
+            <Text>Stop question</Text>
           </TouchableOpacity>
         );
       default:

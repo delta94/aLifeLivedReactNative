@@ -48,7 +48,7 @@ const StoryButtonsComponent = ({
               buttonSize="small"
               onButtonPress={() => onBackButton()}
               disabled={
-                playerState === 'playing' || playerState === 'RECORDING'
+                playerState === 'playing' || playerState === 'recording'
                   ? true
                   : false
               }
@@ -59,7 +59,7 @@ const StoryButtonsComponent = ({
             buttonSize="small"
             onButtonPress={() => handleEndOfQuestions()}
             disabled={
-              playerState === 'playing' || playerState === 'RECORDING'
+              playerState === 'playing' || playerState === 'recording'
                 ? true
                 : false
             }
@@ -94,7 +94,7 @@ const StoryButtonsComponent = ({
               title={'Back'}
               buttonSize="small"
               onButtonPress={() => onBackButton()}
-              disabled={playerState === 'playing' || playerState === 'RECORDING' ? true : false}
+              disabled={playerState === 'playing' || playerState === 'recording' ? true : false}
             />
           )}
           <ButtonComponent
@@ -102,7 +102,7 @@ const StoryButtonsComponent = ({
             buttonSize="small"
             onButtonPress={() => skipOption ? handleOnSkip() : onNextButton()}
             disabled={
-              playerState === 'playing' || playerState === 'RECORDING'
+              playerState === 'playing' || playerState === 'recording'
                 ? true
                 : false
             }

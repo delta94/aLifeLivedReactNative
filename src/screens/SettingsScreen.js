@@ -38,11 +38,13 @@ const SettingsScreen = ({ returnUserReducerToDefaultState, navigation}) => {
       <ButtonClearComponent
         title="FAQ"
         buttonType="clear"
+        onButtonPress={() => console.log('NO CONTENT')}
       />
 
       <ButtonClearComponent
         title="Contact us"
         buttonType="clear"
+        onButtonPress={() => console.log('NO CONTENT')}
       />
 
       <ButtonClearComponent
@@ -51,7 +53,7 @@ const SettingsScreen = ({ returnUserReducerToDefaultState, navigation}) => {
         onButtonPress={() => onSignOut()}
       />
     </View>
-  )
+  );
 };
 
 const mapDispatchToProps = (dispatch) => {
