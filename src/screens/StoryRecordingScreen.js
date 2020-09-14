@@ -287,10 +287,12 @@ const StoryRecordingScreen = ({
   };
 
   // When user presses the close button
-  const onClose = () => {
+  const onClose = async () => {
     navigation.reset({routes: [{name: 'Home'}]});
     resetRecorderState();
     terminateChannels(questions);
+    await TrackPlayer.stop();
+    await AudioRecord.stop();
     return resetQuestionReducerToOriginalState();
   };
 
