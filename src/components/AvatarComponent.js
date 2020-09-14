@@ -20,7 +20,7 @@ const AvatarComponent = ({isRounded, size, iconName, source, showEditButton, onP
         size={size}
         icon={{name: iconName, type: 'font-awesome', color: COLOR.grey}}
         showEditButton={showEditButton}
-        source={ source ? {uri: source} : null}
+        source={source ? {uri: source} : {name: 'user', type: 'font-awesome'}}
         containerStyle={isSquare ? styles.squareContainer : styles.container}
         onPress={onPress ? handleOnPress : null}
       />

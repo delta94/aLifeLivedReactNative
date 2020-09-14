@@ -138,7 +138,6 @@ export const finaliseStoryStreams = async ( storyStreams, storyId ) => {
       storyStreams
     });
     
-    console.log("DATA", result.data);
     return result.data;
   } catch (error) {
       console.log(error);
