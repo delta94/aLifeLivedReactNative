@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1160"
-   version = "1.7">
+   LastUpgradeVersion = "1170"
+   version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "A Life Lived Dev.app"
+               BuildableName = "A Life Lived.app"
                BlueprintName = "aLifeLived"
                ReferencedContainer = "container:aLifeLived.xcodeproj">
             </BuildableReference>
@@ -23,7 +23,7 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "DebugProd"
+      buildConfiguration = "Beta.Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
@@ -31,7 +31,7 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "DebugProd"
+      buildConfiguration = "Beta.Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -45,16 +45,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# Type a script or drag a script file from your workspace to insert its path.&#10;echo &quot;.env.production&quot; &gt; /tmp/envfile&#10;">
-               <EnvironmentBuildable>
-                  <BuildableReference
-                     BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-                     BuildableName = "A Life Lived Dev.app"
-                     BlueprintName = "aLifeLived"
-                     ReferencedContainer = "container:aLifeLived.xcodeproj">
-                  </BuildableReference>
-               </EnvironmentBuildable>
+               scriptText = "# Type a script or drag a script file from your workspace to insert its path.&#10;echo &quot;.env.staging&quot; &gt; /tmp/envfile&#10;">
             </ActionContent>
          </ExecutionAction>
       </PreActions>
@@ -63,7 +54,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "A Life Lived Dev.app"
+            BuildableName = "A Life Lived.app"
             BlueprintName = "aLifeLived"
             ReferencedContainer = "container:aLifeLived.xcodeproj">
          </BuildableReference>
@@ -71,18 +62,18 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "AUDIO_API_BASE_ROUTE"
-            value = "https://a-life-lived-audio-server-live.herokuapp.com"
+            value = "https://a-life-lived-audio-server-stag.herokuapp.com"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "BACKEND_BASE_ROUTE"
-            value = "https://a-life-lived-live.herokuapp.com"
+            value = "https://a-life-lived-staging.herokuapp.com"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "ReleaseProd"
+      buildConfiguration = "Beta.Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -92,17 +83,17 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "A Life Lived Dev.app"
+            BuildableName = "A Life Lived.app"
             BlueprintName = "aLifeLived"
             ReferencedContainer = "container:aLifeLived.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "DebugProd">
+      buildConfiguration = "Beta.Debug">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "ReleaseProd"
+      buildConfiguration = "Beta.Release"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

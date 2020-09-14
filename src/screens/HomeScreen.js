@@ -25,8 +25,13 @@ const HomeScreen = ({
   removeBookMarkedStory,
 }) => {
   const env = NativeModules.RNConfig.env;
+  const ProdChecker = NativeModules.ProdChecker;
   const [refreshing, setRefreshing] = useState(false);
   const [userLikedStories] = useState(userReducer.likedStories);
+
+  ProdChecker.isTestflight().then(val => {
+      console.log("HELLO", val);
+  });
 
   const onLoad = async () => {
     setRefreshing(true);
@@ -126,7 +131,7 @@ const HomeScreen = ({
   
   return (
     <View style={styles.container}>
-      <Text>{env}</Text>
+      <Text>{Config.HELLO}</Text>
       <Text>{Config.BACKEND_BASE_ROUTE}</Text>
       <View style={styles.contentContainer}>
         <FlatList

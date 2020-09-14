@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, Text, ScrollView, KeyboardAvoidingView} from 'react-native';
+import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 
@@ -15,6 +15,8 @@ import { userLoginSuccessful, setUserStories, setUserToken } from './../redux/ac
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
+// Icon
+import IconComponent from './../components/IconComponent';
 
 // Components
 import TextInputComponent from './../components/TextInputComponent';
@@ -66,14 +68,15 @@ const LoginScreen = ({ userLoginSuccessful, navigation, setUserStories }) => {
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>A Life Lived</Text>
       </View>
-        <Animatable.View animation="fadeInUpBig" style={styles.footer}>
-          <AntDesign
-            name="close"
+      <Animatable.View animation="fadeInUpBig" style={styles.footer}>
+        <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('tabsNavigator', { screen: 'Home' })}>
+          <IconComponent
+            name="times"
+            type="font-awesome-5"
             size={ICON_SIZE.iconSizeMedium}
             color={COLOR.grey}
-            style={styles.icon}
-            onPress={() => navigation.navigate('tabsNavigator', {screen: 'Home'})}
           />
+        </TouchableOpacity>
         <ScrollView>
           <KeyboardAvoidingView behavior="padding">
             <View style={styles.textInputContainer}>       

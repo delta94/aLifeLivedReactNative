@@ -2,12 +2,12 @@ platform :ios, '10.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 project 'aLifeLived', {
-  'DebugDev' => :debug,
-  'DebugStaging' => :debug,
-  'DebugProd' => :release,
-  'ReleaseDev' => :debug,
-  'ReleaseStaging' => :debug,
-  'ReleaseProd' => :release,
+  'Dev.Debug' => :debug,
+  'Beta.Debug' => :debug,
+  'Debug' => :debug,
+  'Dev.Release' => :release,
+  'Beta.Release' => :release,
+  'Release' => :release,
 }
 
 def add_flipper_pods!(versions = {})
@@ -18,7 +18,7 @@ def add_flipper_pods!(versions = {})
   versions['Flipper-PeerTalk'] ||= '~> 0.0.4'
   versions['Flipper-RSocket'] ||= '~> 1.0'
 
-  debugs = ['DebugDev', 'DebugStaging', 'DebugProd']
+  debugs = ['Beta.Debug', 'Debug', 'Dev.Debug']
 
   pod 'FlipperKit', versions['Flipper'], :configuration => debugs
   pod 'FlipperKit/FlipperKitLayoutPlugin', versions['Flipper'], :configuration => debugs
