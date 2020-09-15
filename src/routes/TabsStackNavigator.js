@@ -20,6 +20,7 @@ import { tabBarIcons } from './helpers/tabBarOptions';
 
 // Stacks
 import { ProfileStackScreen, HomeStackScreen, NotificationsStackScreen, SearchStackScreen, StoryStackScreen } from './NavigationStacks';
+import { COLOR } from '../styles/styleHelpers';
 
 const Tabs = createBottomTabNavigator();
 
@@ -79,7 +80,8 @@ function TabsNavigator({
 
   // The below handles the basic tab options
   const tabDefaultOptions = {
-    showLabel: false,
+    showLabel: true,
+    activeTintColor: COLOR.limeGreen,
     tabBarVisible: false,
   };
 
