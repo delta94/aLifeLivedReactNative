@@ -71,7 +71,6 @@
 		5363BAEB6BDF4447B1A77427 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		54C1D867A32742EDB065D010 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		580D7AEB24BEEF4C0048C741 /* libPods-aLifeLived.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-aLifeLived.a"; path = "../../Desktop/libPods-aLifeLived.a"; sourceTree = "<group>"; };
-		58D08E7D2500FBC800F2F6C2 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		58E0B8EA24FE687F00000492 /* RNConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNConfig.h; path = aLifeLived/RNConfig.h; sourceTree = "<group>"; };
 		58E0B8EB24FE687F00000492 /* RNConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RNConfig.m; path = aLifeLived/RNConfig.m; sourceTree = "<group>"; };
 		58FCE81D24BEFC8500D77DC3 /* recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = recording.swift; sourceTree = "<group>"; };
@@ -178,7 +177,6 @@
 		13B07FAE1A68108700A75B9A /* aLifeLived */ = {
 			isa = PBXGroup;
 			children = (
-				58D08E7D2500FBC800F2F6C2 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
