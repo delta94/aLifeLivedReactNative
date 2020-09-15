@@ -80,7 +80,7 @@ function TabsNavigator({
 
   // The below handles the basic tab options
   const tabDefaultOptions = {
-    showLabel: true,
+    showLabel: false,
     activeTintColor: COLOR.limeGreen,
     tabBarVisible: false,
   };
