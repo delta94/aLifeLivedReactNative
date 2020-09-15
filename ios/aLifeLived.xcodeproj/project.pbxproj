@@ -19,8 +19,6 @@
 		2DCD954D1E0B4F2C00145EB5 /* aLifeLivedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* aLifeLivedTests.m */; };
 		55D2FE6D5C567398C8A5B05B /* libPods-aLifeLived-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F4FDBB479DE582D07333AD0 /* libPods-aLifeLived-tvOSTests.a */; };
 		58E0B8EC24FE687F00000492 /* RNConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 58E0B8EB24FE687F00000492 /* RNConfig.m */; };
-		58FCE81E24BEFC8500D77DC3 /* recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58FCE81D24BEFC8500D77DC3 /* recording.swift */; };
-		58FCE82224BEFF4400D77DC3 /* recording.m in Sources */ = {isa = PBXBuildFile; fileRef = 58FCE82124BEFF4400D77DC3 /* recording.m */; };
 		745B2AA30F9D9A3CF73FF51C /* libPods-aLifeLived.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BE9A4D4D9B1B74D65E097351 /* libPods-aLifeLived.a */; };
 		948BBE9B3A9C74341ED0368B /* libPods-aLifeLived-aLifeLivedTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B06DDDCE52D03F95FC0FC7BA /* libPods-aLifeLived-aLifeLivedTests.a */; };
 /* End PBXBuildFile section */
@@ -74,9 +72,7 @@
 		58D08E7D2500FBC800F2F6C2 /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		58E0B8EA24FE687F00000492 /* RNConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RNConfig.h; path = aLifeLived/RNConfig.h; sourceTree = "<group>"; };
 		58E0B8EB24FE687F00000492 /* RNConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = RNConfig.m; path = aLifeLived/RNConfig.m; sourceTree = "<group>"; };
-		58FCE81D24BEFC8500D77DC3 /* recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = recording.swift; sourceTree = "<group>"; };
 		58FCE82024BEFE9400D77DC3 /* aLifeLived-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "aLifeLived-Bridging-Header.h"; sourceTree = "<group>"; };
-		58FCE82124BEFF4400D77DC3 /* recording.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = recording.m; sourceTree = "<group>"; };
 		5AE96D0D8D376A9273EBD8B3 /* Pods-aLifeLived-tvOSTests.debugdev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-tvOSTests.debugdev.xcconfig"; path = "Target Support Files/Pods-aLifeLived-tvOSTests/Pods-aLifeLived-tvOSTests.debugdev.xcconfig"; sourceTree = "<group>"; };
 		6F4FDBB479DE582D07333AD0 /* libPods-aLifeLived-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-aLifeLived-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		764C516235028FF49B850A07 /* Pods-aLifeLived-aLifeLivedTests.releasedev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-aLifeLived-aLifeLivedTests.releasedev.xcconfig"; path = "Target Support Files/Pods-aLifeLived-aLifeLivedTests/Pods-aLifeLived-aLifeLivedTests.releasedev.xcconfig"; sourceTree = "<group>"; };
@@ -185,8 +181,6 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				58FCE81D24BEFC8500D77DC3 /* recording.swift */,
-				58FCE82124BEFF4400D77DC3 /* recording.m */,
 				58FCE82024BEFE9400D77DC3 /* aLifeLived-Bridging-Header.h */,
 				58E0B8EA24FE687F00000492 /* RNConfig.h */,
 				58E0B8EB24FE687F00000492 /* RNConfig.m */,
@@ -743,8 +737,6 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				58E0B8EC24FE687F00000492 /* RNConfig.m in Sources */,
-				58FCE81E24BEFC8500D77DC3 /* recording.swift in Sources */,
-				58FCE82224BEFF4400D77DC3 /* recording.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -797,7 +789,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A45DFE5C78CD78D20332C8C2 /* Pods-aLifeLived-aLifeLivedTests.debugprod.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -821,7 +812,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CB0DE129D818BA56D3A27802 /* Pods-aLifeLived-aLifeLivedTests.releasestaging.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = aLifeLivedTests/Info.plist;
@@ -1116,7 +1106,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 465B90DCF34D97BF7ACE6601 /* Pods-aLifeLived-aLifeLivedTests.debugdev.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1290,7 +1279,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B9C1FE5A5B8CAF495755A975 /* Pods-aLifeLived-aLifeLivedTests.debugstaging.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1455,7 +1443,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4ED1B9AE31E3CE62ABFD56FE /* Pods-aLifeLived-aLifeLivedTests.releaseprod.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = aLifeLivedTests/Info.plist;
@@ -1626,7 +1613,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 764C516235028FF49B850A07 /* Pods-aLifeLived-aLifeLivedTests.releasedev.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
