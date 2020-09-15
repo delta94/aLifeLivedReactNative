@@ -14,8 +14,6 @@ const codePushKeys = Platform.select({
   android: Config.CODE_PUSH_ANDROID_KEY
 })
 
-
-
 // Defines what keys are used for what env
 const CodePushifiedApp = codePush({
   deploymentKey: codePushKeys,
