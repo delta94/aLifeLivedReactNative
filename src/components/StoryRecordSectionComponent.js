@@ -13,7 +13,10 @@ const StoryRecordSectionComponent = ({playerState, onRecordStart, onRecordPause,
   // The below handles what icon, text and function displays based off the recording.  
   const handleDisplay = () => {
     switch (playerState) {
-      case "IDLE":
+      case "ready":
+        case "idle":
+          case "loading":
+            case "buffering":
         return (
           <View style={styles.mainContainer}>
             <Text style={styles.headerText}>When you're ready to answer press the record button below</Text>
@@ -26,7 +29,7 @@ const StoryRecordSectionComponent = ({playerState, onRecordStart, onRecordPause,
             </TouchableOpacity>
           </View>
         )
-      case "PAUSED":
+      case "paused":
         return (
           <View style={styles.mainContainer}>
             <Text style={styles.headerText}>For next question hit the next button or continue recording...</Text>
@@ -39,7 +42,7 @@ const StoryRecordSectionComponent = ({playerState, onRecordStart, onRecordPause,
             </TouchableOpacity>
           </View>
         )
-      case "RECORDING": 
+      case "recording": 
         return (
           <View style={styles.mainContainer}>
             <Text style={styles.headerText}>To stop recording press the below button...</Text>
@@ -52,7 +55,7 @@ const StoryRecordSectionComponent = ({playerState, onRecordStart, onRecordPause,
             </TouchableOpacity>
           </View>
         )
-      case "PLAYING":
+      case "playing":
         return (
             <View style={styles.mainContainer}>
               <Text style={styles.headerText}>Press the below button to stop listening to question...</Text>

@@ -2,7 +2,7 @@ import { PLAYER_STATE, RESET_RECORDER_STATE } from './../actions/allActions';
 
 
 const recorderDefaultState = {
-  playerState: "IDLE",
+  playerState: "ready",
 };
 
 const recorderReducer = (state = recorderDefaultState, action) => {

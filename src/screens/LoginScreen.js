@@ -11,7 +11,7 @@ import { login } from './../api/postRequests/login';
 
 // Redux
 import {connect} from 'react-redux';
-import { userLoginSuccessful, setUserStories } from './../redux/actions/userActions';
+import { userLoginSuccessful, setUserStories, setUserToken } from './../redux/actions/userActions';
 
 // Icon
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -38,18 +38,24 @@ const LoginScreen = ({ userLoginSuccessful, navigation, setUserStories }) => {
     const response = await login(emailAddress, password);
 
     if (response.status === 200) {
-      try {
-        const userData = response.data;
-        const authToken = response.headers.authtoken;
-        storeToken(authToken);
-        userLoginSuccessful(userData.userData, authToken);
-        setUserStories(userData.userStories);
-        navigation.navigate('tabsNavigator', {screen: 'Home'})
-        return setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-        return setIsLoading(false);
-      };
+      const userData = response.data;
+      const authToken = response.headers.authtoken;
+
+      // Stores token in async 
+      storeToken(authToken);
+
+      // Sets user token in reducer
+      setUserToken(authToken);
+
+      // Saves userData to reducer 
+      userLoginSuccessful(userData.userData);
+
+      // Sets user stories to reducer
+      setUserStories(userData.userStories);
+
+      // Navigates to home
+      navigation.navigate('tabsNavigator', {screen: 'Home'})
+      return setIsLoading(false);
     } else {
       setIsLoading(false)
       console.log(response.errorMessage);
@@ -59,9 +65,8 @@ const LoginScreen = ({ userLoginSuccessful, navigation, setUserStories }) => {
   
   return (
     <View style={styles.mainContainer}>
-      
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}> A Life Lived </Text>
+        <Text style={styles.headerText}>A Life Lived</Text>
       </View>
       <Animatable.View animation="fadeInUpBig" style={styles.footer}>
         <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate('tabsNavigator', { screen: 'Home' })}>
@@ -76,8 +81,8 @@ const LoginScreen = ({ userLoginSuccessful, navigation, setUserStories }) => {
           <KeyboardAvoidingView behavior="padding">
             <View style={styles.textInputContainer}>       
               <View style={styles.textContainer}>
-                <Text style={styles.header}> HELLO </Text>
-                <Text> Sign in to your account</Text>
+                <Text style={styles.header}>HELLO</Text>
+                <Text>Sign in to your account</Text>
               </View>
             
               <TextInputComponent
@@ -101,7 +106,7 @@ const LoginScreen = ({ userLoginSuccessful, navigation, setUserStories }) => {
           </KeyboardAvoidingView>
           <View style={styles.buttonContainer}>
             {errorMessage ? (
-              <Text style={styles.errorMessage}> {errorMessage} </Text>
+              <Text style={styles.errorMessage}>{errorMessage}</Text>
             ) : null}
             <ButtonComponent
               title="Login"
@@ -126,7 +131,8 @@ const LoginScreen = ({ userLoginSuccessful, navigation, setUserStories }) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     userLoginSuccessful: (userData, authToken) => dispatch(userLoginSuccessful(userData, authToken)),
-    setUserStories: (userStories) => dispatch(setUserStories(userStories))
+    setUserStories: (userStories) => dispatch(setUserStories(userStories)),
+    setUserToken: (encryptedToken) => dispatch(setUserToken(encryptedToken))
   };
 };
 

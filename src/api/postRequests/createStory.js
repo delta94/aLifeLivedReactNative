@@ -5,8 +5,8 @@ export const createStory = async (storyData) => {
     const response = await axiosPostWithAuth('/story', {
       storyData
     });
-    
-    return response.data.storyID;
+
+    return response.data;
   } catch (error) {
     console.log(error);
     return {

@@ -81,6 +81,7 @@ const HomeScreen = ({
       });
     }
 
+    // Need to handle if there is an error here: If so shouldn't bookmark
     // If already bookmarked
     if (hasUserBookMarkedStory) {
       const response = await unBookMarkStory(storyID, userReducer.id);
@@ -90,22 +91,18 @@ const HomeScreen = ({
     } else {
       const response = await bookMarkStory(storyID, userReducer.id);
       response.status === 200
-        ? addBookMarkedStory(storyID)
+        ? addBookMarkedStory({id: storyID})
         : console.log('ERROR');
     }
   };
 
   // Renders each story with the FlatList
   const renderStories = ({item, index}) => {
-    const hasUserLikedStory = userReducer.likedStories
-      ? userReducer.likedStories.includes(item._id)
-      : false;
-    const hasUserBookMarkedStory = userReducer.bookMarks
-      ? userReducer.bookMarks.includes(item._id)
-      : false;
-
+    const hasUserLikedStory = userReducer.likedStories.includes(item.id);
+    const hasUserBookMarkedStory = userReducer.bookMarks.includes(item.id);
+    
     return (
-      <TouchableOpacity onPress={() => onStoryPress(item._id, hasUserBookMarkedStory, hasUserLikedStory)} style={styles.storyCard} id={index}>
+      <TouchableOpacity onPress={() => onStoryPress(item.id, hasUserBookMarkedStory, hasUserLikedStory)} style={styles.storyCard} id={index}>
         <StoryCardComponent
           title={item.title}
           description={item.description}
@@ -115,9 +112,9 @@ const HomeScreen = ({
           hasUserLikedStory={hasUserLikedStory}
           hasUserBookMarkedStory={hasUserBookMarkedStory}
           onBookMarkPress={() =>
-            onBookmarkPress(hasUserBookMarkedStory, item._id)
+            onBookmarkPress(hasUserBookMarkedStory, item.id)
           }
-          id={item._id}
+          id={item.id}
         />
       </TouchableOpacity>
     );
@@ -143,7 +140,7 @@ const HomeScreen = ({
           }}
           data={allCollectionsReducer.stories}
           renderItem={renderStories}
-          keyExtractor={(item) => item._id}
+          keyExtractor={(item) => item.id}
           refreshing={refreshing}
           onRefresh={handleRefresh}
           ListEmptyComponent={onNoData()}

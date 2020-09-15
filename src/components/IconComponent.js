@@ -2,10 +2,12 @@ import React from 'react';
 import {Icon} from 'react-native-elements';
  
 
-export default IconComponent = ({name, type, size, style, color, solid, disabledStyle, reverse, raised, reverseColor}) => {
+export default IconComponent = ({name, type, size, style, color, solid, disabledStyle, reverse, raised, reverseColor, onPress, disabled}) => {
   
   return (
     <Icon
+      onPress={onPress}
+      disabled={disabled}
       name={name}
       type={type}
       size={size}

@@ -11,5 +11,5 @@ module.exports = async function trackPlayerServices () {
 
   TrackPlayer.addEventListener('playback-state', (state) => {});
 
-  TrackPlayer.addEventListener('playback-queue-ended', () => {})
+  TrackPlayer.addEventListener('playback-queue-ended', async () => {})
 };
